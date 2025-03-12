@@ -1,0 +1,18 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+
+# FFG
+/input/*
+/src/bluehost_log_parser/my_secrets.py
+/src/bluehost_log_parser/output/*
+/src/*.log
+/_old_logs/*.log
