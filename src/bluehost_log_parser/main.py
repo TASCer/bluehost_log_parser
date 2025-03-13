@@ -1,25 +1,28 @@
 import argparse
 import datetime as dt
-import db_checks
-import fetch_server_logs
-import insert_activity
-import insert_unique_sources
 import logging
-import mailer
-import my_secrets
-import parse_logs
-import unzip_fetched_server_logs
-import update_sources_whois
 
+from bluehost_log_parser  import db_checks
+from bluehost_log_parser import fetch_server_logs
+from bluehost_log_parser import insert_activity
+from bluehost_log_parser import insert_unique_sources
+from bluehost_log_parser import mailer
+# from bluehost_log_parser import my_secrets
+from bluehost_log_parser import parse_logs
+from bluehost_log_parser import unzip_fetched_server_logs
+from bluehost_log_parser import update_sources_whois
 from logging import Logger, Formatter
+from pathlib import Path
 
+PROJECT_ROOT = Path.cwd() #/ "src" / "bluehost_log_parser" 
+print(PROJECT_ROOT)
 now: dt = dt.date.today()
 todays_date: str = now.strftime("%D").replace("/", "-")
 
 root_logger: Logger = logging.getLogger()
 root_logger.setLevel(logging.INFO)
 
-fh = logging.FileHandler(f"../{todays_date}.log")
+fh = logging.FileHandler(f"{todays_date}.log")
 fh.setLevel(logging.DEBUG)
 
 formatter: Formatter = logging.Formatter("%(asctime)s - %(name)s -%(lineno)d - %(levelname)s - %(message)s")
@@ -30,13 +33,17 @@ root_logger.addHandler(fh)
 logger: Logger = logging.getLogger(__name__)
 
 # REMOTE BLUEHOST LOG PATHS EXCEPT "month-year"
-remote_tascs_logpath = my_secrets.tascs_logs_zipped
-remote_hoa_logpath = my_secrets.hoa_logs_zipped
-remote_roadspies_logpath = my_secrets.roadspies_logs_zipped
-remote_logfile_paths = [remote_tascs_logpath, remote_hoa_logpath, remote_roadspies_logpath]
+REMOTE_TASCS_BASE_PATH = "logs/cag.bis.mybluehost.me-ssl_log-"
+REMOTE_HOA_BASE_PATH = "logs/hoa.tascs.net-ssl_log-" 
+REMOTE_ROADSPIES_BASE_PATH = "logs/roadspies.cag.bis.mybluehost.me-ssl_log-"
 
-remote_historical_logpath = my_secrets.tascs_logs_historical_zipped
-remote_historical_logpaths = [remote_historical_logpath]
+LOCAL_ZIPPED_PATH = PROJECT_ROOT / "input" / "zipped_logfiles"
+LOCAL_UNZIPPED_PATH = PROJECT_ROOT / "output" / "unzipped_logfiles"
+
+REMOTE_LOGFILE_BASE_PATHS: list = [REMOTE_TASCS_BASE_PATH]#, REMOTE_HOA_BASE_PATH, REMOTE_ROADSPIES_BASE_PATH]
+# LOCAL_LOGFILE_PATHS = [LOCAL_ZIPPED_PATH, LOCAL_UNZIPPED_PATH]
+# remote_historical_logpath = my_secrets.tascs_logs_historical_zipped
+# remote_historical_logpaths = [remote_historical_logpath]
 
 
 def database_check() -> None:
@@ -69,21 +76,21 @@ def main(month_num: int | None, year: int | None) -> None:
         month_name: str = now.strftime("%b")
         year: str = str(now.year)
 
-    local_zipped_logfiles: set[str] = fetch_server_logs.secure_copy(
-        remote_logfile_paths, month_name, year
+    fetch_server_logs.secure_copy(
+        REMOTE_LOGFILE_BASE_PATHS, LOCAL_ZIPPED_PATH, month_name, year
     )
-    local_unzipped_logfiles: set[str] = unzip_fetched_server_logs.process(
-        local_zipped_logfiles, month_name, year
+    unzip_fetched_server_logs.process(
+        LOCAL_ZIPPED_PATH, month_name, year
     )
 
     ips, processed_logs, my_processed_logs = parse_logs.process(
-        local_unzipped_logfiles, month_name, year
+        LOCAL_UNZIPPED_PATH, month_name, year
     )
 
     unique_sources: set = set(ips)
     insert_unique_sources.update(unique_sources)
-    update_sources_whois.lookup()
-    insert_activity.update(processed_logs, my_processed_logs)
+    # update_sources_whois.lookup()
+    # insert_activity.update(processed_logs, my_processed_logs)
 
     logger.info("***** COMPLETED WEB LOG PROCESSING *****")
 
@@ -96,7 +103,7 @@ def main(month_num: int | None, year: int | None) -> None:
     if len(my_processed_logs == 0 and len(processed_logs) == 0):
         mailer.send_mail(
             "ERROR: BH WebLog Processing",
-            f"NO LOGS PROCESSED! CHECK log, possible error downloading from Bluehost",
+            "NO LOGS PROCESSED! CHECK log, possible error downloading from Bluehost",
         )
 
 
@@ -124,5 +131,5 @@ if __name__ == "__main__":
         main(**vars(args))
 
     else:
-        print(f"Database {have_rdbms} has an issue")
-        logger.error(f"Database {have_rdbms} has an issue")
+        print("Database has an issue")
+        logger.error("Database has an issue")

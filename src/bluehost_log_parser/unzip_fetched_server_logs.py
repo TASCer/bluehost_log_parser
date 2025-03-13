@@ -5,10 +5,13 @@ import my_secrets
 
 from datetime import datetime
 from logging import Logger
+from pathlib import Path
 
 logger: Logger = logging.getLogger(__name__)
 
 now: datetime = dt.datetime.now()
+
+unzipped_paths: set = set()
 
 
 def process(files: set[str], month_name: str | None, year: str | None) -> set[str]:
@@ -32,8 +35,8 @@ def process(files: set[str], month_name: str | None, year: str | None) -> set[st
         year: str = str(now.year)
 
     local_files: set = set()
-
-    for file in files:
+    print("UZIP files", files)
+    for file in files.iterdir():
         try:
             local_file: str | None = file.split(".")[0]
             with gzip.open(f"{my_secrets.local_zipped_path}{file}", "rb") as zipped_file:
