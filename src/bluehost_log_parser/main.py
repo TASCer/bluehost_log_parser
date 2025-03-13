@@ -9,7 +9,7 @@ from bluehost_log_parser import insert_unique_sources
 from bluehost_log_parser import mailer
 # from bluehost_log_parser import my_secrets
 from bluehost_log_parser import parse_logs
-from bluehost_log_parser import unzip_fetched_server_logs
+from bluehost_log_parser import unzip_fetched_logs
 from bluehost_log_parser import update_sources_whois
 from logging import Logger, Formatter
 from pathlib import Path
@@ -40,7 +40,7 @@ REMOTE_ROADSPIES_BASE_PATH = "logs/roadspies.cag.bis.mybluehost.me-ssl_log-"
 LOCAL_ZIPPED_PATH = PROJECT_ROOT / "input" / "zipped_logfiles"
 LOCAL_UNZIPPED_PATH = PROJECT_ROOT / "output" / "unzipped_logfiles"
 
-REMOTE_LOGFILE_BASE_PATHS: list = [REMOTE_TASCS_BASE_PATH]#, REMOTE_HOA_BASE_PATH, REMOTE_ROADSPIES_BASE_PATH]
+REMOTE_LOGFILE_BASE_PATHS: list = [REMOTE_TASCS_BASE_PATH, REMOTE_HOA_BASE_PATH, REMOTE_ROADSPIES_BASE_PATH]
 # LOCAL_LOGFILE_PATHS = [LOCAL_ZIPPED_PATH, LOCAL_UNZIPPED_PATH]
 # remote_historical_logpath = my_secrets.tascs_logs_historical_zipped
 # remote_historical_logpaths = [remote_historical_logpath]
@@ -76,35 +76,35 @@ def main(month_num: int | None, year: int | None) -> None:
         month_name: str = now.strftime("%b")
         year: str = str(now.year)
 
-    fetch_server_logs.secure_copy(
-        REMOTE_LOGFILE_BASE_PATHS, LOCAL_ZIPPED_PATH, month_name, year
-    )
-    unzip_fetched_server_logs.process(
-        LOCAL_ZIPPED_PATH, month_name, year
-    )
-
-    ips, processed_logs, my_processed_logs = parse_logs.process(
-        LOCAL_UNZIPPED_PATH, month_name, year
+    # fetch_server_logs.secure_copy(
+    #     REMOTE_LOGFILE_BASE_PATHS, LOCAL_ZIPPED_PATH, month_name, year
+    # )
+    unzip_fetched_logs.process(
+        LOCAL_ZIPPED_PATH, LOCAL_UNZIPPED_PATH, month_name, year
     )
 
-    unique_sources: set = set(ips)
-    insert_unique_sources.update(unique_sources)
+    # ips, processed_logs, my_processed_logs = parse_logs.process(
+    #     LOCAL_UNZIPPED_PATH, month_name, year
+    # )
+
+    # unique_sources: set = set(ips)
+    # insert_unique_sources.update(unique_sources)
     # update_sources_whois.lookup()
     # insert_activity.update(processed_logs, my_processed_logs)
 
     logger.info("***** COMPLETED WEB LOG PROCESSING *****")
 
-    if len(my_processed_logs > 0 or len(processed_logs) > 0):
-        mailer.send_mail(
-            "BH WebLog Processing Complete",
-            f"Public: {len(processed_logs)} - SOHO: {len(my_processed_logs)}",
-        )
+    # if len(my_processed_logs > 0 or len(processed_logs) > 0):
+    #     mailer.send_mail(
+    #         "BH WebLog Processing Complete",
+    #         f"Public: {len(processed_logs)} - SOHO: {len(my_processed_logs)}",
+    #     )
 
-    if len(my_processed_logs == 0 and len(processed_logs) == 0):
-        mailer.send_mail(
-            "ERROR: BH WebLog Processing",
-            "NO LOGS PROCESSED! CHECK log, possible error downloading from Bluehost",
-        )
+    # if len(my_processed_logs == 0 and len(processed_logs) == 0):
+    #     mailer.send_mail(
+    #         "ERROR: BH WebLog Processing",
+    #         "NO LOGS PROCESSED! CHECK log, possible error downloading from Bluehost",
+    #     )
 
 
 

@@ -1,6 +1,5 @@
 import datetime as dt
 import logging
-import my_secrets
 import re
 
 from logging import Logger

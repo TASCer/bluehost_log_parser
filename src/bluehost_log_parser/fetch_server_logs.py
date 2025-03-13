@@ -14,7 +14,7 @@ now: dt = dt.date.today()
 todays_date: str = now.strftime("%D").replace("/", "-")
 
 
-def secure_copy(remote_paths: list[str], local_path: Path, month_name: str | None, year: str | None) -> set[str]:
+def secure_copy(remote_log_paths: list[str], local_zipped_path: Path, month_name: str | None, year: str | None) -> set[str]:
     """
     Takes in a list of paths for location of website log files
     If historical
@@ -34,14 +34,13 @@ def secure_copy(remote_paths: list[str], local_path: Path, month_name: str | Non
 
     logger.info("STARTED: Remote download of site web logs")
 
-    for path in remote_paths:
+    for path in remote_log_paths:
         remote_zipped_filename: str = path + month_name + "-" + year + ".gz"
 
-        # COPY FROM REMOTE BLUEHOST SERVER DEPENDING ON PLATFORM
         if not platform.system() == "Windows":
             try:
                 copy_command = os.system(
-                    f"scp {my_secrets.user}@{my_secrets.bh_ip}:{remote_zipped_filename} {local_path}"
+                    f"scp {my_secrets.user}@{my_secrets.bh_ip}:{remote_zipped_filename} {local_zipped_path}"
                 )
 
                 if copy_command == 0:
