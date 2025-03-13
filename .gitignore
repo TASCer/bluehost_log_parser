@@ -14,5 +14,5 @@ wheels/
 /input/*
 /src/bluehost_log_parser/my_secrets.py
 /src/bluehost_log_parser/output/*
-/src/*.log
+/*.log
 /_old_logs/*.log
