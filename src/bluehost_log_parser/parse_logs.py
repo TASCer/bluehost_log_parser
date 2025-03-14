@@ -4,7 +4,7 @@ import re
 
 from logging import Logger
 from typing import NamedTuple, Tuple
-
+from bluehost_log_parser import my_secrets
 logger: Logger = logging.getLogger(__name__)
 
 now: dt.datetime = dt.datetime.now()
@@ -51,7 +51,7 @@ def process(
 
     for p in log_paths:
         logger.info(f"Parsing {p} logs")
-        with open(f"{my_secrets.local_unzipped_path}{p}_{month_name}-{year}") as logs:
+        with open(f"{p}") as logs:
             site_log_entries: list = []
             site_sources: list = []
             site_long_files: list = []
@@ -70,7 +70,7 @@ def process(
                 SOURCE: str = ip.rstrip()
 
                 # skip parsing system cron jobs performed on bluehost server
-                if SOURCE == f"{my_secrets.bh_ip}":
+                if SOURCE == f"{my_secrets.my_bluehost_ip}":
                     continue
 
                 basic_info: str = basic.split("- - ")[1]

@@ -13,8 +13,8 @@ wheels/
 # FFG
 /input/*
 /src/bluehost_log_parser/my_secrets.py
-/src/bluehost_log_parser/output/*
+/src/bluehost_log_parser/output/unzipped_logfiles/*
 /*.log
 /_old_logs/*.log
-src/bluehost_log_parser/input/zipped_logfiles/*.gz
-src/bluehost_log_parser/03-13-25.log
+src/bluehost_log_parser/input/zipped_logfiles/*
+

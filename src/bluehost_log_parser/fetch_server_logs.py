@@ -40,7 +40,7 @@ def secure_copy(remote_log_paths: list[str], local_zipped_path: Path, month_name
         if not platform.system() == "Windows":
             try:
                 copy_command = os.system(
-                    f"scp {my_secrets.user}@{my_secrets.bh_ip}:{remote_zipped_filename} {local_zipped_path}"
+                    f"scp {my_secrets.user}@{my_secrets.my_bluehost_ip}:{remote_zipped_filename} {local_zipped_path}"
                 )
 
                 if copy_command == 0:
