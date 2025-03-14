@@ -35,24 +35,25 @@ def process(zipped_files: set[Path], unzipped_path: Path, month_name: str | None
         year: str = str(now.year)
 
     local_files: set = set()
-    print("ZIP files path", zipped_files)
-    print("UZIP PATH", unzipped_path)
+
     for zipped_file in zipped_files.iterdir():
-        print("FILE:", zipped_file.name, type(zipped_file))
+        print("FILE:", zipped_file, type(zipped_file))
         try:
-            local_file: str | None = zipped_file.name
+            local_file_name: str | None = zipped_file.with_suffix("").name
+            unzipped_file_path = unzipped_path / local_file_name
+            print(unzipped_file_path)
             with gzip.open(f"{zipped_file}", "rb") as zipped_file:
                 with open(
-                    unzipped_path / local_file,
+                    unzipped_file_path,
                     "wb",
                 ) as unzipped_file:
                     unzipped_file.write(zipped_file.read())
 
         except (BaseException, FileNotFoundError) as e:
             logger.critical(f"{e}")
-            local_file: None = None
+            local_file_name: None = None
 
-        local_files.add(local_file)
+        local_files.add(unzipped_file_path)
 
     logger.info(">>>>> COMPLETED: UNZIPPING AND SAVING DOWNLOADED WEBLOGS >>>>>")
 

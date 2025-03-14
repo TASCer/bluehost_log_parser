@@ -162,11 +162,11 @@ def process(
                     CLIENT=CLIENT,
                 )
 
-                if SOURCE == my_secrets.home_ip:
+                if SOURCE == my_secrets.my_home_ip:
                     all_my_log_entries.append(entry)
                     site_my_log_entries.append(entry)
 
-                elif SOURCE != my_secrets.home_ip:
+                elif SOURCE != my_secrets.my_home_ip:
                     site_log_entries.append(entry)
                     all_log_entries.append(entry)
 

@@ -11,7 +11,6 @@ from pathlib import Path
 logger: Logger = logging.getLogger(__name__)
 
 now: dt = dt.date.today()
-todays_date: str = now.strftime("%D").replace("/", "-")
 
 
 def secure_copy(remote_log_paths: list[str], local_zipped_path: Path, month_name: str | None, year: str | None) -> set[str]:
