@@ -53,6 +53,10 @@ def lookup():
             logger.warning(str(e))
 
         for ip, country, code, desc in no_country:
+            # if ip == '2a06:98c0:3600:':
+            #     logger.warning("IPv6 found {ip}")
+            #     continu
+            
             try:
                 obj: IPWhois = ipwhois.IPWhois(ip, timeout=10)
                 result: dict = obj.lookup_rdap()

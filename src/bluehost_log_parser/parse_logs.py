@@ -51,7 +51,7 @@ def process(
         year: str = str(now.year)
 
     for p in log_paths:
-        logger.info(f"Parsing {p} logs")
+        logger.info(f"Parsing {p.name} logs")
         with open(f"{p}") as logs:
             site_log_entries: list = []
             site_sources: list = []
