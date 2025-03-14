@@ -14,7 +14,12 @@ now: datetime = dt.datetime.now()
 unzipped_paths: set = set()
 
 
-def process(zipped_files: set[Path], unzipped_path: Path, month_name: str | None, year: str | None) -> set[str]:
+def process(
+    zipped_files: set[Path],
+    unzipped_path: Path,
+    month_name: str | None,
+    year: str | None,
+) -> set[str]:
     """
     Takes in a set of str paths for locally copied zipped bluehost website log files
     Unzips file and saves to file

@@ -28,4 +28,6 @@ def update(unique_ips: set[str]) -> None:
 
     with engine.connect() as conn, conn.begin():
         for ip in unique_ips:
-            conn.execute(text(f"""INSERT IGNORE into {SOURCES} values('{ip}', '', '', '');"""))
+            conn.execute(
+                text(f"""INSERT IGNORE into {SOURCES} values('{ip}', '', '', '');""")
+            )

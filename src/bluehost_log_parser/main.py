@@ -2,11 +2,12 @@ import argparse
 import datetime as dt
 import logging
 
-from bluehost_log_parser  import db_checks
+from bluehost_log_parser import db_checks
 from bluehost_log_parser import fetch_server_logs
 from bluehost_log_parser import insert_activity
 from bluehost_log_parser import insert_unique_sources
 from bluehost_log_parser import mailer
+
 # from bluehost_log_parser import my_secrets
 from bluehost_log_parser import parse_logs
 from bluehost_log_parser import unzip_fetched_logs
@@ -14,7 +15,7 @@ from bluehost_log_parser import update_sources_whois
 from logging import Logger, Formatter
 from pathlib import Path
 
-PROJECT_ROOT = Path.cwd() #/ "src" / "bluehost_log_parser" 
+PROJECT_ROOT = Path.cwd()  # / "src" / "bluehost_log_parser"
 print(PROJECT_ROOT)
 now: dt = dt.date.today()
 todays_date: str = now.strftime("%D").replace("/", "-")
@@ -25,7 +26,9 @@ root_logger.setLevel(logging.INFO)
 fh = logging.FileHandler(f"{todays_date}.log")
 fh.setLevel(logging.DEBUG)
 
-formatter: Formatter = logging.Formatter("%(asctime)s - %(name)s -%(lineno)d - %(levelname)s - %(message)s")
+formatter: Formatter = logging.Formatter(
+    "%(asctime)s - %(name)s -%(lineno)d - %(levelname)s - %(message)s"
+)
 fh.setFormatter(formatter)
 
 root_logger.addHandler(fh)
@@ -34,13 +37,15 @@ logger: Logger = logging.getLogger(__name__)
 
 # REMOTE BLUEHOST LOG PATHS EXCEPT "month-year"
 REMOTE_TASCS_BASE_PATH = "logs/cag.bis.mybluehost.me-ssl_log-"
-REMOTE_HOA_BASE_PATH = "logs/hoa.tascs.net-ssl_log-" 
+REMOTE_HOA_BASE_PATH = "logs/hoa.tascs.net-ssl_log-"
 REMOTE_ROADSPIES_BASE_PATH = "logs/roadspies.cag.bis.mybluehost.me-ssl_log-"
 
 LOCAL_ZIPPED_PATH = PROJECT_ROOT / "input" / "zipped_logfiles"
 LOCAL_UNZIPPED_PATH = PROJECT_ROOT / "output" / "unzipped_logfiles"
 
-REMOTE_LOGFILE_BASE_PATHS: list = [REMOTE_TASCS_BASE_PATH]#, REMOTE_HOA_BASE_PATH, REMOTE_ROADSPIES_BASE_PATH]
+REMOTE_LOGFILE_BASE_PATHS: list = [
+    REMOTE_TASCS_BASE_PATH
+]  # , REMOTE_HOA_BASE_PATH, REMOTE_ROADSPIES_BASE_PATH]
 # LOCAL_LOGFILE_PATHS = [LOCAL_ZIPPED_PATH, LOCAL_UNZIPPED_PATH]
 # remote_historical_logpath = my_secrets.tascs_logs_historical_zipped
 # remote_historical_logpaths = [remote_historical_logpath]
@@ -105,7 +110,6 @@ def main(month_num: int | None, year: int | None) -> None:
             "ERROR: BH WebLog Processing",
             "NO LOGS PROCESSED! CHECK log, possible error downloading from Bluehost",
         )
-
 
 
 if __name__ == "__main__":

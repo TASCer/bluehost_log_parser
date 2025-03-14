@@ -34,13 +34,18 @@ def lookup():
         exit()
 
     with engine.connect() as conn, conn.begin():
-        logger.info("Updating lookup table with source country name and description via IPWhois")
+        logger.info(
+            "Updating lookup table with source country name and description via IPWhois"
+        )
 
         errors = 0
 
         try:
             sql_no_country: CursorResult = conn.execute(
-                text(f"""SELECT * from {SOURCES} WHERE COUNTRY = '' or COUNTRY is null or country like '%HTTP%';"""))
+                text(
+                    f"""SELECT * from {SOURCES} WHERE COUNTRY = '' or COUNTRY is null or country like '%HTTP%';"""
+                )
+            )
 
             no_country: list = [i for i in sql_no_country]
 
@@ -55,7 +60,11 @@ def lookup():
             except ipwhois.HTTPLookupError as http:
                 http_errors += 1
                 http: str = str(http).split("&")[0]
-                conn.execute(text(f"""update {SOURCES} SET country = '{str(http)}' WHERE SOURCE = '{ip}';"""))
+                conn.execute(
+                    text(
+                        f"""update {SOURCES} SET country = '{str(http)}' WHERE SOURCE = '{ip}';"""
+                    )
+                )
 
                 continue
 
@@ -78,7 +87,11 @@ def lookup():
                 print(f"Non httplookup error: {error} {ip}")
                 logger.warning(f"Non httplookup error: {error} {ip}")
 
-                conn.execute(text(f"""update {SOURCES} SET country = '{error}' WHERE SOURCE = '{ip}';"""))
+                conn.execute(
+                    text(
+                        f"""update {SOURCES} SET country = '{error}' WHERE SOURCE = '{ip}';"""
+                    )
+                )
 
                 continue
 
@@ -101,7 +114,9 @@ def lookup():
 
             elif result["asn_country_code"].islower():
                 asn_alpha2: str = asn_alpha2.upper()
-                logger.warning(f"RDAP responded with lowercase country for {ip}, should be upper")
+                logger.warning(
+                    f"RDAP responded with lowercase country for {ip}, should be upper"
+                )
 
             else:
                 asn_alpha2 = result["asn_country_code"]
@@ -122,7 +137,9 @@ def lookup():
     if errors >= 1:
         logger.warning(f"sources table: {errors} errors encountered")
 
-    logger.info(f"sources table: {len(no_country) - errors} updated with country names and ASN description.")
+    logger.info(
+        f"sources table: {len(no_country) - errors} updated with country names and ASN description."
+    )
 
     stop_time = dt.datetime.utcnow()
     elapsed_time = int((stop_time - start_time).total_seconds())
@@ -135,5 +152,5 @@ def lookup():
         logger.info(f"\t ~{whois_rate= } lookups per minute")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     lookup()

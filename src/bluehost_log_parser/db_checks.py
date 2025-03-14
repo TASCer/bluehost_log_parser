@@ -43,7 +43,6 @@ def schema():
             logger.info(f"Database {DB_NAME} did not exist and has been created.")
 
     except (exc.SQLAlchemyError, exc.OperationalError) as e:
-
         return False
 
     return True

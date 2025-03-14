@@ -5,6 +5,7 @@ import re
 from logging import Logger
 from typing import NamedTuple, Tuple
 from bluehost_log_parser import my_secrets
+
 logger: Logger = logging.getLogger(__name__)
 
 now: dt.datetime = dt.datetime.now()
@@ -170,20 +171,28 @@ def process(
                     site_log_entries.append(entry)
                     all_log_entries.append(entry)
 
-            logger.info(f"\t\t{len(site_log_entries)} NON SOHO logs with {len(set(site_sources))} unique source ip")
+            logger.info(
+                f"\t\t{len(site_log_entries)} NON SOHO logs with {len(set(site_sources))} unique source ip"
+            )
             logger.info(f"\t\t{len(site_my_log_entries)} SOHO logs")
-            logger.info(f"\t\t{len(site_log_entries) + len(site_my_log_entries)} SITE LOG ENTRIES")
+            logger.info(
+                f"\t\t{len(site_log_entries) + len(site_my_log_entries)} SITE LOG ENTRIES"
+            )
 
             if len(site_long_files) >= 1:
-                logger.warning(f"\t\t{len(site_long_files)} long file names encountered.")
+                logger.warning(
+                    f"\t\t{len(site_long_files)} long file names encountered."
+                )
 
     if len(all_long_files) > 0:
-        logger.warning(f"\t\t{len(all_long_files)} LOG ENTRIES HAD FILE NAME OVER 120 chars.")
+        logger.warning(
+            f"\t\t{len(all_long_files)} LOG ENTRIES HAD FILE NAME OVER 120 chars."
+        )
 
     logger.info("COMPLETED WEBLOG PARSING")
 
     return all_sources, all_log_entries, all_my_log_entries
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     process()

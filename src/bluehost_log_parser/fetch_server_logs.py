@@ -13,7 +13,12 @@ logger: Logger = logging.getLogger(__name__)
 now: dt = dt.date.today()
 
 
-def secure_copy(remote_log_paths: list[str], local_zipped_path: Path, month_name: str | None, year: str | None) -> set[str]:
+def secure_copy(
+    remote_log_paths: list[str],
+    local_zipped_path: Path,
+    month_name: str | None,
+    year: str | None,
+) -> set[str]:
     """
     Takes in a list of paths for location of website log files
     If historical
@@ -21,7 +26,6 @@ def secure_copy(remote_log_paths: list[str], local_zipped_path: Path, month_name
     param: month
     param: year
     """
-
 
     if year and month_name:
         month_name: str = month_name
@@ -68,4 +72,3 @@ def secure_copy(remote_log_paths: list[str], local_zipped_path: Path, month_name
                 continue
 
     logger.info("COMPLETED: Remote download of site web logs")
-
