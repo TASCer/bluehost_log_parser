@@ -2,8 +2,8 @@ import country_converter as coco
 import datetime as dt
 import ipwhois
 import logging
-import my_secrets
 
+from bluehost_log_parser import my_secrets
 from ipwhois import IPWhois
 from logging import Logger
 from sqlalchemy.engine import Engine, CursorResult
@@ -17,7 +17,7 @@ SOURCES = "sources"
 
 def lookup():
     """
-    Updates lookup table 'sources' entries with full country name and ASN Description from whois
+    Updates lookup table 'sources' entries with full country name and ASN Description from ipwhois
     """
     logger: Logger = logging.getLogger(__name__)
     start_time = dt.datetime.utcnow()
@@ -25,9 +25,7 @@ def lookup():
     http_errors = 0
 
     try:
-        engine: Engine = create_engine(
-            f"mysql+pymysql://{my_secrets.dbuser}:{my_secrets.dbpass}@{my_secrets.dbhost}/{my_secrets.dbname}"
-        )
+        engine: Engine = create_engine(f"mysql+pymysql://{my_secrets.local_dburi}")
 
     except exc.SQLAlchemyError as e:
         logger.critical(str(e))
@@ -43,20 +41,16 @@ def lookup():
         try:
             sql_no_country: CursorResult = conn.execute(
                 text(
-                    f"""SELECT * from {SOURCES} WHERE COUNTRY = '' or COUNTRY is null or country like '%HTTP%';"""
+                    f"""SELECT SOURCE from {SOURCES} WHERE COUNTRY = '' or COUNTRY is null;"""
                 )
             )
 
-            no_country: list = [i for i in sql_no_country]
+            no_country: list[str] = [i[0] for i in sql_no_country]
 
         except exc.SQLAlchemyError as e:
             logger.warning(str(e))
 
-        for ip, country, code, desc in no_country:
-            # if ip == '2a06:98c0:3600:':
-            #     logger.warning("IPv6 found {ip}")
-            #     continu
-            
+        for ip in no_country:
             try:
                 obj: IPWhois = ipwhois.IPWhois(ip, timeout=10)
                 result: dict = obj.lookup_rdap()
@@ -128,7 +122,7 @@ def lookup():
 
             try:
                 conn.execute(
-                    text(f"""UPDATE `{my_secrets.dbname}`.`{SOURCES}`
+                    text(f"""UPDATE `{my_secrets.local_dbname}`.`{SOURCES}`
                         SET
                             `COUNTRY` = '{country_name}',
                             `ALPHA2` = '{asn_alpha2}',

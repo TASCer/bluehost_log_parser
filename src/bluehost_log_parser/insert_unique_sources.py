@@ -1,12 +1,11 @@
 import logging
-import my_secrets
 
+from bluehost_log_parser import my_secrets
 from logging import Logger
 from sqlalchemy.engine import Engine
 from sqlalchemy import exc, create_engine, text
 
-# SQL TABLE constants
-SOURCES = "sources"
+SOURCES_TABLE = "sources"
 
 
 def update(unique_ips: set[str]) -> None:
@@ -19,7 +18,7 @@ def update(unique_ips: set[str]) -> None:
 
     try:
         engine: Engine = create_engine(
-            f"mysql+pymysql://{my_secrets.dbuser}:{my_secrets.dbpass}@{my_secrets.dbhost}/{my_secrets.dbname}"
+            f"mysql+pymysql://{my_secrets.local_dburi}"
         )
 
     except exc.SQLAlchemyError as e:
@@ -29,5 +28,7 @@ def update(unique_ips: set[str]) -> None:
     with engine.connect() as conn, conn.begin():
         for ip in unique_ips:
             conn.execute(
-                text(f"""INSERT IGNORE into {SOURCES} values('{ip}', '', '', '');""")
+                text(
+                    f"""INSERT IGNORE into {SOURCES_TABLE} values('{ip}', '', '', '');"""
+                )
             )

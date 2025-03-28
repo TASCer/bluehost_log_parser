@@ -1,7 +1,7 @@
 import logging
-import my_secrets
 import sqlalchemy as sa
 
+from bluehost_log_parser import my_secrets
 from logging import Logger
 from sqlalchemy import (
     create_engine,
@@ -15,16 +15,16 @@ from sqlalchemy import (
 )
 from sqlalchemy_utils import database_exists, create_database
 
-# SQL DB connection constants
-DB_HOSTNAME = f"{my_secrets.dbhost}"
-DB_NAME = f"{my_secrets.dbname}"
-DB_USER = f"{my_secrets.dbuser}"
-DB_PW = f"{my_secrets.dbpass}"
+from bluehost_log_parser.insert_activity import MY_LOGS_TABLE
 
-# SQL TABLE constants
-LOGS = "logs"
-SOURCES = "sources"
-MY_LOGS = "my_logs"
+DB_HOSTNAME = f"{my_secrets.local_dbhost}"
+DB_NAME = f"{my_secrets.local_dbname}"
+DB_USER = f"{my_secrets.local_dbuser}"
+DB_PW = f"{my_secrets.local_dbpassword}"
+DB_URI = f"{my_secrets.local_dburi}"
+
+LOGS_TABLE = "logs"
+SOURCES_TABLE = "sources"
 
 
 def schema():
@@ -43,6 +43,7 @@ def schema():
             logger.info(f"Database {DB_NAME} did not exist and has been created.")
 
     except (exc.SQLAlchemyError, exc.OperationalError) as e:
+        logger.error(e)
         return False
 
     return True
@@ -65,17 +66,17 @@ def tables():
         return False
 
     logs_tbl_insp = sa.inspect(engine)
-    logs_tbl: bool = logs_tbl_insp.has_table(LOGS, schema=f"{DB_NAME}")
-    my_logs_tbl: bool = logs_tbl_insp.has_table(MY_LOGS, schema=f"{DB_NAME}")
+    logs_tbl: bool = logs_tbl_insp.has_table(LOGS_TABLE, schema=f"{DB_NAME}")
+    my_logs_tbl: bool = logs_tbl_insp.has_table(MY_LOGS_TABLE, schema=f"{DB_NAME}")
     sources_tbl_insp = sa.inspect(engine)
-    sources_tbl: bool = sources_tbl_insp.has_table(SOURCES, schema=f"{DB_NAME}")
+    sources_tbl: bool = sources_tbl_insp.has_table(SOURCES_TABLE, schema=f"{DB_NAME}")
 
     meta = MetaData()
 
     if not logs_tbl:
         try:
             logs = Table(
-                LOGS,
+                LOGS_TABLE,
                 meta,
                 Column(
                     "ACCESSED",
@@ -113,7 +114,7 @@ def tables():
     if not my_logs_tbl:
         try:
             my_logs = Table(
-                MY_LOGS,
+                MY_LOGS_TABLE,
                 meta,
                 Column(
                     "ACCESSED",
@@ -151,7 +152,7 @@ def tables():
     if not sources_tbl:
         try:
             sources = Table(
-                SOURCES,
+                SOURCES_TABLE,
                 meta,
                 Column("SOURCE", types.VARCHAR(15), primary_key=True),
                 Column("COUNTRY", types.VARCHAR(100)),

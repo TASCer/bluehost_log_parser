@@ -42,7 +42,7 @@ def process(
     local_files: set = set()
 
     for zipped_file in zipped_files.iterdir():
-        print("FILE:", zipped_file, type(zipped_file))
+        # print("FILE:", zipped_file, type(zipped_file))
         try:
             local_file_name: str | None = zipped_file.with_suffix("").name
             unzipped_file_path = unzipped_path / local_file_name

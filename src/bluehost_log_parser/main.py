@@ -16,14 +16,15 @@ from logging import Logger, Formatter
 from pathlib import Path
 
 PROJECT_ROOT = Path.cwd()  # / "src" / "bluehost_log_parser"
-print(PROJECT_ROOT)
+LOGGER_ROOT = Path.cwd().parent.parent
+
 now: dt = dt.date.today()
 todays_date: str = now.strftime("%D").replace("/", "-")
 
 root_logger: Logger = logging.getLogger()
 root_logger.setLevel(logging.INFO)
 
-fh = logging.FileHandler(f"{todays_date}.log")
+fh = logging.FileHandler(f"{LOGGER_ROOT}/{todays_date}.log")
 fh.setLevel(logging.DEBUG)
 
 formatter: Formatter = logging.Formatter(
@@ -44,8 +45,9 @@ LOCAL_ZIPPED_PATH = PROJECT_ROOT / "input" / "zipped_logfiles"
 LOCAL_UNZIPPED_PATH = PROJECT_ROOT / "output" / "unzipped_logfiles"
 
 REMOTE_LOGFILE_BASE_PATHS: list = [
-    REMOTE_TASCS_BASE_PATH
-]  # , REMOTE_HOA_BASE_PATH, REMOTE_ROADSPIES_BASE_PATH]
+    REMOTE_TASCS_BASE_PATH, 
+    REMOTE_HOA_BASE_PATH, 
+    REMOTE_ROADSPIES_BASE_PATH]
 # LOCAL_LOGFILE_PATHS = [LOCAL_ZIPPED_PATH, LOCAL_UNZIPPED_PATH]
 # remote_historical_logpath = my_secrets.tascs_logs_historical_zipped
 # remote_historical_logpaths = [remote_historical_logpath]
