@@ -28,7 +28,7 @@ fh = logging.FileHandler(f"{LOGGER_ROOT}/{todays_date}.log")
 fh.setLevel(logging.DEBUG)
 
 formatter: Formatter = logging.Formatter(
-    "%(asctime)s - %(name)s -%(lineno)d - %(levelname)s - %(message)s"
+    "%(asctime)s - %(filename)s -%(lineno)d - %(levelname)s - %(message)s"
 )
 fh.setFormatter(formatter)
 
@@ -36,7 +36,7 @@ root_logger.addHandler(fh)
 
 logger: Logger = logging.getLogger(__name__)
 
-# REMOTE BLUEHOST LOG PATHS EXCEPT "month-year"
+# REMOTE BLUEHOST LOG PATHS EXCEPT "month-year" at end of filename
 REMOTE_TASCS_BASE_PATH = "logs/cag.bis.mybluehost.me-ssl_log-"
 REMOTE_HOA_BASE_PATH = "logs/hoa.tascs.net-ssl_log-"
 REMOTE_ROADSPIES_BASE_PATH = "logs/roadspies.cag.bis.mybluehost.me-ssl_log-"
@@ -45,12 +45,10 @@ LOCAL_ZIPPED_PATH = PROJECT_ROOT / "input" / "zipped_logfiles"
 LOCAL_UNZIPPED_PATH = PROJECT_ROOT / "output" / "unzipped_logfiles"
 
 REMOTE_LOGFILE_BASE_PATHS: list = [
-    REMOTE_TASCS_BASE_PATH, 
-    REMOTE_HOA_BASE_PATH, 
-    REMOTE_ROADSPIES_BASE_PATH]
-# LOCAL_LOGFILE_PATHS = [LOCAL_ZIPPED_PATH, LOCAL_UNZIPPED_PATH]
-# remote_historical_logpath = my_secrets.tascs_logs_historical_zipped
-# remote_historical_logpaths = [remote_historical_logpath]
+    REMOTE_TASCS_BASE_PATH,
+    REMOTE_HOA_BASE_PATH,
+    REMOTE_ROADSPIES_BASE_PATH,
+]
 
 
 def database_check() -> None:
@@ -63,7 +61,7 @@ def database_check() -> None:
     have_tables: bool = db_checks.tables()
 
     if have_database and have_tables:
-        logger.info("RDBMS ONLINE")
+        logger.info("\t\tRDBMS ONLINE")
         return True
 
     else:
@@ -83,9 +81,9 @@ def main(month_num: int | None, year: int | None) -> None:
         month_name: str = now.strftime("%b")
         year: str = str(now.year)
 
-    # fetch_server_logs.secure_copy(
-    #     REMOTE_LOGFILE_BASE_PATHS, LOCAL_ZIPPED_PATH, month_name, year
-    # )
+    fetch_server_logs.secure_copy(
+        REMOTE_LOGFILE_BASE_PATHS, LOCAL_ZIPPED_PATH, month_name, year
+    )
     unzipped_log_files = unzip_fetched_logs.process(
         LOCAL_ZIPPED_PATH, LOCAL_UNZIPPED_PATH, month_name, year
     )
@@ -103,7 +101,7 @@ def main(month_num: int | None, year: int | None) -> None:
 
     if len(my_processed_logs) > 0 or len(processed_logs) > 0:
         mailer.send_mail(
-            "BH WebLog Processing Complete",
+            "COMPLETED: BH WebLog Processing",
             f"Public: {len(processed_logs)} - SOHO: {len(my_processed_logs)}",
         )
 
