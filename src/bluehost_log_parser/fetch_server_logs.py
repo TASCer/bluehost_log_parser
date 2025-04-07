@@ -35,7 +35,7 @@ def secure_copy(
         month_name: str = now.strftime("%b")
         year: str = str(now.year)
 
-    logger.info("STARTED: Remote download of site web logs")
+    logger.info("STARTED: download of site web logs")
 
     for path in remote_log_paths:
         remote_zipped_filename: str = path + month_name + "-" + year + ".gz"
@@ -48,7 +48,7 @@ def secure_copy(
 
                 if copy_command == 0:
                     logger.info(
-                        f"{path} {remote_zipped_filename} retrieved from bluehost server"
+                        f"\t{remote_zipped_filename} securely copied from remote web server"
                     )
                 else:
                     logger.critical(f"Remote scp issue: {remote_zipped_filename}")
@@ -71,4 +71,4 @@ def secure_copy(
 
                 continue
 
-    logger.info("COMPLETED: Remote download of site web logs")
+    logger.info("COMPLETED: download of site web logs")
