@@ -34,9 +34,7 @@ def update(log_entries: list, my_log_entries: list) -> None:
     """
     logger: Logger = logging.getLogger(__name__)
     try:
-        engine: Engine = create_engine(
-            f"mysql+pymysql://{my_secrets.local_dburi}"
-        )
+        engine: Engine = create_engine(f"mysql+pymysql://{my_secrets.local_dburi}")
 
     except exc.SQLAlchemyError as e:
         logger.critical(str(e))

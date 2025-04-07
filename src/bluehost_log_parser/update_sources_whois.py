@@ -33,7 +33,7 @@ def lookup():
 
     with engine.connect() as conn, conn.begin():
         logger.info(
-            "Updating lookup table with source country name and description via IPWhois"
+            "Updating source table with country name and description via IPWhois"
         )
 
         errors = 0
