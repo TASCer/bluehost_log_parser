@@ -1,7 +1,7 @@
 [project]
 name = "bluehost-log-parser"
 version = "1.5.0"
-description = "Bluehost Server Apache Log Processor"
+description = "Bluehost Server Apache Log Parser"
 readme = "README.md"
 authors = [
     { name = "Todd S", email = "info@tascs.net" }
