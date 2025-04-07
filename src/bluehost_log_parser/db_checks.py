@@ -6,6 +6,7 @@ from logging import Logger
 from sqlalchemy import (
     create_engine,
     exc,
+    inspect,
     types,
     Column,
     Table,
@@ -25,6 +26,7 @@ DB_URI = f"{my_secrets.local_dburi}"
 
 LOGS_TABLE = "logs"
 SOURCES_TABLE = "sources"
+MY_LOGS_TABLE = "my_logs"
 
 
 def schema():
@@ -65,11 +67,11 @@ def tables():
         logger.critical(str(e))
         return False
 
-    logs_tbl_insp = sa.inspect(engine)
-    logs_tbl: bool = logs_tbl_insp.has_table(LOGS_TABLE, schema=f"{DB_NAME}")
-    my_logs_tbl: bool = logs_tbl_insp.has_table(MY_LOGS_TABLE, schema=f"{DB_NAME}")
-    sources_tbl_insp = sa.inspect(engine)
-    sources_tbl: bool = sources_tbl_insp.has_table(SOURCES_TABLE, schema=f"{DB_NAME}")
+    logs_check: inspect = sa.inspect(engine)
+
+    logs_tbl: bool = logs_check.has_table(LOGS_TABLE, schema=f"{DB_NAME}")
+    my_logs_tbl: bool = logs_check.has_table(MY_LOGS_TABLE, schema=f"{DB_NAME}")
+    sources_tbl: bool = logs_check.has_table(SOURCES_TABLE, schema=f"{DB_NAME}")
 
     meta = MetaData()
 
