@@ -1,7 +1,7 @@
 import datetime as dt
 import gzip
 import logging
-import my_secrets
+# import my_secrets
 
 from datetime import datetime
 from logging import Logger

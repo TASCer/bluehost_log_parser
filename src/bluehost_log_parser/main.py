@@ -113,7 +113,6 @@ def main(month_num: int | None, year: int | None) -> None:
 
 
 if __name__ == "__main__":
-    # have_rdbms: tuple[bool,str] = database_check()
     if database_check():
         parser = argparse.ArgumentParser(description="ADHOC month/year log processing")
         parser.add_argument(

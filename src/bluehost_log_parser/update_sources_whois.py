@@ -22,7 +22,7 @@ def lookup():
     logger: Logger = logging.getLogger(__name__)
     start_time = dt.datetime.utcnow()
 
-    http_errors = 0
+    http_errors: int = 0
 
     try:
         engine: Engine = create_engine(f"mysql+pymysql://{my_secrets.local_dburi}")
@@ -36,7 +36,7 @@ def lookup():
             "Updating source table with country name and description via IPWhois"
         )
 
-        errors = 0
+        errors: int = 0
 
         try:
             sql_no_country: CursorResult = conn.execute(
@@ -98,7 +98,7 @@ def lookup():
             if asn_description == "NA" or asn_description is None:
                 asn_description = "NA"
             else:
-                asn_description = asn_description.rsplit(",")[0]
+                asn_description: str = asn_description.rsplit(",")[0]
 
             if result["asn_country_code"] is None:
                 logger.warning(f"{ip} had no alpha2 code, setting country name to '00'")
@@ -117,7 +117,7 @@ def lookup():
                 )
 
             else:
-                asn_alpha2 = result["asn_country_code"]
+                asn_alpha2: str = result["asn_country_code"]
                 country_name: Optional[str] = coco.convert(asn_alpha2)
 
             try:
@@ -140,7 +140,7 @@ def lookup():
     )
 
     stop_time = dt.datetime.utcnow()
-    elapsed_time = int((stop_time - start_time).total_seconds())
+    elapsed_time: int = int((stop_time - start_time).total_seconds())
 
     logger.info(f"\tupdated: {len(no_country)} lookups in {elapsed_time} seconds.")
 
