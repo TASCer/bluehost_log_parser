@@ -18,19 +18,18 @@ except exc.SQLAlchemyError as e:
     exit()
 
 
-
 df = pd.read_sql_table(con=engine.connect(), table_name="logs")
-df.where((df["CODE"] == '200') & (df["REF_URL"] == "hoa.tascs.net"), inplace=True)
+df.where((df["CODE"] == "404") & (df["REF_URL"] == "hoa.tascs.net"), inplace=True)
 df.sort_values("ACCESSED", inplace=True, ascending=False)
-print(df.info())
+df_group = df.groupby(by="SOURCE")
+print(df_group.count())
 
 app = Dash()
 
 app.layout = [
-    html.Div(children='Webserver Logs App'),
-    dash_table.DataTable(data=df.to_dict('records'), page_size=25),
-    dcc.Graph(figure=px.histogram(df, x='AGENT', y='SIZE', histfunc='avg'))
-
+    html.Div(children="Webserver Logs App"),
+    dash_table.DataTable(data=df.to_dict("records"), page_size=25),
+    dcc.Graph(figure=px.histogram(df, x="AGENT", y="SIZE", histfunc="avg")),
 ]
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)

@@ -4,7 +4,7 @@ import os
 import platform
 import subprocess
 
-from bluehost_log_parser import my_secrets
+from bluehost_log_parser import my_secrets, mailer
 from logging import Logger
 from pathlib import Path
 
@@ -18,7 +18,7 @@ def secure_copy(
     local_zipped_path: Path,
     month_name: str | None,
     year: str | None,
-) -> set[str]:
+) -> None:
     """
     Takes in a list of paths for location of website log files
     If historical
@@ -52,9 +52,13 @@ def secure_copy(
                     )
                 else:
                     logger.critical(f"Remote scp issue: {remote_zipped_filename}")
+                    exit()
 
             except (OSError, FileNotFoundError) as err:
                 logger.critical(f"see: {err} for more information")
+                # SEND EMAIL?
+                # mailer.send_mail(subject="**WEBLOG SCP FAILURE", text="check ssh agent process and key")
+                exit()
 
         else:
             try:

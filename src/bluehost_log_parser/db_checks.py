@@ -18,14 +18,14 @@ from sqlalchemy_utils import database_exists, create_database
 
 from bluehost_log_parser.insert_activity import MY_LOGS_TABLE
 
-DB_HOSTNAME = f"{my_secrets.local_dbhost}"
-DB_NAME = f"{my_secrets.local_dbname}"
-DB_USER = f"{my_secrets.local_dbuser}"
-DB_PW = f"{my_secrets.local_dbpassword}"
-DB_URI = f"{my_secrets.local_dburi}"
+DB_HOSTNAME: str = f"{my_secrets.local_dbhost}"
+DB_NAME: str = f"{my_secrets.local_dbname}"
+DB_USER: str = f"{my_secrets.local_dbuser}"
+DB_PW: str = f"{my_secrets.local_dbpassword}"
+DB_URI: str = f"{my_secrets.local_dburi}"
 
-LOGS_TABLE = "logs"
-SOURCES_TABLE = "sources"
+LOGS_TABLE: str = "logs"
+SOURCES_TABLE: str = "sources"
 
 
 def schema():
