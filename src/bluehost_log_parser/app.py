@@ -2,7 +2,7 @@
 import logging
 import pandas as pd
 import plotly.express as px
-from dash_bootstrap_components.themes import BOOTSTRAP
+import dash_bootstrap_components as dbc
 from dash import Dash, html, dash_table, dcc
 from bluehost_log_parser import my_secrets
 from logging import Logger
@@ -28,7 +28,7 @@ def main():
     refs = [r for r in df_group.groups]
     print(refs)
 
-    app = Dash()
+    app = Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
     # app.layout = create_layout(app, df)
     app.layout = [
         html.Div(children="Webserver Logs App"),
