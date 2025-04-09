@@ -22,15 +22,20 @@ def main():
         exit()
 
     df = pd.read_sql_table(con=engine.connect(), table_name="logs")
-    df.where((df["CODE"] == "200") & (df["REF_URL"] == "tascs.net:443"), inplace=True)
+    df.where((df["CODE"] == "200") & (df["REF_URL"] != "tascs.net:443"), inplace=True)
     df.sort_values("ACCESSED", inplace=True, ascending=False)
     df_group = df.groupby(by="REF_URL")
     refs = [r for r in df_group.groups]
     print(refs)
 
     app = Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
+    app.layout = dbc.Alert(
+        "Hello, Bootstrap!", className="m-5"
+    )
     # app.layout = create_layout(app, df)
     app.layout = [
+        dbc.Alert(
+        "Hello, Bootstrap!", className="m-5"),
         html.Div(children="Webserver Logs App"),
         dash_table.DataTable(data=df.to_dict("records"), page_size=25),
         dcc.Graph(figure=px.histogram(df, x="AGENT", y="SIZE", histfunc="avg")),
