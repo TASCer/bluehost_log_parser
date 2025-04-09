@@ -14,15 +14,12 @@ logger: Logger = logging.getLogger(__name__)
 
 
 def main():
-        
-
     try:
         engine: Engine = create_engine(f"mysql+pymysql://{my_secrets.local_dburi}")
 
     except exc.SQLAlchemyError as e:
         logger.critical(str(e))
         exit()
-
 
     df = pd.read_sql_table(con=engine.connect(), table_name="logs")
     df.where((df["CODE"] == "200") & (df["REF_URL"] == "tascs.net:443"), inplace=True)
@@ -43,4 +40,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()    
+    main()
