@@ -15,7 +15,7 @@ local_dburi = f"{local_dbuser}:{local_dbpassword}@{local_dbhost}/{local_dbname}"
 exchange_user = "user@user.tld"
 exchange_password = "password"
 exchange_mail_from = "user@user.tld"
-exchange_mailhost = 'mailserver.domain.tld'
+exchange_mailhost = "mailserver.domain.tld"
 # RECIPIENT LIST
 email_to = ["user@user.tld", "user2@user.tld", "user3@user.tld"]
 # TEST EMAIL INFO
