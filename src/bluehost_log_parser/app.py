@@ -1,35 +1,45 @@
+# https://github.com/ArjanCodes/2022-dash
 import logging
 import pandas as pd
 import plotly.express as px
-
+from dash_bootstrap_components.themes import BOOTSTRAP
 from dash import Dash, html, dash_table, dcc
 from bluehost_log_parser import my_secrets
 from logging import Logger
 from sqlalchemy import create_engine, Engine, exc
+from dash.dependencies import Input, Output
+# from bluehost_log_parser.components.layout import create_layout
 
 logger: Logger = logging.getLogger(__name__)
 
 
-try:
-    engine: Engine = create_engine(f"mysql+pymysql://{my_secrets.local_dburi}")
+def main():
+        
 
-except exc.SQLAlchemyError as e:
-    logger.critical(str(e))
-    exit()
+    try:
+        engine: Engine = create_engine(f"mysql+pymysql://{my_secrets.local_dburi}")
+
+    except exc.SQLAlchemyError as e:
+        logger.critical(str(e))
+        exit()
 
 
-df = pd.read_sql_table(con=engine.connect(), table_name="logs")
-df.where((df["CODE"] == "404") & (df["REF_URL"] == "hoa.tascs.net"), inplace=True)
-df.sort_values("ACCESSED", inplace=True, ascending=False)
-df_group = df.groupby(by="SOURCE")
-print(df_group.count())
+    df = pd.read_sql_table(con=engine.connect(), table_name="logs")
+    df.where((df["CODE"] == "200") & (df["REF_URL"] == "cag.bis.mybluehost.me"), inplace=True)
+    df.sort_values("ACCESSED", inplace=True, ascending=False)
+    df_group = df.groupby(by="SOURCE")
+    print(df.head())
 
-app = Dash()
+    app = Dash()
+    # app.layout = create_layout(app, df)
+    app.layout = [
+        html.Div(children="Webserver Logs App"),
+        dash_table.DataTable(data=df.to_dict("records"), page_size=25),
+        # dcc.Graph(figure=px.histogram(df, x="AGENT", y="SIZE", histfunc="avg")),
+    ]
 
-app.layout = [
-    html.Div(children="Webserver Logs App"),
-    dash_table.DataTable(data=df.to_dict("records"), page_size=25),
-    dcc.Graph(figure=px.histogram(df, x="AGENT", y="SIZE", histfunc="avg")),
-]
-if __name__ == "__main__":
     app.run(debug=True)
+
+
+if __name__ == "__main__":
+    main()    

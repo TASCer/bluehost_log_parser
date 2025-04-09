@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "Python: main",
             "type": "python",
@@ -12,6 +13,17 @@
             "program": "main.py",
             "console": "integratedTerminal",
             "justMyCode": true
+        },
+
+        {
+            "name": "Python: dash",
+            "type": "python",
+            "cwd": "${workspaceFolder}/src/bluehost_log_parser/",
+            "request": "launch",
+            "program": "app.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
         }
+
     ]
 }
