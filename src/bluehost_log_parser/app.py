@@ -25,17 +25,18 @@ def main():
 
 
     df = pd.read_sql_table(con=engine.connect(), table_name="logs")
-    df.where((df["CODE"] == "200") & (df["REF_URL"] == "cag.bis.mybluehost.me"), inplace=True)
+    df.where((df["CODE"] == "200") & (df["REF_URL"] == "tascs.net:443"), inplace=True)
     df.sort_values("ACCESSED", inplace=True, ascending=False)
-    df_group = df.groupby(by="SOURCE")
-    print(df.head())
+    df_group = df.groupby(by="REF_URL")
+    refs = [r for r in df_group.groups]
+    print(refs)
 
     app = Dash()
     # app.layout = create_layout(app, df)
     app.layout = [
         html.Div(children="Webserver Logs App"),
         dash_table.DataTable(data=df.to_dict("records"), page_size=25),
-        # dcc.Graph(figure=px.histogram(df, x="AGENT", y="SIZE", histfunc="avg")),
+        dcc.Graph(figure=px.histogram(df, x="AGENT", y="SIZE", histfunc="avg")),
     ]
 
     app.run(debug=True)
