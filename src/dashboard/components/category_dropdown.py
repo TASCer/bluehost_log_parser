@@ -10,6 +10,7 @@ from .dropdown_helper import to_dropdown_options
 
 def render(app: Dash) -> html.Div:
     source = load_weblog_data()
+
     @app.callback(
         Output(ids.CATEGORY_DROPDOWN, "value"),
         [

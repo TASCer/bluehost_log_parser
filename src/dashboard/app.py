@@ -2,9 +2,10 @@
 import logging
 import plotly.express as px
 import dash_bootstrap_components as dbc
-from dash import Dash, dash_table#, dcc
+from dash import Dash, dash_table  # , dcc
 from logging import Logger
 from dashboard.data import loader
+
 # from dash.dependencies import Input, Output
 from dashboard.components import layout
 

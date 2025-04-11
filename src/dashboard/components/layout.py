@@ -1,12 +1,12 @@
-from dash import Dash, html, dash_table
-from dashboard.components import (
-    # bar_chart,
-    # nation_dropdown,
-    # month_dropdown,
-    # pie_chart,
-    category_dropdown
-    # year_dropdown,
-)
+from dash import Dash, html  # , dash_table
+# from dashboard.components import (
+# bar_chart,
+# nation_dropdown,
+# month_dropdown,
+# pie_chart,
+# category_dropdown,
+# year_dropdown,
+# )
 
 # from ..data.source import DataSource
 

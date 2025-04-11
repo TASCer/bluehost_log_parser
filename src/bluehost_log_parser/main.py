@@ -7,14 +7,14 @@ from bluehost_log_parser import fetch_server_logs
 from bluehost_log_parser import insert_activity
 from bluehost_log_parser import insert_unique_sources
 from bluehost_log_parser import mailer
-from dashboard import app
 from bluehost_log_parser import parse_logs
 from bluehost_log_parser import unzip_fetched_logs
 from bluehost_log_parser import update_sources_whois
+from dashboard import app
 from logging import Logger, Formatter
 from pathlib import Path
 
-PROJECT_ROOT = Path.cwd()  # / "src" / "bluehost_log_parser"
+PROJECT_ROOT = Path.cwd()
 LOGGER_ROOT = Path.cwd().parent.parent
 
 now: dt = dt.date.today()
