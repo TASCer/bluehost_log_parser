@@ -5,6 +5,7 @@
     "version": "0.2.0",
     "configurations": [
 
+
         {
             "name": "Python: main",
             "type": "python",
@@ -18,7 +19,7 @@
         {
             "name": "Python: dash",
             "type": "python",
-            "cwd": "${workspaceFolder}/src/bluehost_log_parser/",
+            "cwd": "${workspaceFolder}/src/dashboard/",
             "request": "launch",
             "program": "app.py",
             "console": "integratedTerminal",
