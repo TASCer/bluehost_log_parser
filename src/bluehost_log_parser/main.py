@@ -7,8 +7,7 @@ from bluehost_log_parser import fetch_server_logs
 from bluehost_log_parser import insert_activity
 from bluehost_log_parser import insert_unique_sources
 from bluehost_log_parser import mailer
-
-# from bluehost_log_parser import my_secrets
+from dashboard import app
 from bluehost_log_parser import parse_logs
 from bluehost_log_parser import unzip_fetched_logs
 from bluehost_log_parser import update_sources_whois
@@ -110,6 +109,8 @@ def main(month_num: int | None, year: int | None) -> None:
             "ERROR: BH WebLog Processing",
             "NO LOGS PROCESSED! CHECK log, possible error downloading from Bluehost",
         )
+
+    app.main()
 
 
 if __name__ == "__main__":

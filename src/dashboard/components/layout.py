@@ -24,7 +24,7 @@ def create_layout(app: Dash) -> html.Div:
                         # nation_dropdown.render(app),
                         # year_dropdown.render(app),
                         # month_dropdown.render(app),
-                        category_dropdown.render(app),
+                        # category_dropdown.render(app),
                     ],
                 ),
             ],
