@@ -15,7 +15,7 @@ from logging import Logger, Formatter
 from pathlib import Path
 
 PROJECT_ROOT = Path.cwd()
-LOGGER_ROOT = Path.cwd().parent.parent
+LOGGER_ROOT = Path.cwd().parent
 
 now: dt = dt.date.today()
 todays_date: str = now.strftime("%D").replace("/", "-")
@@ -23,7 +23,7 @@ todays_date: str = now.strftime("%D").replace("/", "-")
 root_logger: Logger = logging.getLogger()
 root_logger.setLevel(logging.INFO)
 
-fh = logging.FileHandler(f"{LOGGER_ROOT}/{todays_date}.log")
+fh = logging.FileHandler(f"{LOGGER_ROOT}/parser-{todays_date}.log")
 fh.setLevel(logging.DEBUG)
 
 formatter: Formatter = logging.Formatter(

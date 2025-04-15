@@ -1,6 +1,11 @@
+import logging
 import pandas as pd
+
 from sqlalchemy import create_engine, Engine, exc
 from bluehost_log_parser.my_secrets import local_dburi
+from logging import Logger
+
+logger: Logger = logging.getLogger(__name__)
 
 
 class DataSchema:
@@ -26,11 +31,11 @@ def load_weblog_data() -> pd.DataFrame:
         engine: Engine = create_engine(f"mysql+pymysql://{local_dburi}")
 
     except exc.SQLAlchemyError as e:
-        # logger.critical(str(e))
+        logger.critical(str(e))
         exit()
 
     df = pd.read_sql_table(
         con=engine.connect(), table_name="logs", parse_dates=[DataSchema.DATE]
     )
-    print(df.info())
+
     return df

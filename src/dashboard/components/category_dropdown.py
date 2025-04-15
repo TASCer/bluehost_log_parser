@@ -10,6 +10,7 @@ from .dropdown_helper import to_dropdown_options
 
 def render(app: Dash) -> html.Div:
     source = load_weblog_data()
+    print()
 
     @app.callback(
         Output(ids.CATEGORY_DROPDOWN, "value"),
@@ -20,20 +21,20 @@ def render(app: Dash) -> html.Div:
         ],
     )
     def select_all_categories(_: int) -> list[str]:
-        return source.filter("CODE").unique_categories
+        return source["CODE"].unique()
 
     return html.Div(
         children=[
             dcc.Dropdown(
                 id=ids.CATEGORY_DROPDOWN,
-                options=to_dropdown_options(source.unique_categories),
-                value=source.unique_categories,
+                options=to_dropdown_options(source["CODE"].unique()),
+                value=source["CODE"].unique(),
                 multi=True,
-                # placeholder=i18n.t("general.select"),
+                placeholder="general.select",
             ),
             html.Button(
                 className="dropdown-button",
-                # children=[i18n.t("general.select_all")],
+                children=["general.select_all"],
                 id=ids.SELECT_ALL_CATEGORIES_BUTTON,
                 n_clicks=0,
             ),
