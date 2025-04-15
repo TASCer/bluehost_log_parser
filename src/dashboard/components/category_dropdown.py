@@ -1,4 +1,3 @@
-# import i18n
 from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
 from dashboard.data.loader import load_weblog_data

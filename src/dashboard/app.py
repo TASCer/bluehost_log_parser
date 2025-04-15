@@ -3,8 +3,8 @@ import datetime as dt
 import logging
 import plotly.express as px
 import dash_bootstrap_components as dbc
-# import datetime as dt
 
+# import datetime as dt
 from dash import Dash
 from dashboard.data import loader
 from logging import Formatter, Logger
@@ -44,16 +44,12 @@ def main():
     # df.where((df["CODE"] == "200") & (df["REF_URL"] == "TASCS.NET"), inplace=True)
     # df.sort_values("ACCESSED", inplace=True, ascending=False)
     # print("DF", df.info())
-    df_group = df.groupby("REF_URL").count()
-    print(df_group)
-    refs = [r.lower() for r in df_group]
-    print("REF", refs, len(refs))
+    # df_group = df.groupby("REF_URL").count()
+    # print(df_group)
+    # refs = [r.lower() for r in df_group]
+    # print("REF", refs, len(refs))
 
     app.layout = layout.create_layout(app, df)
-    print(app.layout)
-    # app.layout = [
-    # dcc.Graph(figure=px.histogram(df, x="AGENT", y="SIZE", histfunc="avg")),
-    # ]
 
     app.run(debug=True)
 

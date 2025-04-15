@@ -14,10 +14,12 @@ from dashboard.components import (
 
 
 def create_layout(app: Dash, data) -> html.Div:
-    # dash_table.DataTable(data=df.to_dict("records"), page_size=25, column_selectable=True),
-
     return (
         dbc.Alert("WebLogs App", className="s-15"),
+        # ISSUE USING COLUMN SELECTABLE. NEED TO USE DataSource method DF not supported.
+        dash_table.DataTable(
+            data=data.to_dict("records"), page_size=25, column_selectable=False
+        ),
         html.Div(
             className="app-div",
             children=[
@@ -42,8 +44,3 @@ def create_layout(app: Dash, data) -> html.Div:
     #     pie_chart.render(app, source),
     #     ],
     # )
-
-
-# app.layout = dbc.Alert(
-#     "Hello, Bootstrap!", className="m-5"
-# )
