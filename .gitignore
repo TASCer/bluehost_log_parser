@@ -18,4 +18,6 @@ wheels/
 /_old_logs/*.log
 src/bluehost_log_parser/input/zipped_logfiles/*
 
-src/bluehost_log_parser/03-14-25.log
+src/bluehost_log_parser/*.log
+src/dashboard/*.log
+src/bluehost_log_parser/*.log
