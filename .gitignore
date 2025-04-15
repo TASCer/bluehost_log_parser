@@ -9,15 +9,14 @@ wheels/
 # Virtual environments
 .venv
 
-
-# FFG
-/input/*
+# Secrets
 /src/bluehost_log_parser/my_secrets.py
-/src/bluehost_log_parser/output/unzipped_logfiles/*
-/*.log
-/_old_logs/*.log
-src/bluehost_log_parser/input/zipped_logfiles/*
 
-src/bluehost_log_parser/*.log
-src/dashboard/*.log
-src/bluehost_log_parser/*.log
+# Logs
+/_old_logs/*.log
+src/*.log
+
+# Folder
+/src/bluehost_log_parser/output/unzipped_logfiles/*
+src/bluehost_log_parser/input/zipped_logfiles/*
+/input/*
