@@ -1,4 +1,3 @@
-import i18n
 import plotly.graph_objects as go
 from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
@@ -21,7 +20,7 @@ def render(app: Dash, source: DataSource) -> html.Div:
     ) -> html.Div:
         filtered_source = source.filter(years, months, categories)
         if not filtered_source.row_count:
-            return html.Div(i18n.t("general.no_data"), id=ids.PIE_CHART)
+            return html.Div(("general.no_data"), id=ids.PIE_CHART)
 
         pie = go.Pie(
             labels=filtered_source.all_categories,

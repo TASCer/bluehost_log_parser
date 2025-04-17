@@ -4,10 +4,10 @@ import dash_bootstrap_components as dbc
 from dashboard.components import (
     # bar_chart,
     # nation_dropdown,
-    # month_dropdown,
+    month_dropdown,
     # pie_chart,
     category_dropdown,
-    # year_dropdown,
+    year_dropdown,
 )
 
 # from ..data.source import DataSource
@@ -32,9 +32,9 @@ def create_layout(app: Dash, data) -> html.Div:
                     className="dropdown-container",
                     children=[
                         # nation_dropdown.render(app),
-                        # year_dropdown.render(app),
-                        # month_dropdown.render(app),
-                        category_dropdown.render(app),
+                        # year_dropdown.render(app, data),
+                        # month_dropdown.render(app, data),
+                        category_dropdown.render(app, data),
                     ],
                 ),
             ],

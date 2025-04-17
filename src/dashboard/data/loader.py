@@ -1,29 +1,28 @@
 import logging
 import pandas as pd
-
+from functools import reduce
+from typing import Callable
 from sqlalchemy import create_engine, Engine, exc
 from bluehost_log_parser.my_secrets import local_dburi
 from logging import Logger
 
 logger: Logger = logging.getLogger(__name__)
 
-
-class DataSchema:
-    # AMOUNT = "amount"
-    # CATEGORY = "category"
-    DATE = "date"
-    MONTH = "month"
-    YEAR = "year"
+Preprocessor = Callable[[pd.DataFrame], pd.DataFrame]
 
 
 def create_year_column(df: pd.DataFrame) -> pd.DataFrame:
-    df[DataSchema.YEAR] = df[DataSchema.DATE].dt.year.astype(str)
+    df["YEAR"] = df["ACCESSED"].dt.year
     return df
 
 
 def create_month_column(df: pd.DataFrame) -> pd.DataFrame:
-    df[DataSchema.MONTH] = df[DataSchema.DATE].dt.month.astype(str)
+    df["MONTH"] = df["ACCESSED"].dt.month
     return df
+
+
+def compose(*functions: Preprocessor) -> Preprocessor:
+    return reduce(lambda f, g: lambda x: g(f(x)), functions)
 
 
 def load_weblog_data() -> pd.DataFrame:
@@ -34,8 +33,11 @@ def load_weblog_data() -> pd.DataFrame:
         logger.critical(str(e))
         exit()
 
-    df = pd.read_sql_table(
-        con=engine.connect(), table_name="logs", parse_dates=[DataSchema.DATE]
+    data = pd.read_sql_table(con=engine.connect(), table_name="logs")
+
+    preprocessor = compose(
+        create_year_column,
+        create_month_column,
     )
 
-    return df
+    return preprocessor(data)

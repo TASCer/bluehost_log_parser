@@ -4,13 +4,11 @@ import logging
 import plotly.express as px
 import dash_bootstrap_components as dbc
 
-# import datetime as dt
 from dash import Dash
-from dashboard.data import loader
+from bluehost_log_parser.parse_logs import LogEntry
+from dashboard.data.loader import load_weblog_data
 from logging import Formatter, Logger
 from pathlib import Path
-
-# from dash.dependencies import Input, Output
 from dashboard.components import layout
 
 LOGGER_ROOT = Path.cwd().parent
@@ -40,16 +38,10 @@ app = Dash(
 
 
 def main():
-    df = loader.load_weblog_data()
-    # df.where((df["CODE"] == "200") & (df["REF_URL"] == "TASCS.NET"), inplace=True)
-    # df.sort_values("ACCESSED", inplace=True, ascending=False)
-    # print("DF", df.info())
-    # df_group = df.groupby("REF_URL").count()
-    # print(df_group)
-    # refs = [r.lower() for r in df_group]
-    # print("REF", refs, len(refs))
-
-    app.layout = layout.create_layout(app, df)
+    data = load_weblog_data()
+    # NO WORKIE creating instances re: source.py. Still works so far.
+    # data = LogEntry(**data)
+    app.layout = layout.create_layout(app, data=data)
 
     app.run(debug=True)
 
