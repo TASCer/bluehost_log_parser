@@ -5,7 +5,7 @@ import logging
 import dash_bootstrap_components as dbc
 
 from dash import Dash
-from bluehost_log_parser.parse_logs import LogEntry
+from dashboard.data.source import DataSource
 from dashboard.data.loader import load_weblog_data
 from logging import Formatter, Logger
 from pathlib import Path
@@ -41,9 +41,9 @@ app = Dash(
 
 def main():
     data = load_weblog_data(locale=LOCALE)
-    # NO WORKIE creating instances re: source.py. Still works so far.
-    # data = LogEntry(**data)
-    app.layout = layout.create_layout(app, data=data)
+    data = DataSource(data)
+
+    app.layout = layout.create_layout(app, source=data)
 
     app.run(debug=True)
 
