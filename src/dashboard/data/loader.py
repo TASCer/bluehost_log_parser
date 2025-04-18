@@ -1,13 +1,12 @@
-import datetime as dt
-from functools import partial, reduce
-from typing import Callable
-
 import babel.dates
+import datetime as dt
 import i18n
 import pandas as pd
 
-Preprocessor = Callable[[pd.DataFrame], pd.DataFrame]
-
+from bluehost_log_parser.my_secrets import local_dburi
+from functools import partial, reduce
+from typing import Callable
+from sqlalchemy import Engine, create_engine, exc
 
 class DataSchema:
     AMOUNT = "amount"
@@ -15,6 +14,18 @@ class DataSchema:
     DATE = "date"
     MONTH = "month"
     YEAR = "year"
+
+try:
+    engine: Engine = create_engine(f"mysql+pymysql://{local_dburi}")
+
+except exc.SQLAlchemyError as e:
+    # logger.critical(str(e))
+    exit()
+
+
+
+Preprocessor = Callable[[pd.DataFrame], pd.DataFrame]
+
 
 
 def create_year_column(df: pd.DataFrame) -> pd.DataFrame:
@@ -47,17 +58,10 @@ def compose(*functions: Preprocessor) -> Preprocessor:
     return reduce(lambda f, g: lambda x: g(f(x)), functions)
 
 
-def load_transaction_data(path: str, locale: str) -> pd.DataFrame:
-    # load the data from the CSV file
-    data = pd.read_csv(
-        path,
-        dtype={
-            DataSchema.AMOUNT: float,
-            DataSchema.CATEGORY: str,
-            # DataSchema.DATE: str,
-        },
-        parse_dates=[DataSchema.DATE],
-    )
+def load_weblog_data(locale: str) -> pd.DataFrame:
+    with engine.connect() as conn, conn.begin():
+        data = pd.read_sql(sql="SELECT * from logs", con=conn)#,
+        
     preprocessor = compose(
         create_year_column,
         create_month_column,

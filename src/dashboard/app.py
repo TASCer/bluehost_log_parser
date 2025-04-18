@@ -1,7 +1,7 @@
-# https://github.com/ArjanCodes/2022-dash
+import i18n
 import datetime as dt
 import logging
-import plotly.express as px
+# import plotly.express as px
 import dash_bootstrap_components as dbc
 
 from dash import Dash
@@ -30,6 +30,8 @@ root_logger.addHandler(fh)
 
 logger: Logger = logging.getLogger(__name__)
 
+LOCALE = "en"
+
 app = Dash(
     name="WebLog App",
     external_stylesheets=[dbc.themes.BOOTSTRAP],
@@ -38,7 +40,7 @@ app = Dash(
 
 
 def main():
-    data = load_weblog_data()
+    data = load_weblog_data(locale=LOCALE)
     # NO WORKIE creating instances re: source.py. Still works so far.
     # data = LogEntry(**data)
     app.layout = layout.create_layout(app, data=data)

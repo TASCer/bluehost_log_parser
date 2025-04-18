@@ -1,5 +1,5 @@
 from dash import Dash, html
-from src.components import (
+from dashboard.components import (
     bar_chart,
     category_dropdown,
     month_dropdown,
