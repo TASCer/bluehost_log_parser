@@ -33,7 +33,7 @@ class DataSource:
     def create_pivot_table(self) -> pd.DataFrame:
         pt = self._data.pivot_table(
             values=DataSchema.AMOUNT,
-            index=[DataSchema.CATEGORY],
+            index=[DataSchema.CODE],
             aggfunc="sum",
             fill_value=0,
             dropna=False,
@@ -54,7 +54,7 @@ class DataSource:
 
     @property
     def all_categories(self) -> list[str]:
-        return self._data[DataSchema.CATEGORY].tolist()
+        return self._data[DataSchema.CODE].tolist()
 
     @property
     def all_amounts(self) -> list[str]:

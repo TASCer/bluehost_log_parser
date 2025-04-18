@@ -26,7 +26,7 @@ def render(app: Dash, source: DataSource) -> html.Div:
 
         fig = px.bar(
             filtered_source.create_pivot_table(),
-            x=DataSchema.CATEGORY,
+            x=DataSchema.CODE,
             y=DataSchema.AMOUNT,
             color="category",
             labels={
