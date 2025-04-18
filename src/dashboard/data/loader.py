@@ -25,6 +25,7 @@ class DataSchema:
     YEAR = "YEAR"
     MONTH = "MONTH"
 
+
 try:
     engine: Engine = create_engine(f"mysql+pymysql://{local_dburi}")
 
@@ -67,8 +68,8 @@ def compose(*functions: Preprocessor) -> Preprocessor:
 
 def load_weblog_data(locale: str) -> pd.DataFrame:
     with engine.connect() as conn, conn.begin():
-        data = pd.read_sql(sql="SELECT * from logs", con=conn)#,
-        
+        data = pd.read_sql(sql="SELECT * from logs", con=conn)  # ,
+
     preprocessor = compose(
         create_year_column,
         create_month_column,

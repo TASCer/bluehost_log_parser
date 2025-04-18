@@ -1,7 +1,7 @@
 import i18n
 import datetime as dt
 import logging
-# import plotly.express as px
+
 import dash_bootstrap_components as dbc
 
 from dash import Dash
@@ -36,6 +36,7 @@ app = Dash(
     name="WebLog App",
     external_stylesheets=[dbc.themes.BOOTSTRAP],
     description="View Apache Weblog data",
+    title="Weblog App",
 )
 
 
