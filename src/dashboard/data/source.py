@@ -1,4 +1,3 @@
-# TODO Determine if needed. Currently not in use
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -6,8 +5,8 @@ from typing import Optional
 
 import pandas as pd
 
-from .loader import LogEntry
-# from .loader import LogEntry
+from ..data.loader import DataSchema
+from .loader import DataSchema
 
 
 @dataclass
@@ -33,13 +32,13 @@ class DataSource:
 
     def create_pivot_table(self) -> pd.DataFrame:
         pt = self._data.pivot_table(
-            values=LogEntry.RES_CODE,
-            index=[LogEntry.SOURCE],
+            values=DataSchema.AMOUNT,
+            index=[DataSchema.CATEGORY],
             aggfunc="sum",
             fill_value=0,
             dropna=False,
         )
-        return pt.reset_index().sort_values(LogEntry.AMOUNT, ascending=False)
+        return pt.reset_index().sort_values(DataSchema.AMOUNT, ascending=False)
 
     @property
     def row_count(self) -> int:
@@ -47,19 +46,19 @@ class DataSource:
 
     @property
     def all_years(self) -> list[str]:
-        return self._data[LogEntry.YEAR].tolist()
+        return self._data[DataSchema.YEAR].tolist()
 
     @property
     def all_months(self) -> list[str]:
-        return self._data[LogEntry.MONTH].tolist()
+        return self._data[DataSchema.MONTH].tolist()
 
     @property
     def all_categories(self) -> list[str]:
-        return self._data[LogEntry.RES_CODE].tolist()
+        return self._data[DataSchema.CATEGORY].tolist()
 
     @property
     def all_amounts(self) -> list[str]:
-        return self._data[LogEntry.FILE].tolist()
+        return self._data[DataSchema.AMOUNT].tolist()
 
     @property
     def unique_years(self) -> list[str]:

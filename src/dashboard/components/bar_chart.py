@@ -1,13 +1,14 @@
+import i18n
 import plotly.express as px
 from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
 
-# from ..data.loader import DataSchema
-# from ..data.source import DataSource
+from ..data.loader import DataSchema
+from ..data.source import DataSource
 from . import ids
 
 
-def render(app: Dash, source) -> html.Div:
+def render(app: Dash, source: DataSource) -> html.Div:
     @app.callback(
         Output(ids.BAR_CHART, "children"),
         [
@@ -21,16 +22,16 @@ def render(app: Dash, source) -> html.Div:
     ) -> html.Div:
         filtered_source = source.filter(years, months, categories)
         if not filtered_source.row_count:
-            return html.Div(("general.no_data"), id=ids.BAR_CHART)
+            return html.Div(i18n.t("general.no_data"), id=ids.BAR_CHART)
 
         fig = px.bar(
             filtered_source.create_pivot_table(),
-            x=source.CATEGORY,
-            y=source.AMOUNT,
+            x=DataSchema.CATEGORY,
+            y=DataSchema.AMOUNT,
             color="category",
             labels={
-                "category": "general.category",
-                "amount": "general.amount",
+                "category": i18n.t("general.category"),
+                "amount": i18n.t("general.amount"),
             },
         )
 

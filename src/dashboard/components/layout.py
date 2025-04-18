@@ -1,46 +1,30 @@
-from dash import Dash, html, dash_table, dcc
-import plotly.express as px
-import dash_bootstrap_components as dbc
-from dashboard.components import (
-    # bar_chart,
-    # nation_dropdown,
-    month_dropdown,
-    # pie_chart,
+from dash import Dash, html
+from src.components import (
+    bar_chart,
     category_dropdown,
+    month_dropdown,
+    pie_chart,
     year_dropdown,
 )
 
-# from ..data.source import DataSource
+from ..data.source import DataSource
 
 
-def create_layout(app: Dash, data) -> html.Div:
-    return (
-        dbc.Alert("WebLogs App", className="s-15"),
-        # ISSUE USING COLUMN SELECTABLE. NEED TO USE DataSource method DF not supported.
-        dash_table.DataTable(
-            data=data.to_dict("records"), page_size=25, column_selectable=False
-        ),
-        html.Div(
-            className="app-div",
-            children=[
-                # html.H1(app.title),
-                html.Hr(),
-                dcc.Graph(
-                    figure=px.histogram(data, x="AGENT", y="SIZE", histfunc="avg")
-                ),
-                html.Div(
-                    className="dropdown-container",
-                    children=[
-                        # nation_dropdown.render(app),
-                        # year_dropdown.render(app, data),
-                        # month_dropdown.render(app, data),
-                        category_dropdown.render(app, data),
-                    ],
-                ),
-            ],
-        ),
+def create_layout(app: Dash, source: DataSource) -> html.Div:
+    return html.Div(
+        className="app-div",
+        children=[
+            html.H1(app.title),
+            html.Hr(),
+            html.Div(
+                className="dropdown-container",
+                children=[
+                    year_dropdown.render(app, source),
+                    month_dropdown.render(app, source),
+                    category_dropdown.render(app, source),
+                ],
+            ),
+            bar_chart.render(app, source),
+            pie_chart.render(app, source),
+        ],
     )
-    # bar_chart.render(app, source),
-    #     pie_chart.render(app, source),
-    #     ],
-    # )
