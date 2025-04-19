@@ -12,9 +12,11 @@ from ..data.source import DataSource
 
 def create_layout(app: Dash, source: DataSource) -> html.Div:
     return html.Div(
-        className="app-div",
+        className="bg-primary-subtle border border-primary-subtle p-2",
         children=[
+            html.H1(app.title),
             html.Hr(),
+            # html.H6(source.unique_years),
             html.Div(
                 className="dropdown-container",
                 children=[
