@@ -1,7 +1,7 @@
 from dash import Dash, dash_table, html, dcc
 from dashboard.components import (
     bar_chart,
-    category_dropdown,
+    code_dropdown,
     month_dropdown,
     pie_chart,
     year_dropdown,
@@ -22,10 +22,10 @@ def create_layout(app: Dash, source: DataSource) -> html.Div:
                 children=[
                     year_dropdown.render(app, source),
                     month_dropdown.render(app, source),
-                    category_dropdown.render(app, source),
+                    code_dropdown.render(app, source),
                 ],
             ),
             bar_chart.render(app, source),
-            pie_chart.render(app, source),
+            # pie_chart.render(app, source),
         ],
     )

@@ -56,7 +56,7 @@ def convert_date_locale(df: pd.DataFrame, locale: str) -> pd.DataFrame:
 
 def translate_category_language(df: pd.DataFrame) -> pd.DataFrame:
     def translate(category: str) -> str:
-        return i18n.t(f"category.{category}")
+        return i18n.t(f"{category}")
 
     df[DataSchema.CODE] = df[DataSchema.CODE].apply(translate)
     return df

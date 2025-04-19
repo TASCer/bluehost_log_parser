@@ -17,28 +17,28 @@ class DataSource:
         self,
         years: Optional[list[str]] = None,
         months: Optional[list[str]] = None,
-        categories: Optional[list[str]] = None,
+        codes: Optional[list[str]] = None,
     ) -> DataSource:
         if years is None:
             years = self.unique_years
         if months is None:
             months = self.unique_months
-        if categories is None:
-            categories = self.unique_categories
+        if codes is None:
+            codes = self.unique_codes
         filtered_data = self._data.query(
-            "year in @years and month in @months and category in @categories"
+            "YEAR in @years and MONTH in @months and CODE in @codes"
         )
         return DataSource(filtered_data)
 
     def create_pivot_table(self) -> pd.DataFrame:
         pt = self._data.pivot_table(
-            values=DataSchema.AMOUNT,
+            values=DataSchema.MONTH,
             index=[DataSchema.CODE],
             aggfunc="sum",
             fill_value=0,
             dropna=False,
         )
-        return pt.reset_index().sort_values(DataSchema.AMOUNT, ascending=False)
+        return pt.reset_index().sort_values(DataSchema.MONTH, ascending=False)
 
     @property
     def row_count(self) -> int:
@@ -53,7 +53,7 @@ class DataSource:
         return self._data[DataSchema.MONTH].tolist()
 
     @property
-    def all_categories(self) -> list[str]:
+    def all_codes(self) -> list[str]:
         return self._data[DataSchema.CODE].tolist()
 
     @property
@@ -69,5 +69,5 @@ class DataSource:
         return sorted(set(self.all_months))
 
     @property
-    def unique_categories(self) -> list[str]:
-        return sorted(set(self.all_categories))
+    def unique_codes(self) -> list[str]:
+        return sorted(set(self.all_codes))

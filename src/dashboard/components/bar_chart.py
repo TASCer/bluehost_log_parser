@@ -14,24 +14,24 @@ def render(app: Dash, source: DataSource) -> html.Div:
         [
             Input(ids.YEAR_DROPDOWN, "value"),
             Input(ids.MONTH_DROPDOWN, "value"),
-            Input(ids.CATEGORY_DROPDOWN, "value"),
+            Input(ids.CODE_DROPDOWN, "value"),
         ],
     )
     def update_bar_chart(
-        years: list[str], months: list[str], categories: list[str]
+        years: list[str], months: list[str], codes: list[str]
     ) -> html.Div:
-        filtered_source = source.filter(years, months, categories)
+        filtered_source = source.filter(years, months, codes)
         if not filtered_source.row_count:
             return html.Div(i18n.t("general.no_data"), id=ids.BAR_CHART)
 
         fig = px.bar(
             filtered_source.create_pivot_table(),
             x=DataSchema.CODE,
-            y=DataSchema.ACTION,
-            color="category",
+            y=DataSchema.MONTH,
+            color="CODE",
             labels={
-                "category": i18n.t("general.category"),
-                "amount": i18n.t("general.amount"),
+                "code": i18n.t("general.code"),
+                "month": i18n.t("general.month"),
             },
         )
 

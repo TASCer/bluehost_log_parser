@@ -13,7 +13,7 @@ def render(app: Dash, source: DataSource) -> html.Div:
         [
             Input(ids.YEAR_DROPDOWN, "value"),
             Input(ids.MONTH_DROPDOWN, "value"),
-            Input(ids.CATEGORY_DROPDOWN, "value"),
+            Input(ids.CODE_DROPDOWN, "value"),
         ],
     )
     def update_pie_chart(
