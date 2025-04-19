@@ -1,3 +1,4 @@
+# TODO month labels strange, string og names?!
 import i18n
 import plotly.express as px
 from dash import Dash, dcc, html
