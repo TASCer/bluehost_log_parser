@@ -18,13 +18,13 @@ def render(app: Dash, source: DataFrame) -> html.Div:
     def update_pie_chart(
         years: list[str], months: list[str], codes: list[str]
     ) -> html.Div:
-        filtered_source = source.filter(years, months, codes)
-        if not filtered_source.row_count:
-            return html.Div("general.no_data", id=ids.PIE_CHART)
+        # filtered_source = source.filter(years, months, codes)
+        # if not filtered_source.row_count:
+        #     return html.Div("general.no_data", id=ids.PIE_CHART)
 
         pie = go.Pie(
-            labels=filtered_source.all_codes,
-            values=filtered_source.all_months,
+            labels=source["CODE"],
+            values=source["MONTH"],
             hole=0.5,
         )
 

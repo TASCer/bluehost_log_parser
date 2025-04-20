@@ -25,6 +25,6 @@ def create_layout(app: Dash, source: DataFrame) -> html.Div:
                 ],
             ),
             bar_chart.render(app, source),
-            # pie_chart.render(app, source),
+            pie_chart.render(app, source),
         ],
     )
