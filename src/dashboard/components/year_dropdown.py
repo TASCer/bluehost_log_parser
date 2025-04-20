@@ -1,13 +1,11 @@
-import i18n
 from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
-
-from ..data.source import DataSource
+from pandas import DataFrame
 from . import ids
 from .dropdown_helper import to_dropdown_options
 
 
-def render(app: Dash, source: DataSource) -> html.Div:
+def render(app: Dash, source: DataFrame) -> html.Div:
     @app.callback(
         Output(ids.YEAR_DROPDOWN, "value"),
         Input(ids.SELECT_ALL_YEARS_BUTTON, "n_clicks"),
@@ -17,7 +15,7 @@ def render(app: Dash, source: DataSource) -> html.Div:
 
     return html.Div(
         children=[
-            html.H6(i18n.t("general.year")),
+            html.H6("general.year"),
             dcc.Dropdown(
                 id=ids.YEAR_DROPDOWN,
                 options=to_dropdown_options(source.unique_years),
@@ -26,7 +24,7 @@ def render(app: Dash, source: DataSource) -> html.Div:
             ),
             html.Button(
                 className="dropdown-button",
-                children=[i18n.t("general.select_all")],
+                children=["general.select_all"],
                 id=ids.SELECT_ALL_YEARS_BUTTON,
                 n_clicks=0,
             ),

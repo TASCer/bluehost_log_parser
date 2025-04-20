@@ -1,11 +1,9 @@
-import i18n
 import datetime as dt
 import logging
 
 import dash_bootstrap_components as dbc
 
 from dash import Dash
-from dashboard.data.source import DataSource
 from dashboard.data.loader import load_weblog_data
 from logging import Formatter, Logger
 from pathlib import Path
@@ -42,7 +40,6 @@ app = Dash(
 
 def main():
     data = load_weblog_data(locale=LOCALE)
-    data = DataSource(data)
 
     app.layout = layout.create_layout(app, source=data)
 

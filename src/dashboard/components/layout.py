@@ -6,11 +6,9 @@ from dashboard.components import (
     pie_chart,
     year_dropdown,
 )
+from pandas import DataFrame
 
-from ..data.source import DataSource
-
-
-def create_layout(app: Dash, source: DataSource) -> html.Div:
+def create_layout(app: Dash, source: DataFrame) -> html.Div:
     return html.Div(
         className="bg-primary-subtle border border-primary-subtle p-2",
         children=[

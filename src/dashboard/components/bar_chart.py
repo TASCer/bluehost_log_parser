@@ -1,15 +1,13 @@
-# TODO month labels strange, string og names?!
-import i18n
 import plotly.express as px
+
 from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
-
+from pandas import DataFrame
 from ..data.loader import DataSchema
-from ..data.source import DataSource
 from . import ids
 
 
-def render(app: Dash, source: DataSource) -> html.Div:
+def render(app: Dash, source: DataFrame) -> html.Div:
     @app.callback(
         Output(ids.BAR_CHART, "children"),
         [
@@ -23,16 +21,16 @@ def render(app: Dash, source: DataSource) -> html.Div:
     ) -> html.Div:
         filtered_source = source.filter(years, months, codes)
         if not filtered_source.row_count:
-            return html.Div(i18n.t("general.no_data"), id=ids.BAR_CHART)
+            return html.Div("general.no_data", id=ids.BAR_CHART)
 
         fig = px.bar(
             filtered_source.create_pivot_table(),
-            x=DataSchema.CODE,
-            y=DataSchema.MONTH,
+            x=DataSchema.MONTH,
+            y=DataSchema.CODE,
             color="CODE",
             labels={
-                "code": i18n.t("general.code"),
-                "month": i18n.t("general.month"),
+                "code": "general.code",
+                "month": "general.month",
             },
         )
 

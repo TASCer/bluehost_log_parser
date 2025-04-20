@@ -1,13 +1,11 @@
-import i18n
 from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
-
-from ..data.source import DataSource
+from pandas import DataFrame
 from . import ids
 from .dropdown_helper import to_dropdown_options
 
 
-def render(app: Dash, source: DataSource) -> html.Div:
+def render(app: Dash, source: DataFrame) -> html.Div:
     @app.callback(
         Output(ids.CODE_DROPDOWN, "value"),
         [
@@ -21,17 +19,17 @@ def render(app: Dash, source: DataSource) -> html.Div:
 
     return html.Div(
         children=[
-            html.H6(i18n.t("general.code")),
+            html.H6("general.code"),
             dcc.Dropdown(
                 id=ids.CODE_DROPDOWN,
                 options=to_dropdown_options(source.unique_codes),
                 value=source.unique_codes,
                 multi=True,
-                placeholder=i18n.t("general.select"),
+                placeholder="general.select",
             ),
             html.Button(
                 className="dropdown-button",
-                children=[i18n.t("general.select_all")],
+                children="general.select_all",
                 id=ids.SELECT_ALL_CODES_BUTTON,
                 n_clicks=0,
             ),
