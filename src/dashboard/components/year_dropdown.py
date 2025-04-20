@@ -18,8 +18,8 @@ def render(app: Dash, source: DataFrame) -> html.Div:
             html.H6("general.year"),
             dcc.Dropdown(
                 id=ids.YEAR_DROPDOWN,
-                options=to_dropdown_options(source.unique_years),
-                value=source.unique_years,
+                options=[{"label": year, "value": year} for year in source["YEAR"]],
+                value=source["YEAR"],
                 multi=True,
             ),
             html.Button(

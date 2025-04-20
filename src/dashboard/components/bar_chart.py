@@ -3,7 +3,6 @@ import plotly.express as px
 from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
 from pandas import DataFrame
-from ..data.loader import DataSchema
 from . import ids
 
 
@@ -25,8 +24,8 @@ def render(app: Dash, source: DataFrame) -> html.Div:
 
         fig = px.bar(
             filtered_source.create_pivot_table(),
-            x=DataSchema.MONTH,
-            y=DataSchema.CODE,
+            x=source["MONTH"],
+            y=source["CODE"],
             color="CODE",
             labels={
                 "code": "general.code",

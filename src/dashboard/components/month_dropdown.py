@@ -22,8 +22,8 @@ def render(app: Dash, source: DataFrame) -> html.Div:
             html.H6(i18n.t("general.month")),
             dcc.Dropdown(
                 id=ids.MONTH_DROPDOWN,
-                options=to_dropdown_options(source.unique_months),
-                value=source.unique_months,
+                options=to_dropdown_options(source["MONTH"].unique()),
+                value=source["MONTH"].unique(),
                 multi=True,
             ),
             html.Button(

@@ -2,28 +2,11 @@ import babel.dates
 import datetime as dt
 import i18n
 import pandas as pd
-
 from bluehost_log_parser.my_secrets import local_dburi
 from functools import partial, reduce
 from typing import Callable
 from sqlalchemy import Engine, create_engine, exc
 
-
-class DataSchema:
-    ACCESSED = "ACCESSED"
-    SOURCE = "SOURCE"
-    CLIENT = "CLIENT"
-    AGENT = "AGENT"
-    ACTION = "ACTION"
-    FILE = "FILE"
-    TYPE = "TYPE"
-    CODE = "CODE"
-    SIZE = "SIZE"
-    REF_URL = "REF_URL"
-    REF_IP = "REF_IP"
-    DATE = "DATE"
-    YEAR = "YEAR"
-    MONTH = "MONTH"
 
 
 try:
@@ -37,28 +20,12 @@ Preprocessor = Callable[[pd.DataFrame], pd.DataFrame]
 
 
 def create_year_column(df: pd.DataFrame) -> pd.DataFrame:
-    df[DataSchema.YEAR] = df[DataSchema.ACCESSED].dt.year.astype(str)
+    df["YEAR"] = df["ACCESSED"].dt.year.astype(str)
     return df
 
 
 def create_month_column(df: pd.DataFrame) -> pd.DataFrame:
-    df[DataSchema.MONTH] = df[DataSchema.ACCESSED].dt.month.astype(str)
-    return df
-
-
-def convert_date_locale(df: pd.DataFrame, locale: str) -> pd.DataFrame:
-    def date_repr(date: dt.date) -> str:
-        return babel.dates.format_date(date, format="MMMM", locale=locale)
-
-    df[DataSchema.MONTH] = df[DataSchema.ACCESSED].apply(date_repr)
-    return df
-
-
-def translate_category_language(df: pd.DataFrame) -> pd.DataFrame:
-    def translate(category: str) -> str:
-        return i18n.t(f"{category}")
-
-    df[DataSchema.CODE] = df[DataSchema.CODE].apply(translate)
+    df["MONTH"] = df["ACCESSED"].dt.month.astype(str)
     return df
 
 
@@ -73,7 +40,5 @@ def load_weblog_data(locale: str) -> pd.DataFrame:
     preprocessor = compose(
         create_year_column,
         create_month_column,
-        partial(convert_date_locale, locale=locale),
-        translate_category_language,
     )
     return preprocessor(data)
