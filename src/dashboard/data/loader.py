@@ -35,7 +35,7 @@ def compose(*functions: Preprocessor) -> Preprocessor:
 
 def load_weblog_data(locale: str) -> pd.DataFrame:
     with engine.connect() as conn, conn.begin():
-        data = pd.read_sql(sql="SELECT * from logs", con=conn)  # ,
+        data = pd.read_sql(sql="""SELECT * FROM `bluehost-weblogs`.logs where ACCESSED like '2025-04-17%%'; """, con=conn)  # ,
 
     preprocessor = compose(
         create_year_column,

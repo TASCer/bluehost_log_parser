@@ -12,6 +12,7 @@ def create_layout(app: Dash, source: DataFrame) -> html.Div:
     return html.Div(
         className="bg-primary-subtle border border-primary-subtle p-2",
         children=[
+            html.P(source.columns),
             html.H1(app.title),
             html.Hr(),
             # html.H6(source.unique_years),
