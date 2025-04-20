@@ -18,12 +18,13 @@ def render(app: Dash, source: DataFrame) -> html.Div:
     def update_bar_chart(
         years: list[str], months: list[str], codes: list[str]
     ) -> html.Div:
-        filtered_source = source.filter(years, months, codes)
-        if not filtered_source.row_count:
-            return html.Div("general.no_data", id=ids.BAR_CHART)
+        # filtered_source = source.filter([years, months, codes])
+        # if not filtered_source.row_count:
+        #     logger.error("NO")
+        #     return html.Div("general.no_data", id=ids.BAR_CHART)
 
         fig = px.bar(
-            filtered_source.create_pivot_table(),
+            source.create_pivot_table(),
             x=source["MONTH"],
             y=source["CODE"],
             color="CODE",

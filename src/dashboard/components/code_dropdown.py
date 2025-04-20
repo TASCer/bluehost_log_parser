@@ -15,7 +15,7 @@ def render(app: Dash, source: DataFrame) -> html.Div:
         ],
     )
     def select_all_codes(years: list[str], months: list[str], _: int) -> list[str]:
-        return source.filter(source["YEAR"].unique(), source["MONTH"].unique())
+        return source["CODE"].unique()
 
     return html.Div(
         children=[

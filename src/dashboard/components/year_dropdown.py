@@ -11,15 +11,15 @@ def render(app: Dash, source: DataFrame) -> html.Div:
         Input(ids.SELECT_ALL_YEARS_BUTTON, "n_clicks"),
     )
     def select_all_years(_: int) -> list[str]:
-        return source.unique_years
+        return source["YEAR"].unique()
 
     return html.Div(
         children=[
             html.H6("general.year"),
             dcc.Dropdown(
                 id=ids.YEAR_DROPDOWN,
-                options=[{"label": year, "value": year} for year in source["YEAR"]],
-                value=source["YEAR"],
+                options=[{"label": year, "value": year} for year in source["YEAR"].unique()],
+                value=source["YEAR"].max(),
                 multi=True,
             ),
             html.Button(

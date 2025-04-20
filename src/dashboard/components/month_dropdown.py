@@ -15,7 +15,7 @@ def render(app: Dash, source: DataFrame) -> html.Div:
         ],
     )
     def select_all_months(years: list[str], _: int) -> list[str]:
-        return source.filter(years=years).unique_months
+        return source["MONTH"].unique()
 
     return html.Div(
         children=[
