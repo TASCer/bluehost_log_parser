@@ -8,6 +8,7 @@ from dashboard.components import (
 )
 from pandas import DataFrame
 
+
 def create_layout(app: Dash, source: DataFrame) -> html.Div:
     return html.Div(
         className="bg-primary-subtle border border-primary-subtle p-2",

@@ -17,7 +17,7 @@ def render(app: Dash, source: DataFrame) -> html.Div:
     )
     def update_bar_chart(
         years: list[str], months: list[str], codes: list[str]
-        ) -> html.Div:
+    ) -> html.Div:
         filtered_data = source.query(
             "YEAR in @years and MONTH in @months and CODE in @codes"
         )
