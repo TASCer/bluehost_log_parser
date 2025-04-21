@@ -1,12 +1,14 @@
-import i18n
 from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
 from pandas import DataFrame
 from . import ids
-from .dropdown_helper import to_dropdown_options
+# from .dropdown_helper import to_dropdown_options
 
 
 def render(app: Dash, source: DataFrame) -> html.Div:
+    all_months: list[str] = source["MONTH"].tolist()
+    unique_months = sorted(set(all_months))
+
     @app.callback(
         Output(ids.MONTH_DROPDOWN, "value"),
         [
@@ -15,15 +17,16 @@ def render(app: Dash, source: DataFrame) -> html.Div:
         ],
     )
     def select_all_months(years: list[str], _: int) -> list[str]:
-        return source["MONTH"].unique()
+        filtered_data = source.query("YEAR in @years")
+        return sorted(set(filtered_data[source["MONTH"]].tolist()))
 
     return html.Div(
         children=[
-            html.H6(i18n.t("general.month")),
+            html.H6("general.month"),
             dcc.Dropdown(
                 id=ids.MONTH_DROPDOWN,
-                options=to_dropdown_options(source["MONTH"].unique()),
-                value=source["MONTH"].unique(),
+                options=[{"label": month, "value": month} for month in unique_months],
+                value=unique_months,
                 multi=True,
             ),
             html.Button(

@@ -2,7 +2,7 @@ from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
 from pandas import DataFrame
 from . import ids
-from .dropdown_helper import to_dropdown_options
+# from .dropdown_helper import to_dropdown_options
 
 
 def render(app: Dash, source: DataFrame) -> html.Div:

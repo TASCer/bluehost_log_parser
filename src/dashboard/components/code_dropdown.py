@@ -2,7 +2,7 @@ from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
 from pandas import DataFrame
 from . import ids
-from .dropdown_helper import to_dropdown_options
+# from .dropdown_helper import to_dropdown_options
 
 
 def render(app: Dash, source: DataFrame) -> html.Div:
@@ -22,8 +22,8 @@ def render(app: Dash, source: DataFrame) -> html.Div:
             html.H6("general.code"),
             dcc.Dropdown(
                 id=ids.CODE_DROPDOWN,
-                options=to_dropdown_options(source["CODE"].unique()),
-                value=source["CODE"].unique(),
+                options=source["CODE"].unique(),
+                value=source["CODE"],
                 multi=True,
                 placeholder="general.select",
             ),
