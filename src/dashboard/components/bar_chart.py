@@ -6,7 +6,9 @@ from pandas import DataFrame
 from . import ids
 
 
-def render(app: Dash, source: DataFrame) -> html.Div:
+def render(app: Dash, data: DataFrame) -> html.Div:
+    df = data.copy()
+
     @app.callback(
         Output(ids.BAR_CHART, "children"),
         [
@@ -18,7 +20,7 @@ def render(app: Dash, source: DataFrame) -> html.Div:
     def update_bar_chart(
         years: list[str], months: list[str], codes: list[str]
     ) -> html.Div:
-        filtered_data = source.query(
+        filtered_data = df.query(
             "YEAR in @years and MONTH in @months and CODE in @codes"
         )
 
@@ -28,19 +30,20 @@ def render(app: Dash, source: DataFrame) -> html.Div:
         # ISSSUE
         def create_pivot_table() -> DataFrame:
             pt = filtered_data.pivot_table(
-                values=source["MONTH"],
-                index=source["CODE"],
+                values=data["MONTH"],
+                index=data["CODE"],
                 aggfunc="sum",
                 fill_value=0,
                 dropna=False,
             )
-            return pt.reset_index().sort_values(source["CODE"], ascending=False)
+            return pt.reset_index().sort_values(data["CODE"], ascending=False)
 
         fig = px.bar(
+            filtered_data,
             # create_pivot_table(),
-            x=source["CODE"],
-            y=source["MONTH"],
-            color=source["CODE"],
+            x=filtered_data["CODE"],
+            y=filtered_data["MONTH"],
+            color=filtered_data["CLIENT"],
         )
 
         return html.Div(dcc.Graph(figure=fig), id=ids.BAR_CHART)

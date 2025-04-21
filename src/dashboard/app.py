@@ -37,9 +37,9 @@ app = Dash(
 
 
 def main():
-    data = load_weblog_data()
+    source = load_weblog_data()
 
-    app.layout = layout.create_layout(app, source=data)
+    app.layout = layout.create_layout(app, data=source)
 
     app.run(debug=True, port="8000")
 

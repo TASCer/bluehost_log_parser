@@ -9,22 +9,22 @@ from dashboard.components import (
 from pandas import DataFrame
 
 
-def create_layout(app: Dash, source: DataFrame) -> html.Div:
+def create_layout(app: Dash, data: DataFrame) -> html.Div:
     return html.Div(
         className="bg-primary-subtle border border-primary-subtle p-2",
         children=[
-            html.P(len(source)),
+            html.P(len(data)),
             html.H1(app.title),
             html.Hr(),
             html.Div(
                 className="dropdown-container",
                 children=[
-                    year_dropdown.render(app, source),
-                    month_dropdown.render(app, source),
-                    code_dropdown.render(app, source),
+                    year_dropdown.render(app, data),
+                    month_dropdown.render(app, data),
+                    code_dropdown.render(app, data),
                 ],
             ),
-            bar_chart.render(app, source),
-            # pie_chart.render(app, source),
+            bar_chart.render(app, data),
+            # pie_chart.render(app, data),
         ],
     )
