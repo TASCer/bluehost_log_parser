@@ -1,4 +1,8 @@
-import plotly.graph_objects as go
+# ISSUE
+# import plotly.graph_objects as go
+
+import plotly.express as px
+
 from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
 from pandas import DataFrame
@@ -24,16 +28,17 @@ def render(app: Dash, data: DataFrame) -> html.Div:
         )
         if filtered_data.shape[0] == 0:
             return html.Div("general.no_data", id=ids.PIE_CHART)
+        fig = px.pie(filtered_data, values='CODE', names='MONTH')
+        # fig.show()
+        # pie = go.Pie(
+        #     labels=df["CODE"],
+        #     values=df["MONTH"],
+        #     hole=0.5,
+        # )
 
-        pie = go.Pie(
-            labels=df["CODE"],
-            values=df["MONTH"],
-            hole=0.5,
-        )
-
-        fig = go.Figure(data=[pie])
-        fig.update_layout(margin={"t": 40, "b": 0, "l": 0, "r": 0})
-        fig.update_traces(hovertemplate="%{label}<br>$%{value:.2f}<extra></extra>")
+        # fig = go.Figure(data=[pie])
+        # fig.update_layout(margin={"t": 40, "b": 0, "l": 0, "r": 0})
+        # fig.update_traces(hovertemplate="%{label}<br>$%{value:.2f}<extra></extra>")
 
         return html.Div(dcc.Graph(figure=fig), id=ids.PIE_CHART)
 
