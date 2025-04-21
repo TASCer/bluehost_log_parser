@@ -12,10 +12,9 @@ def create_layout(app: Dash, source: DataFrame) -> html.Div:
     return html.Div(
         className="bg-primary-subtle border border-primary-subtle p-2",
         children=[
-            html.P(source.columns),
+            html.P(len(source)),
             html.H1(app.title),
             html.Hr(),
-            # html.H6(source.unique_years),
             html.Div(
                 className="dropdown-container",
                 children=[
@@ -25,6 +24,6 @@ def create_layout(app: Dash, source: DataFrame) -> html.Div:
                 ],
             ),
             bar_chart.render(app, source),
-            pie_chart.render(app, source),
+            # pie_chart.render(app, source),
         ],
     )

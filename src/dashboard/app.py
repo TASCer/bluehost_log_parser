@@ -28,8 +28,6 @@ root_logger.addHandler(fh)
 
 logger: Logger = logging.getLogger(__name__)
 
-LOCALE = "en"
-
 app = Dash(
     name="WebLog App",
     external_stylesheets=[dbc.themes.BOOTSTRAP],
@@ -39,7 +37,7 @@ app = Dash(
 
 
 def main():
-    data = load_weblog_data(locale=LOCALE)
+    data = load_weblog_data()
 
     app.layout = layout.create_layout(app, source=data)
 

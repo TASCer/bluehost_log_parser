@@ -20,12 +20,12 @@ def render(app: Dash, source: DataFrame) -> html.Div:
     ) -> html.Div:
         fig = px.bar(
             source,
-            x=source["SOURCE"],
-            y=source["CODE"],
-            color="CODE",
+            x=source["CODE"],
+            y=source["AGENT"],
+            color=source["YEAR"],
             labels={
-                "code": "general.code",
-                "month": "general.month",
+                "code": "general.month",
+                "month": "general.code",
             },
         )
 
