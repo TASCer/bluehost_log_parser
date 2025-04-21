@@ -15,12 +15,10 @@ def render(app: Dash, source: DataFrame) -> html.Div:
             Input(ids.CODE_DROPDOWN, "value"),
         ],
     )
-    def update_pie_chart(
-        years: list[str], months: list[str], codes: list[str]
-    ) -> html.Div:
-        # filtered_source = source.filter(years, months, codes)
-        # if not filtered_source.row_count:
-        #     return html.Div("general.no_data", id=ids.PIE_CHART)
+    def update_pie_chart(years: list[str], months: list[str], codes: list[str]) -> html.Div:
+        filtered_source = source.filter(years, months, codes)
+        if not filtered_source.row_count:
+            return html.Div("general.no_data", id=ids.PIE_CHART)
 
         pie = go.Pie(
             labels=source["CODE"],
@@ -29,8 +27,8 @@ def render(app: Dash, source: DataFrame) -> html.Div:
         )
 
         fig = go.Figure(data=[pie])
-        # fig.update_layout(margin={"t": 40, "b": 0, "l": 0, "r": 0})
-        # fig.update_traces(hovertemplate="%{label}<br>$%{value:.2f}<extra></extra>")
+        fig.update_layout(margin={"t": 40, "b": 0, "l": 0, "r": 0})
+        fig.update_traces(hovertemplate="%{label}<br>$%{value:.2f}<extra></extra>")
 
         return html.Div(dcc.Graph(figure=fig), id=ids.PIE_CHART)
 

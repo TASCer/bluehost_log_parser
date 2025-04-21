@@ -24,7 +24,7 @@ def create_year_column(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def create_month_column(df: pd.DataFrame) -> pd.DataFrame:
-    df["MONTH"] = df["ACCESSED"].dt.strftime('%b')
+    df["MONTH"] = df["ACCESSED"].dt.strftime('%B')
     return df
 
 

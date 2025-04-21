@@ -17,16 +17,30 @@ def render(app: Dash, source: DataFrame) -> html.Div:
     )
     def update_bar_chart(
         years: list[str], months: list[str], codes: list[str]
-    ) -> html.Div:
+        ) -> html.Div:
+        filtered_data = source.query(
+            "YEAR in @years and MONTH in @months and CODE in @codes"
+        )
+
+        if filtered_data.shape[0] == 0:
+            return html.Div("No data selected.", id=ids.BAR_CHART)
+
+        # ISSSUE
+        def create_pivot_table() -> DataFrame:
+            pt = filtered_data.pivot_table(
+                values=source["MONTH"],
+                index=source["CODE"],
+                aggfunc="sum",
+                fill_value=0,
+                dropna=False,
+            )
+            return pt.reset_index().sort_values(source["CODE"], ascending=False)
+
         fig = px.bar(
-            source,
+            # create_pivot_table(),
             x=source["CODE"],
-            y=source["AGENT"],
-            color=source["YEAR"],
-            labels={
-                "code": "general.month",
-                "month": "general.code",
-            },
+            y=source["MONTH"],
+            color=source["CODE"],
         )
 
         return html.Div(dcc.Graph(figure=fig), id=ids.BAR_CHART)
