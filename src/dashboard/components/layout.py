@@ -4,6 +4,7 @@ from dashboard.components import (
     code_dropdown,
     month_dropdown,
     pie_chart,
+    referal_dropdown,
     year_dropdown,
 )
 from pandas import DataFrame
@@ -22,9 +23,10 @@ def create_layout(app: Dash, data: DataFrame) -> html.Div:
                     year_dropdown.render(app, data),
                     month_dropdown.render(app, data),
                     code_dropdown.render(app, data),
+                    referal_dropdown.render(app, data),
                 ],
             ),
-            # bar_chart.render(app, data),
+            bar_chart.render(app, data),
             pie_chart.render(app, data),
         ],
     )

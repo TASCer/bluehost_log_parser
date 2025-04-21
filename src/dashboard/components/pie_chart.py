@@ -28,7 +28,7 @@ def render(app: Dash, data: DataFrame) -> html.Div:
         )
         if filtered_data.shape[0] == 0:
             return html.Div("general.no_data", id=ids.PIE_CHART)
-        fig = px.pie(filtered_data, values='CODE', names='MONTH')
+        fig = px.pie(filtered_data, values="CODE", names="MONTH")
         # fig.show()
         # pie = go.Pie(
         #     labels=df["CODE"],
