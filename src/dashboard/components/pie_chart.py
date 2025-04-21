@@ -14,7 +14,9 @@ def render(app: Dash, source: DataFrame) -> html.Div:
             Input(ids.CODE_DROPDOWN, "value"),
         ],
     )
-    def update_pie_chart(years: list[str], months: list[str], codes: list[str]) -> html.Div:
+    def update_pie_chart(
+        years: list[str], months: list[str], codes: list[str]
+    ) -> html.Div:
         filtered_source = source.filter(years, months, codes)
         if not filtered_source.row_count:
             return html.Div("general.no_data", id=ids.PIE_CHART)

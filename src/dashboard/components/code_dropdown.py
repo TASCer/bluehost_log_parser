@@ -23,7 +23,7 @@ def render(app: Dash, source: DataFrame) -> html.Div:
             dcc.Dropdown(
                 id=ids.CODE_DROPDOWN,
                 options=source["CODE"].unique(),
-                value=source["CODE"],
+                value=source["CODE"].unique(),
                 multi=True,
                 placeholder="general.select",
             ),

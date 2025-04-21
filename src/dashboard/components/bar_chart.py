@@ -30,13 +30,13 @@ def render(app: Dash, data: DataFrame) -> html.Div:
         # ISSSUE
         def create_pivot_table() -> DataFrame:
             pt = filtered_data.pivot_table(
-                values=data["MONTH"],
-                index=data["CODE"],
+                values=filtered_data["MONTH"],
+                index=filtered_data["CODE"],
                 aggfunc="sum",
                 fill_value=0,
                 dropna=False,
             )
-            return pt.reset_index().sort_values(data["CODE"], ascending=False)
+            return pt.reset_index().sort_values(filtered_data["CODE"], ascending=False)
 
         fig = px.bar(
             filtered_data,

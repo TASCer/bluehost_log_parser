@@ -24,7 +24,7 @@ def create_year_column(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def create_month_column(df: pd.DataFrame) -> pd.DataFrame:
-    df["MONTH"] = df["ACCESSED"].dt.strftime('%B')
+    df["MONTH"] = df["ACCESSED"].dt.strftime("%B")
     return df
 
 
@@ -34,8 +34,11 @@ def compose(*functions: Preprocessor) -> Preprocessor:
 
 def load_weblog_data() -> pd.DataFrame:
     with engine.connect() as conn, conn.begin():
-        data = pd.read_sql(sql="""SELECT * FROM `bluehost-weblogs`.logs where REF_URL = 'mail.tascs.net'; """, con=conn)
-        # ACCESSED like '2025-04-17%%' and 
+        data = pd.read_sql(
+            sql="""SELECT * FROM `bluehost-weblogs`.logs where REF_URL = 'mail.tascs.net'; """,
+            con=conn,
+        )
+        # ACCESSED like '2025-04-17%%' and
     preprocessor = compose(
         create_year_column,
         create_month_column,
