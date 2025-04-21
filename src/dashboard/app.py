@@ -41,7 +41,7 @@ def main():
 
     app.layout = layout.create_layout(app, source=data)
 
-    app.run(debug=True)
+    app.run(debug=True, port="8000")
 
 
 if __name__ == "__main__":

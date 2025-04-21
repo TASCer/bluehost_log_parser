@@ -1,4 +1,3 @@
-import i18n
 import plotly.graph_objects as go
 from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
