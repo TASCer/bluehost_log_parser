@@ -83,7 +83,7 @@ def process(
                     ACTION, FILE, TYPE = action1.split(" ")
 
                 except (ValueError, IndexError) as e:
-                    logger.error(f"\tACTION1 INFO SPLIT ERROR: {action1}--{e}")
+                    logger.error(f"\tACTION1 INFO SPLIT ERROR: {SOURCE}--{e}")
                     continue
 
                 if "'" in FILE:

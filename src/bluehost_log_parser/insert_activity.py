@@ -62,7 +62,7 @@ def update(log_entries: list, my_log_entries: list) -> None:
                         f"""INSERT IGNORE INTO {LOGS_TABLE} VALUES('{ts_parsed}', '{ip}', '{client}', '{agent_name}', '{action}', '{file}', '{conn_type}', '{action_code}', '{action_size}', '{ref_url}', '{ref_ip}');"""
                     )
                 )
-            except (exc.SQLAlchemyError, exc.ProgrammingError, exc.DataError) as e:
+            except (exc.SQLAlchemyError, exc.ProgrammingError, exc.DataError, exc.InvalidRequestError) as e:
                 logger.error(e)
 
     logger.info(f"{len(log_entries)} entries added to {LOGS_TABLE} table")

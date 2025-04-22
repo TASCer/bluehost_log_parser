@@ -110,7 +110,7 @@ def main(month_num: int | None, year: int | None) -> None:
             "NO LOGS PROCESSED! CHECK log, possible error downloading from Bluehost",
         )
 
-    app.main()
+    # app.main()
 
 
 if __name__ == "__main__":
