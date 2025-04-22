@@ -14,12 +14,12 @@ def render(app: Dash, data: DataFrame) -> html.Div:
         [
             Input(ids.YEAR_DROPDOWN, "value"),
             Input(ids.MONTH_DROPDOWN, "value"),
-            # Input(ids.CODE_DROPDOWN, "value"),
+            Input(ids.CODE_DROPDOWN, "value"),
             Input(ids.SELECT_ALL_REFERRALS_BUTTON, "n_clicks"),
 
         ],
     )
-    def select_all_referals(years: list[str], months: list[str], _: int) -> list[str]:
+    def select_all_referals(years: list[str], months: list[str], codes: list[str], _: int) -> list[str]:
         return unique_referals
 
     return html.Div(

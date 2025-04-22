@@ -43,7 +43,7 @@ def render(app: Dash, data: DataFrame) -> html.Div:
             # create_pivot_table(),
             x=filtered_data["CODE"],
             y=filtered_data["MONTH"],
-            color=filtered_data["CLIENT"],
+            color=filtered_data["YEAR"],
         )
 
         return html.Div(dcc.Graph(figure=fig), id=ids.BAR_CHART)
