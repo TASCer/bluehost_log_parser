@@ -35,7 +35,7 @@ def compose(*functions: Preprocessor) -> Preprocessor:
 def load_weblog_data() -> pd.DataFrame:
     with engine.connect() as conn, conn.begin():
         data = pd.read_sql(
-            sql="""SELECT * FROM `bluehost-weblogs`.logs where REF_URL = 'mail.tascs.net'; """,
+            sql="""SELECT * FROM `bluehost-weblogs`.logs; """,
             con=conn,
         )
         # ACCESSED like '2025-04-17%%' and
@@ -43,4 +43,5 @@ def load_weblog_data() -> pd.DataFrame:
         create_year_column,
         create_month_column,
     )
+    logger.info("LOADED SOURCE DATA")
     return preprocessor(data)

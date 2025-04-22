@@ -6,33 +6,35 @@ from . import ids
 
 
 def render(app: Dash, data: DataFrame) -> html.Div:
+    all_referrals: list[str] = data["REF_URL"].tolist()
+    unique_referals = sorted(set(all_referrals))
+
     @app.callback(
-        Output(ids.REFERAL_DROPDOWN, "value"),
+        Output(ids.REFERRAL_DROPDOWN, "value"),
         [
             Input(ids.YEAR_DROPDOWN, "value"),
             Input(ids.MONTH_DROPDOWN, "value"),
-            # Input(ids.SELECT_ALL_CODES_BUTTON, "n_clicks"),
-            Input(ids.SELECT_ALL_REFERALS_BUTTON, "n_clicks"),
+            # Input(ids.CODE_DROPDOWN, "value"),
+            Input(ids.SELECT_ALL_REFERRALS_BUTTON, "n_clicks"),
 
         ],
     )
     def select_all_referals(years: list[str], months: list[str], _: int) -> list[str]:
-        return data["REF_URL"].unique()
+        return unique_referals
 
     return html.Div(
         children=[
-            html.H6("general.referal"),
+            html.H6("referral.url"),
             dcc.Dropdown(
-                id=ids.REFERAL_DROPDOWN,
-                options=data["REF_URL"].unique(),
-                value=data["REF_URL"].unique(),
+                id=ids.REFERRAL_DROPDOWN,
+                options=unique_referals,
+                value=unique_referals,
                 multi=True,
-                placeholder="general.select",
             ),
             html.Button(
                 className="dropdown-button",
-                children="general.select_all",
-                id=ids.SELECT_ALL_REFERALS_BUTTON,
+                children="all_referrals",
+                id=ids.SELECT_ALL_REFERRALS_BUTTON,
                 n_clicks=0,
             ),
         ],

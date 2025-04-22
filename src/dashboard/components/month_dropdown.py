@@ -21,7 +21,7 @@ def render(app: Dash, source: DataFrame) -> html.Div:
 
     return html.Div(
         children=[
-            html.H6("general.month"),
+            html.H6("month"),
             dcc.Dropdown(
                 id=ids.MONTH_DROPDOWN,
                 options=[{"label": month, "value": month} for month in unique_months],
@@ -30,7 +30,7 @@ def render(app: Dash, source: DataFrame) -> html.Div:
             ),
             html.Button(
                 className="dropdown-button",
-                children=["general.select_all"],
+                children=["all_months"],
                 id=ids.SELECT_ALL_MONTHS_BUTTON,
                 n_clicks=0,
             ),

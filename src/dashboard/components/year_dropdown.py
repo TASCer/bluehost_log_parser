@@ -18,7 +18,7 @@ def render(app: Dash, source: DataFrame) -> html.Div:
 
     return html.Div(
         children=[
-            html.H6("general.year"),
+            html.H6("year"),
             dcc.Dropdown(
                 id=ids.YEAR_DROPDOWN,
                 options=[{"label": year, "value": year} for year in unique_years],
@@ -27,7 +27,7 @@ def render(app: Dash, source: DataFrame) -> html.Div:
             ),
             html.Button(
                 className="dropdown-button",
-                children=["general.select_all"],
+                children=["all_years"],
                 id=ids.SELECT_ALL_YEARS_BUTTON,
                 n_clicks=0,
             ),

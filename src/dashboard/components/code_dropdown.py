@@ -6,6 +6,9 @@ from . import ids
 
 
 def render(app: Dash, source: DataFrame) -> html.Div:
+    all_codes: list[str] = source["CODE"].tolist()
+    unique_codes = sorted(set(all_codes))
+
     @app.callback(
         Output(ids.CODE_DROPDOWN, "value"),
         [
@@ -15,21 +18,20 @@ def render(app: Dash, source: DataFrame) -> html.Div:
         ],
     )
     def select_all_codes(years: list[str], months: list[str], _: int) -> list[str]:
-        return source["CODE"].unique()
+        return unique_codes
 
     return html.Div(
         children=[
-            html.H6("general.code"),
+            html.H6("response.code"),
             dcc.Dropdown(
                 id=ids.CODE_DROPDOWN,
-                options=source["CODE"].unique(),
-                value=source["CODE"].unique(),
+                options=unique_codes,
+                value=unique_codes,
                 multi=True,
-                placeholder="general.select",
             ),
             html.Button(
                 className="dropdown-button",
-                children="general.select_all",
+                children="all_codes",
                 id=ids.SELECT_ALL_CODES_BUTTON,
                 n_clicks=0,
             ),
