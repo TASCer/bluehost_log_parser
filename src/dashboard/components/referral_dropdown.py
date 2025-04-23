@@ -7,7 +7,7 @@ from . import ids
 
 def render(app: Dash, data: DataFrame) -> html.Div:
     all_referrals: list[str] = data["REF_URL"].tolist()
-    unique_referals = sorted(set(all_referrals))
+    unique_referrals = sorted(set(all_referrals))
 
     @app.callback(
         Output(ids.REFERRAL_DROPDOWN, "value"),
@@ -20,15 +20,15 @@ def render(app: Dash, data: DataFrame) -> html.Div:
         ],
     )
     def select_all_referals(years: list[str], months: list[str], codes: list[str], _: int) -> list[str]:
-        return unique_referals
+        return unique_referrals
 
     return html.Div(
         children=[
             html.H6("referral.url"),
             dcc.Dropdown(
                 id=ids.REFERRAL_DROPDOWN,
-                options=unique_referals,
-                value=unique_referals,
+                options=[{"label": year, "value": year} for year in unique_referrals],
+                value=unique_referrals,
                 multi=True,
             ),
             html.Button(

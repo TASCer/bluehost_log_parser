@@ -1,9 +1,13 @@
+import logging
 import plotly.express as px
 
 from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
+from logging import Logger
 from pandas import DataFrame
 from . import ids
+
+logger: Logger = logging.getLogger(__name__)
 
 
 def render(app: Dash, data: DataFrame) -> html.Div:
@@ -20,6 +24,8 @@ def render(app: Dash, data: DataFrame) -> html.Div:
     def update_bar_chart(
         years: list[str], months: list[str], codes: list[str]
     ) -> html.Div:
+        logger.debug(f"YEARS: {years} MONTHS:{months} CODES:{codes}")
+
         filtered_data = df.query(
             "YEAR in @years and MONTH in @months and CODE in @codes"
         )
@@ -41,9 +47,9 @@ def render(app: Dash, data: DataFrame) -> html.Div:
         fig = px.bar(
             filtered_data,
             # create_pivot_table(),
-            x=filtered_data["CODE"],
-            y=filtered_data["MONTH"],
-            color=filtered_data["YEAR"],
+            x="CODE",
+            y="SOURCE",
+            color="MONTH",
         )
 
         return html.Div(dcc.Graph(figure=fig), id=ids.BAR_CHART)
