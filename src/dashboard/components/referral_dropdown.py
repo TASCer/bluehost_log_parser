@@ -16,10 +16,11 @@ def render(app: Dash, data: DataFrame) -> html.Div:
             Input(ids.MONTH_DROPDOWN, "value"),
             Input(ids.CODE_DROPDOWN, "value"),
             Input(ids.SELECT_ALL_REFERRALS_BUTTON, "n_clicks"),
-
         ],
     )
-    def select_all_referals(years: list[str], months: list[str], codes: list[str], _: int) -> list[str]:
+    def select_all_referals(
+        years: list[str], months: list[str], codes: list[str], _: int
+    ) -> list[str]:
         return unique_referrals
 
     return html.Div(
@@ -27,8 +28,8 @@ def render(app: Dash, data: DataFrame) -> html.Div:
             html.H6("referral.url"),
             dcc.Dropdown(
                 id=ids.REFERRAL_DROPDOWN,
-                options=[{"label": year, "value": year} for year in unique_referrals],
-                value=unique_referrals,
+                options=unique_referrals,
+                value=None,
                 multi=True,
             ),
             html.Button(

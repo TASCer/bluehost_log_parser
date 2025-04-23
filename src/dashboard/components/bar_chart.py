@@ -19,15 +19,16 @@ def render(app: Dash, data: DataFrame) -> html.Div:
             Input(ids.YEAR_DROPDOWN, "value"),
             Input(ids.MONTH_DROPDOWN, "value"),
             Input(ids.CODE_DROPDOWN, "value"),
+            Input(ids.REFERRAL_DROPDOWN, "value"),
         ],
     )
     def update_bar_chart(
-        years: list[str], months: list[str], codes: list[str]
+        years: list[str], months: list[str], codes: list[str], referrals: list[str]
     ) -> html.Div:
         logger.debug(f"YEARS: {years} MONTHS:{months} CODES:{codes}")
 
         filtered_data = df.query(
-            "YEAR in @years and MONTH in @months and CODE in @codes"
+            "YEAR in @years and MONTH in @months and CODE in @codes and REF_URL in @referrals"
         )
 
         if filtered_data.shape[0] == 0:
