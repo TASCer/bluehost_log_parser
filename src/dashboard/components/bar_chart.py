@@ -25,7 +25,7 @@ def render(app: Dash, data: DataFrame) -> html.Div:
     def update_bar_chart(
         years: list[str], months: list[str], codes: list[str], referrals: list[str]
     ) -> html.Div:
-        logger.debug(f"YEARS: {years} MONTHS:{months} CODES:{codes}")
+        logger.debug(f"YEARS: {years} MONTHS:{months} CODES:{codes} REFERRALS:{referrals}")
 
         filtered_data = df.query(
             "YEAR in @years and MONTH in @months and CODE in @codes and REF_URL in @referrals"
@@ -46,11 +46,11 @@ def render(app: Dash, data: DataFrame) -> html.Div:
             return pt.reset_index().sort_values(filtered_data["CODE"], ascending=False)
 
         fig = px.bar(
-            filtered_data,
+            data_frame=filtered_data,
             # create_pivot_table(),
             x="CODE",
             y="SOURCE",
-            color="MONTH",
+            color="REF_URL",
         )
 
         return html.Div(dcc.Graph(figure=fig), id=ids.BAR_CHART)
