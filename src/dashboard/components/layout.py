@@ -7,6 +7,7 @@ from dashboard.components import (
     pie_chart,
     referral_dropdown,
     year_dropdown,
+    table_viewer
 )
 from pandas import DataFrame
 
@@ -20,15 +21,23 @@ def create_layout(app: Dash, data: DataFrame) -> html.Div:
             html.H1(app.title),
             html.Hr(),
             html.Div(
-                className="dropdown-container",
+                className="table-striped",
                 children=[
-                    year_dropdown.render(app, data),
-                    month_dropdown.render(app, data),
-                    code_dropdown.render(app, data),
-                    referral_dropdown.render(app, data),
-                ],
-            ),
-            bar_chart.render(app, data),
+                    table_viewer.render(app, data)
+
+                ]
+            )
+
+            # html.Div(
+            #     className="dropdown-container",
+            #     children=[
+            #         year_dropdown.render(app, data),
+            #         month_dropdown.render(app, data),
+            #         code_dropdown.render(app, data),
+            #         referral_dropdown.render(app, data),
+            #     ],
+            # ),
+            # bar_chart.render(app, data),
             # pie_chart.render(app, data),
         ],
     )
