@@ -26,7 +26,7 @@ def render(app: Dash, source: DataFrame) -> html.Div:
             dcc.Dropdown(
                 id=ids.MONTH_DROPDOWN,
                 options=[{"label": month, "value": month} for month in unique_months],
-                value=unique_months[0],
+                value=unique_months,
                 multi=True,
             ),
             html.Button(
