@@ -20,7 +20,9 @@ def create_layout(app: Dash, data: DataFrame) -> html.Div:
             html.P(len(data)),
             html.H1(app.title),
             html.Hr(),
+            # TESTING TABLES
             html.Div(
+                id = "tbl_out",
                 className="table-striped",
                 children=[
                     table_viewer.render(app, data)
