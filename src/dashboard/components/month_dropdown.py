@@ -6,7 +6,8 @@ from . import ids
 
 
 def render(app: Dash, source: DataFrame) -> html.Div:
-    all_months: list[str] = source["MONTH"].tolist()
+    df = source.copy()
+    all_months: list[str] = df["MONTH"].tolist()
     unique_months = sorted(set(all_months))
 
     @app.callback(
@@ -25,7 +26,7 @@ def render(app: Dash, source: DataFrame) -> html.Div:
             dcc.Dropdown(
                 id=ids.MONTH_DROPDOWN,
                 options=[{"label": month, "value": month} for month in unique_months],
-                value=unique_months,
+                value=unique_months[0],
                 multi=True,
             ),
             html.Button(

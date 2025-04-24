@@ -12,7 +12,7 @@ logger: Logger = logging.getLogger(__name__)
 
 def render(app: Dash, data: DataFrame) -> html.Div:
     df = data.copy()
-
+    logger.info(f"{len(df)=}")
     @app.callback(
         Output(ids.BAR_CHART, "children"),
         [
@@ -50,9 +50,9 @@ def render(app: Dash, data: DataFrame) -> html.Div:
             # create_pivot_table(),
             x="CODE",
             y="SOURCE",
-            color="REF_URL",
+            color="MONTH",
         )
-
+        logger.info("PLOT CREATED")
         return html.Div(dcc.Graph(figure=fig), id=ids.BAR_CHART)
 
     return html.Div(id=ids.BAR_CHART)

@@ -6,7 +6,8 @@ from . import ids
 
 
 def render(app: Dash, source: DataFrame) -> html.Div:
-    all_years: list[str] = source["YEAR"]
+    df = source.copy()
+    all_years: list[str] = df["YEAR"]
     unique_years: list[str] = sorted(set(all_years), key=int)
 
     @app.callback(
@@ -22,7 +23,7 @@ def render(app: Dash, source: DataFrame) -> html.Div:
             dcc.Dropdown(
                 id=ids.YEAR_DROPDOWN,
                 options=[{"label": year, "value": year} for year in unique_years],
-                value=unique_years,
+                value=unique_years[0],
                 multi=True,
             ),
             html.Button(

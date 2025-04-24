@@ -1,3 +1,4 @@
+from venv import logger
 from dash import Dash, dash_table, html, dcc
 from dashboard.components import (
     bar_chart,
@@ -11,6 +12,7 @@ from pandas import DataFrame
 
 
 def create_layout(app: Dash, data: DataFrame) -> html.Div:
+    logger.info(f"LAYOUT CREATED df:{len(data)}")
     return html.Div(
         className="bg-primary-subtle border border-primary-subtle p-2",
         children=[

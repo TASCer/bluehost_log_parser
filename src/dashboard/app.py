@@ -6,6 +6,7 @@ from dash import Dash
 from dashboard.components import layout
 from dashboard.data.loader import load_weblog_data
 from logging import Formatter, Logger
+from pandas import DataFrame
 from pathlib import Path
 
 LOGGER_ROOT = Path.cwd().parent
@@ -36,8 +37,8 @@ app = Dash(
 
 
 def main():
-    source = load_weblog_data()
-
+    source: DataFrame = load_weblog_data()
+    logger.info("LOADED SOURCE DATA")
     app.layout = layout.create_layout(app, data=source)
 
     app.run(debug=True, port="8000")
