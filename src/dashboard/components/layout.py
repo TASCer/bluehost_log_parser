@@ -20,26 +20,17 @@ def create_layout(app: Dash, data: DataFrame) -> html.Div:
             html.P(len(data)),
             html.H1(app.title),
             html.Hr(),
-            # TESTING TABLES
+
             html.Div(
-                id = "tbl_out",
-                className="table-striped",
+                className="dropdown-container",
                 children=[
-                    table_viewer.render(app, data)
-
-                ]
-            )
-
-            # html.Div(
-            #     className="dropdown-container",
-            #     children=[
-            #         year_dropdown.render(app, data),
-            #         month_dropdown.render(app, data),
-            #         code_dropdown.render(app, data),
-            #         referral_dropdown.render(app, data),
-            #     ],
-            # ),
-            # bar_chart.render(app, data),
-            # pie_chart.render(app, data),
+                    year_dropdown.render(app, data),
+                    month_dropdown.render(app, data),
+                    code_dropdown.render(app, data),
+                    referral_dropdown.render(app, data),
+                ],
+            ),
+            bar_chart.render(app, data),
+            pie_chart.render(app, data),
         ],
     )
