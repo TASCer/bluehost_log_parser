@@ -15,7 +15,7 @@ from pandas import DataFrame
 def create_layout(app: Dash, data: DataFrame) -> html.Div:
     logger.info(f"LAYOUT CREATED df:{len(data)}")
     return html.Div(
-        className="bg-primary-subtle border border-primary-subtle p-2",
+        className="dash-ag-grid",
         children=[
             html.P(len(data)),
             html.H1(app.title),
