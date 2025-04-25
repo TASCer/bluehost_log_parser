@@ -17,6 +17,7 @@ source = { editable = "." }
 dependencies = [
     { name = "country-converter" },
     { name = "dash" },
+    { name = "dash-ag-grid" },
     { name = "dash-bootstrap-components" },
     { name = "ipwhois" },
     { name = "pymysql" },
@@ -35,6 +36,7 @@ dev = [
 requires-dist = [
     { name = "country-converter", specifier = ">=1.3" },
     { name = "dash", specifier = ">=3.0.2" },
+    { name = "dash-ag-grid", specifier = ">=31.3.1" },
     { name = "dash-bootstrap-components", specifier = ">=2.0.0" },
     { name = "ipwhois", specifier = ">=1.3.0" },
     { name = "pymysql", specifier = ">=1.1.1" },
@@ -131,6 +133,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/14/f6/c337e0f019a6faaeb2cf42ae846f4736136e62de5522b02ae1acad1bb26f/dash-3.0.3.tar.gz", hash = "sha256:86d3038ae9f09e1f246937afbab5451c9db5a3832911c325d2e1f0bcefe2b7c9", size = 7603520 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/e8/62/4f7ed64d193fe8a3d13abe03694bd752ca3c34fce8b025af794585f3cc2a/dash-3.0.3-py3-none-any.whl", hash = "sha256:9c6577e056971590c002c07fd26376d3d501bddb39804466e401876fb1e043ac", size = 7952319 },
+]
+
+[[package]]
+name = "dash-ag-grid"
+version = "31.3.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "dash" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/74/5e/e8c0b160005c5b01407aa4c739bf28a60043921458b2f25ef7b977f989e9/dash_ag_grid-31.3.1.tar.gz", hash = "sha256:90069c340d893841d4e405fd3759794260946428c9cefcf70a356431e68c5020", size = 3861593 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/84/a9/7d1bd060ca28611e155cf7e3a53756b7244ee3224481c9ff0be0d2d2b2fb/dash_ag_grid-31.3.1-py3-none-any.whl", hash = "sha256:2bce8e2a99c2d08800f6c119e4723c838789a093eea29b121aabdb541e1da156", size = 3878810 },
 ]
 
 [[package]]
