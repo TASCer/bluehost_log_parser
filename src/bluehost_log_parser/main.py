@@ -109,8 +109,8 @@ def main(month_num: int | None, year: int | None) -> None:
             "ERROR: BH WebLog Processing",
             "NO LOGS PROCESSED! CHECK log, possible error downloading from Bluehost",
         )
-
-    # app.main()
+    # RUNS PARSE AGAIN?
+    return app.main()
 
 
 if __name__ == "__main__":
