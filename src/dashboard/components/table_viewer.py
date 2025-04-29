@@ -1,18 +1,29 @@
+# https://github.com/Coding-with-Adam/Dash-by-Plotly/blob/master/Ag-Grid/introduction/ag-grid-intro2.py
+import dash_ag_grid as dag
+
 from pandas import DataFrame
 from dash import Dash, html
 from dash.dependencies import Input, Output
 from logging import Logger
 from . import ids
 
-import dash_ag_grid as dag
 
-
-# deleteable=True only on column defining? Can remove rows!
+# deleteable=True only on column defining? Can remove rows obly for datatable!
 def render(app: Dash, data: DataFrame) -> html.Div:
     df = data.copy()
     df["SIZE"] = df["SIZE"].apply(lambda s: int("0") if not s.isdigit() else int(s))
     del df["REF_IP"]
-    columnDefs = [{"field": i} for i in df.columns]
+
+    columnDefs = []
+    for i in df.columns:
+        if i == "ACCESSED":
+            columnDefs.append({"field": i, "filter": "agDateColumnFilter"})
+        if i == "SIZE" or i == "YEAR":
+            columnDefs.append({"field": i, "filter": "agNumberColumnFilter"})
+
+        else:
+            columnDefs.append({"field": i})
+
     defaultColDef = {
         "editable": True,
         "headerClass": "center-aligned-header",
