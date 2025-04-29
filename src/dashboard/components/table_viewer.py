@@ -59,7 +59,10 @@ def render(app: Dash, data: DataFrame) -> html.Div:
     if df.shape[0] == 0:
         return html.Div("general.no_data", id=ids.PIE_CHART)
 
-    return html.Div([grid])
+    return html.Div(
+        children=[grid],
+        className="table",
+    )
 
 
 # WORKS IN Pycharm

@@ -35,9 +35,7 @@ def schema():
     """
     logger: Logger = logging.getLogger(__name__)
     try:
-        engine = create_engine(
-            f"mysql+pymysql://{DB_URI}"
-        )
+        engine = create_engine(f"mysql+pymysql://{DB_URI}")
 
         if not database_exists(engine.url):
             create_database(engine.url)
@@ -58,9 +56,7 @@ def tables():
     logger: Logger = logging.getLogger(__name__)
 
     try:
-        engine = create_engine(
-            f"mysql+pymysql://{DB_URI}"
-        )
+        engine = create_engine(f"mysql+pymysql://{DB_URI}")
 
     except (exc.SQLAlchemyError, exc.OperationalError) as e:
         logger.critical(str(e))
