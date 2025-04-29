@@ -12,10 +12,7 @@ def render(app: Dash, data: DataFrame) -> html.Div:
     df = data.copy()
     df["SIZE"] = df["SIZE"].apply(lambda s: int("0") if not s.isdigit() else int(s))
     del df["REF_IP"]
-    # print(df.head(5))
-    # print(df.info())
     columnDefs = [{"field": i} for i in df.columns]
-    print(columnDefs)
     defaultColDef = {
         "editable": True,
         "headerClass": "center-aligned-header",
@@ -63,50 +60,3 @@ def render(app: Dash, data: DataFrame) -> html.Div:
         children=[grid],
         className="table",
     )
-
-
-# WORKS IN Pycharm
-# df["SIZE"] = df["SIZE"].apply(lambda s: int("0") if not s.isdigit() else int(s))
-# del df["REF_IP"]
-# print(df.head(5))
-# print(df.info())
-
-# df_referal_groups = df.groupby(["REF_URL"])
-
-# app = Dash(__name__)
-
-# columnDefs = [{"field": i} for i in df.columns]
-# print(columnDefs)
-# defaultColDef = {'editable': True, "headerClass": 'center-aligned-header', "filter": "agTextColumnFilter", "deletable": True, "floatingFilter": False}
-
-# grid = dag.AgGrid(
-#     className="ag-theme-balham",
-#     id="log-grid",
-#     rowData=df.to_dict('records'),
-#     defaultColDef=defaultColDef,
-#     columnSize="responsiveSizeToFit",
-#     dashGridOptions={
-#         "rowSelection": "multiple",
-#         "suppressRowClickSelection": False,
-#         "animateRows": True,
-#         "pagination": True,
-#         "autoHeaderHeight": True,
-#         "autoHeight": True
-#     },
-#     selectAll=True,
-#     columnDefs=columnDefs,
-# )
-# graph = dcc.Graph(id="log-graph")
-
-# app.layout = html.Div([grid, graph])
-
-
-# @app.callback(
-#     Output("log-graph", "figure"),
-#     Input("log-grid", "rowData")
-# )
-# def update_graph(row_data):
-#     if row_data is not None:
-#         df = pd.DataFrame(row_data)
-#         fig = px.bar(df, x="CLIENT", y="ACCESSED", title="File Size By Referrer", color="ACTION")
-#         return fig
