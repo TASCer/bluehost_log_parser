@@ -16,15 +16,15 @@ todays_date: str = now.strftime("%D").replace("/", "-")
 dash_logger: Logger = logging.getLogger()
 dash_logger.setLevel(logging.INFO)
 
-fh = logging.FileHandler(f"{LOGGER_ROOT}/dashboard-{todays_date}.log")
-fh.setLevel(logging.DEBUG)
+# fh = logging.FileHandler(f"{LOGGER_ROOT}/dashboard-{todays_date}.log")
+# fh.setLevel(logging.DEBUG)
 
-formatter: Formatter = logging.Formatter(
-    "%(asctime)s - %(filename)s -%(lineno)d - %(levelname)s - %(message)s"
-)
-fh.setFormatter(formatter)
+# formatter: Formatter = logging.Formatter(
+#     "%(asctime)s - %(filename)s -%(lineno)d - %(levelname)s - %(message)s"
+# )
+# fh.setFormatter(formatter)
 
-dash_logger.addHandler(fh)
+# dash_logger.addHandler(fh)
 
 logger: Logger = logging.getLogger(__name__)
 
