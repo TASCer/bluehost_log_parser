@@ -13,6 +13,7 @@ logger: Logger = logging.getLogger(__name__)
 def render(app: Dash, data: DataFrame) -> html.Div:
     df = data.copy()
     logger.info(f"{len(df)=}")
+
     @app.callback(
         Output(ids.BAR_CHART, "children"),
         [
@@ -25,7 +26,9 @@ def render(app: Dash, data: DataFrame) -> html.Div:
     def update_bar_chart(
         years: list[str], months: list[str], codes: list[str], referrals: list[str]
     ) -> html.Div:
-        logger.debug(f"YEARS: {years} MONTHS:{months} CODES:{codes} REFERRALS:{referrals}")
+        logger.debug(
+            f"YEARS: {years} MONTHS:{months} CODES:{codes} REFERRALS:{referrals}"
+        )
 
         filtered_data = df.query(
             "YEAR in @years and MONTH in @months and CODE in @codes and REF_URL in @referrals"
