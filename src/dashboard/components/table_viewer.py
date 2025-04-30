@@ -7,7 +7,7 @@ from dash.dependencies import Input, Output
 from logging import Logger
 from . import ids
 
-# register_page(__name__, path="/")
+# register_page(__name__, path="/logs")
 
 
 # deleteable=True only on column defining? Can remove rows obly for datatable!

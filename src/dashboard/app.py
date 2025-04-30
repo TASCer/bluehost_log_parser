@@ -1,5 +1,7 @@
+# https://dash.plotly.com/urls
 import dash_bootstrap_components as dbc
 import datetime as dt
+import dash
 import logging
 
 from dash import Dash
@@ -16,15 +18,15 @@ todays_date: str = now.strftime("%D").replace("/", "-")
 dash_logger: Logger = logging.getLogger()
 dash_logger.setLevel(logging.INFO)
 
-# fh = logging.FileHandler(f"{LOGGER_ROOT}/dashboard-{todays_date}.log")
-# fh.setLevel(logging.DEBUG)
+fh = logging.FileHandler(f"{LOGGER_ROOT}/dashboard-{todays_date}.log")
+fh.setLevel(logging.DEBUG)
 
-# formatter: Formatter = logging.Formatter(
-#     "%(asctime)s - %(filename)s -%(lineno)d - %(levelname)s - %(message)s"
-# )
-# fh.setFormatter(formatter)
+formatter: Formatter = logging.Formatter(
+    "%(asctime)s - %(filename)s -%(lineno)d - %(levelname)s - %(message)s"
+)
+fh.setFormatter(formatter)
 
-# dash_logger.addHandler(fh)
+dash_logger.addHandler(fh)
 
 logger: Logger = logging.getLogger(__name__)
 
@@ -33,6 +35,7 @@ app = Dash(
     external_stylesheets=[dbc.themes.BOOTSTRAP],
     description="View Apache Weblog data",
     title="Bluehost Weblogs",
+    use_pages=False,
 )
 
 

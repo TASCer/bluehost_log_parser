@@ -14,14 +14,15 @@ from pandas import DataFrame
 
 def create_layout(app: Dash, data: DataFrame) -> html.Div:
     logger.info(f"LAYOUT CREATED df:{len(data)}")
+
     return html.Div(
-        className="dash-ag-grid",
+        className="container-fluid",
         children=[
-            html.P(len(data)),
-            html.H1(app.title),
+            html.P(f"SOURCE WEBLOG COUNT: {len(data)}"),
+            # html.H1(app.title),
             html.Hr(),
             html.Div(
-                className="dropdown-container",
+                className="dropdown-button",
                 children=[
                     year_dropdown.render(app, data),
                     month_dropdown.render(app, data),
@@ -30,7 +31,7 @@ def create_layout(app: Dash, data: DataFrame) -> html.Div:
                     table_viewer.render(app, data),
                 ],
             ),
-            # bar_chart.render(app, data),
-            # pie_chart.render(app, data),
+            bar_chart.render(app, data),
+            pie_chart.render(app, data),
         ],
     )
