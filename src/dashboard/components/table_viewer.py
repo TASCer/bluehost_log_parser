@@ -2,10 +2,12 @@
 import dash_ag_grid as dag
 
 from pandas import DataFrame
-from dash import Dash, html
+from dash import Dash, html, register_page
 from dash.dependencies import Input, Output
 from logging import Logger
 from . import ids
+
+# register_page(__name__, path="/")
 
 
 # deleteable=True only on column defining? Can remove rows obly for datatable!
@@ -18,7 +20,7 @@ def render(app: Dash, data: DataFrame) -> html.Div:
     for i in df.columns:
         if i == "ACCESSED":
             columnDefs.append({"field": i, "filter": "agDateColumnFilter"})
-        if i == "SIZE" or i == "YEAR":
+        elif i == "SIZE" or i == "YEAR":
             columnDefs.append({"field": i, "filter": "agNumberColumnFilter"})
 
         else:
@@ -45,6 +47,8 @@ def render(app: Dash, data: DataFrame) -> html.Div:
             "pagination": True,
             "autoHeaderHeight": True,
             "autoHeight": True,
+            "paginationAutoPageSize": True,
+            "domLayout": "autoHeight",
         },
         selectAll=True,
         columnDefs=columnDefs,
