@@ -3,13 +3,14 @@ import datetime as dt
 import logging
 
 from bluehost_log_parser import db_checks
+from bluehost_log_parser import fetch_whois_data
 from bluehost_log_parser import fetch_server_logs
 from bluehost_log_parser import insert_activity
 from bluehost_log_parser import insert_unique_sources
 from bluehost_log_parser import mailer
 from bluehost_log_parser import parse_logs
 from bluehost_log_parser import unzip_fetched_logs
-from bluehost_log_parser import update_sources_whois
+from bluehost_log_parser import update_sources
 from dashboard import app
 from logging import Logger, Formatter
 from pathlib import Path
@@ -80,9 +81,9 @@ def main(month_num: int | None, year: int | None) -> None:
         month_name: str = now.strftime("%b")
         year: str = str(now.year)
 
-    fetch_server_logs.secure_copy(
-        REMOTE_LOGFILE_BASE_PATHS, LOCAL_ZIPPED_PATH, month_name, year
-    )
+    # fetch_server_logs.secure_copy(
+    #     REMOTE_LOGFILE_BASE_PATHS, LOCAL_ZIPPED_PATH, month_name, year
+    # )
     unzipped_log_files = unzip_fetched_logs.process(
         LOCAL_ZIPPED_PATH, LOCAL_UNZIPPED_PATH, month_name, year
     )
@@ -92,8 +93,12 @@ def main(month_num: int | None, year: int | None) -> None:
     )
 
     unique_sources: set = set(ips)
-    insert_unique_sources.update(unique_sources)
-    update_sources_whois.lookup()
+    no_country_name: list[str] = insert_unique_sources.inserts(unique_sources)
+    if no_country_name:
+        results = fetch_whois_data.get_country(no_country_name)
+        print(results)
+        update_sources.whois_updates(results)
+
     insert_activity.update(processed_logs, my_processed_logs)
 
     logger.info("***** COMPLETED WEB LOG PROCESSING *****")
@@ -110,7 +115,7 @@ def main(month_num: int | None, year: int | None) -> None:
             "NO LOGS PROCESSED! CHECK log, possible error downloading from Bluehost",
         )
     # RUNS PARSE AGAIN?
-    return app.main()
+    # return app.main()
 
 
 if __name__ == "__main__":
