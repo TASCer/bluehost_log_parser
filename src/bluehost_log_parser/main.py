@@ -11,7 +11,8 @@ from bluehost_log_parser import mailer
 from bluehost_log_parser import parse_logs
 from bluehost_log_parser import unzip_fetched_logs
 from bluehost_log_parser import update_sources
-from dashboard import app
+
+# from dashboard import app
 from logging import Logger, Formatter
 from pathlib import Path
 
@@ -81,9 +82,9 @@ def main(month_num: int | None, year: int | None) -> None:
         month_name: str = now.strftime("%b")
         year: str = str(now.year)
 
-    # fetch_server_logs.secure_copy(
-    #     REMOTE_LOGFILE_BASE_PATHS, LOCAL_ZIPPED_PATH, month_name, year
-    # )
+    fetch_server_logs.secure_copy(
+        REMOTE_LOGFILE_BASE_PATHS, LOCAL_ZIPPED_PATH, month_name, year
+    )
     unzipped_log_files = unzip_fetched_logs.process(
         LOCAL_ZIPPED_PATH, LOCAL_UNZIPPED_PATH, month_name, year
     )
@@ -115,7 +116,7 @@ def main(month_num: int | None, year: int | None) -> None:
             "NO LOGS PROCESSED! CHECK log, possible error downloading from Bluehost",
         )
     # RUNS PARSE AGAIN?
-    # return app.main()
+    # dashboard.app.main()
 
 
 if __name__ == "__main__":

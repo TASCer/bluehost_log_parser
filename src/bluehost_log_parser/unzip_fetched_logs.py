@@ -16,8 +16,8 @@ unzipped_paths: set = set()
 def process(
     zipped_files: set[Path],
     unzipped_path: Path,
-    month_name: str | None,
-    year: str | None,
+    month_name: str,
+    year: str,
 ) -> set[str]:
     """
     Takes in a set of str paths for locally copied zipped bluehost website log files
@@ -30,13 +30,13 @@ def process(
     """
     logger.info("<<<<< STARTED: UNZIPPING AND SAVING DOWNLOADED WEBLOGS <<<<<")
 
-    if year and month_name:
-        month_name: str = month_name
-        year: str = year
+    # if year and month_name:
+    #     month_name: str = month_name
+    #     year: str = year
 
-    else:
-        month_name: str = now.strftime("%b")
-        year: str = str(now.year)
+    # else:
+    #     month_name: str = now.strftime("%b")
+    #     year: str = str(now.year)
 
     local_files: set = set()
 
