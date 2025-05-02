@@ -35,7 +35,6 @@ def inserts(unique_ips: set[str]) -> list[str]:
             text(f"SELECT * from {SOURCES_TABLE} WHERE COUNTRY = ''")
         )
         missing_country = [t[0] for t in q_missing_country]
-        print("MISSING COUNTRY", len(missing_country))
 
         return missing_country
     # try:
