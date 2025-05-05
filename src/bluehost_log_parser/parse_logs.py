@@ -90,6 +90,7 @@ def process(
                     FILE = FILE.replace("'", "")
 
                 if len(FILE) >= 120:
+                    logger.warning(f"\tLONG FILENAME: {FILE}")
                     site_long_files.append(SOURCE)
                     all_long_files.append((server_timestamp, SOURCE))
 

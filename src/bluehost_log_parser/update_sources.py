@@ -46,7 +46,7 @@ def whois_updates(whois_data: list[str]):
             logger.warning(f"sources table: {errors} errors encountered")
 
         logger.info(
-            f"sources table: {len(whois_data) - errors} updated with country names and ASN description."
+            f"\tsources table: {len(whois_data) - errors} updated with country names and ASN description."
         )
 
 

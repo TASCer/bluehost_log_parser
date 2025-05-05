@@ -32,7 +32,7 @@ def inserts(unique_ips: set[str]) -> list[str]:
             )
 
         q_missing_country = conn.execute(
-            text(f"SELECT * from {SOURCES_TABLE} WHERE COUNTRY = ''")
+            text(f"SELECT * from {SOURCES_TABLE} WHERE COUNTRY = '' or COUNTRY is null")
         )
         missing_country = [t[0] for t in q_missing_country]
 

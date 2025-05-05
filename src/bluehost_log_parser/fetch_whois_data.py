@@ -16,6 +16,8 @@ now: dt = dt.date.today()
 
 
 def get_country(source_ips: list) -> list[str]:
+    logger.info("STARTED querying Whois for country names and descriptions.")
+
     http_errors = 0
     whois_results: list = []
     start_time: datetime = dt.datetime.utcnow()
@@ -81,7 +83,7 @@ def get_country(source_ips: list) -> list[str]:
     elapsed_time: int = int((stop_time - start_time).total_seconds())
 
     logger.info(
-        f"\tqueried: {len(source_ips)} source country names and descriptions in {elapsed_time} seconds."
+        f"\t\tqueried: {len(source_ips)} source country names and descriptions in {elapsed_time} seconds."
     )
 
     if elapsed_time >= 60:
