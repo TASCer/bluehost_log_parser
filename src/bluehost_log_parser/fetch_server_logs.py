@@ -56,8 +56,10 @@ def secure_copy(
 
             except (OSError, FileNotFoundError) as err:
                 logger.critical(f"see: {err} for more information")
-                # SEND EMAIL?
-                # mailer.send_mail(subject="**WEBLOG SCP FAILURE", text="check ssh agent process and key")
+                mailer.send_mail(
+                    subject="**WEBLOG SCP FAILURE",
+                    text="check ssh agent process and key",
+                )
                 exit()
 
         else:

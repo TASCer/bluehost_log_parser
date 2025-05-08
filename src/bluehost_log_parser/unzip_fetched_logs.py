@@ -32,7 +32,6 @@ def process(
 
     for root, dirs, files in unzipped_path.walk(top_down=False):
         for name in files:
-            print(name)
             (root / name).unlink()
 
     # if year and month_name:

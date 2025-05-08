@@ -12,7 +12,6 @@ from bluehost_log_parser import parse_logs
 from bluehost_log_parser import unzip_fetched_logs
 from bluehost_log_parser import update_sources
 
-# from dashboard import app
 from logging import Logger, Formatter
 from pathlib import Path
 
@@ -85,7 +84,7 @@ def main(month_num: int | None, year: int | None) -> None:
     fetch_server_logs.secure_copy(
         REMOTE_LOGFILE_BASE_PATHS, LOCAL_ZIPPED_PATH, month_name, year
     )
-    unzipped_log_files = unzip_fetched_logs.process(
+    unzipped_log_files: set[str] = unzip_fetched_logs.process(
         LOCAL_ZIPPED_PATH, LOCAL_UNZIPPED_PATH, month_name, year
     )
 
@@ -96,8 +95,7 @@ def main(month_num: int | None, year: int | None) -> None:
     unique_sources: set = set(ips)
     no_country_name: list[str] = insert_unique_sources.inserts(unique_sources)
     if no_country_name:
-        results = fetch_whois_data.get_country(no_country_name)
-        print(results)
+        results: list[str] = fetch_whois_data.get_country(no_country_name)
         update_sources.whois_updates(results)
 
     insert_activity.update(processed_logs, my_processed_logs)
