@@ -1,15 +1,13 @@
 # https://dash.plotly.com/urls
 import dash_bootstrap_components as dbc
 import datetime as dt
-import dash
 import logging
 
 from dash import Dash
 from dashboard.components import layout
 from dashboard.data.loader import load_weblog_data
-from logging import Formatter, Logger
+from logging import Logger
 from pandas import DataFrame
-from pathlib import Path
 
 now: dt = dt.date.today()
 todays_date: str = now.strftime("%D").replace("/", "-")
@@ -28,7 +26,7 @@ app = Dash(
 )
 
 
-def main():
+def main() -> None:
     source: DataFrame = load_weblog_data()
     logger.info("LOADED SOURCE DATA")
     app.layout = layout.create_layout(app, data=source)

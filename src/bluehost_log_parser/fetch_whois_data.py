@@ -79,7 +79,7 @@ def get_country(source_ips: list) -> list[str]:
 
         whois_results.append([ip, country_name, asn_alpha2, asn_description])
 
-    stop_time = dt.datetime.utcnow()
+    stop_time: datetime = dt.datetime.utcnow()
     elapsed_time: int = int((stop_time - start_time).total_seconds())
 
     logger.info(

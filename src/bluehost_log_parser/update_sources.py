@@ -9,7 +9,7 @@ LOGS_TABLE = "logs"
 SOURCES_TABLE = "sources"
 
 
-def whois_updates(whois_data: list[str]):
+def whois_updates(whois_data: list[str]) -> None:
     """
     Updates lookup table 'sources' entries with full country name and ASN Description from ipwhois
     """

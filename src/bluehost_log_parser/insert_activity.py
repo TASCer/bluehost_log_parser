@@ -18,9 +18,9 @@ def parse_timestamp(ts: str) -> datetime:
     :return: datetime
     """
     ts = ts.replace(":", " ", 1)
-    ts_split = ts.split(" ", 2)
+    ts_split: list[str] = ts.split(" ", 2)
     ts = " ".join(ts_split[0:2])
-    ts_parsed = parse(ts)
+    ts_parsed: datetime = parse(ts)
 
     return ts_parsed
 
@@ -54,7 +54,7 @@ def update(log_entries: list, my_log_entries: list) -> None:
             ref_url,
             ref_ip,
         ) in log_entries:
-            ts_parsed = parse_timestamp(ts)
+            ts_parsed: datetime = parse_timestamp(ts)
 
             try:
                 conn.execute(

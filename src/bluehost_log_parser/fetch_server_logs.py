@@ -42,7 +42,7 @@ def secure_copy(
 
         if not platform.system() == "Windows":
             try:
-                copy_command = os.system(
+                copy_command: int = os.system(
                     f"scp {my_secrets.bluehost_user}@{my_secrets.my_bluehost_ip}:{remote_zipped_filename} {local_zipped_path}"
                 )
 
