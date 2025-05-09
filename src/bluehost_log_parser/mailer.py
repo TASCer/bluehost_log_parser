@@ -1,7 +1,7 @@
 # https://www.justintodata.com/send-email-using-python-tutorial/
 import datetime as dt
 import logging
-import my_secrets
+from bluehost_log_parser import my_secrets
 import smtplib
 import ssl
 
