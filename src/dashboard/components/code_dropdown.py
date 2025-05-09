@@ -1,3 +1,4 @@
+# TODO IMPLEMENT THE dropdown helper
 from dash import dcc, html, callback
 from dash.dependencies import Input, Output
 from pandas import DataFrame
@@ -7,7 +8,7 @@ from . import ids
 
 def render(source: DataFrame) -> html.Div:
     all_codes: list[str] = source["CODE"].tolist()
-    unique_codes = sorted(set(all_codes))
+    unique_codes: list[str] = sorted(set(all_codes))
 
     @callback(
         Output(ids.CODE_DROPDOWN, "value"),
