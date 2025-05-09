@@ -37,7 +37,7 @@ def compose(*functions: Preprocessor) -> Preprocessor:
 def load_weblog_data() -> pd.DataFrame:
     with engine.connect() as conn, conn.begin():
         data: DataFrame = pd.read_sql(
-            sql="""SELECT * FROM `bluehost-weblogs`.logs where ACCESSED like '2025-%%';""",
+            sql="""SELECT * FROM `bluehost-weblogs`.logs where ACCESSED like '2025-05-08%%';""",
             con=conn,
         )
     # where ACCESSED like '2025-04%%'

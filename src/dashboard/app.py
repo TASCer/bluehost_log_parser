@@ -1,38 +1,63 @@
 # https://dash.plotly.com/urls
+import dash
 import dash_bootstrap_components as dbc
 import datetime as dt
 import logging
 
-from dash import Dash
-from dashboard.components import layout
+from dash import Dash, dcc, html
 from dashboard.data.loader import load_weblog_data
-from logging import Logger
+from logging import Logger, Formatter
 from pandas import DataFrame
+from bluehost_log_parser.main import LOGGER_ROOT
 
 now: dt = dt.date.today()
 todays_date: str = now.strftime("%D").replace("/", "-")
 
-dash_logger: Logger = logging.getLogger()
-dash_logger.setLevel(logging.INFO)
+logger: Logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
+logger: Logger = logging.getLogger(__name__)
+fh = logging.FileHandler(f"{LOGGER_ROOT}/{todays_date}.log")
+fh.setLevel(logging.DEBUG)
+
+formatter: Formatter = logging.Formatter(
+    "%(asctime)s - %(filename)s -%(lineno)d - %(levelname)s - %(message)s"
+)
+fh.setFormatter(formatter)
+
+logger.addHandler(fh)
 
 logger: Logger = logging.getLogger(__name__)
 
 app = Dash(
-    name="WebLog App",
+    __name__,
     external_stylesheets=[dbc.themes.BOOTSTRAP],
     description="View Apache Weblog data",
-    title="Bluehost Weblogs",
-    use_pages=False,
+    title="Analyze Weblogs",
+    use_pages=True,
 )
 
 
-def main() -> None:
-    source: DataFrame = load_weblog_data()
-    logger.info("LOADED SOURCE DATA")
-    app.layout = layout.create_layout(app, data=source)
-
-    app.run(debug=True, port="8000")
+source: DataFrame = load_weblog_data()
+logger.info("LOADED SOURCE DATA")
+app.layout = html.Div(
+    [
+        # html.H1("Bluehost Log Analysis"),
+        html.Div(
+            [
+                html.Div(
+                    dcc.Link(
+                        f"{page['name']} - {page['path']}",
+                        href=page["relative_path"],
+                    )
+                )
+                for page in dash.page_registry.values()
+            ]
+        ),
+        dash.page_container,
+    ]
+)
 
 
 if __name__ == "__main__":
-    main()
+    app.run(debug=True, port="8000")

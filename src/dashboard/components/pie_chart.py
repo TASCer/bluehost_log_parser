@@ -1,18 +1,15 @@
-# ISSUE
-# import plotly.graph_objects as go
-
 import plotly.express as px
 
-from dash import Dash, dcc, html
+from dash import dcc, html, callback
 from dash.dependencies import Input, Output
 from pandas import DataFrame
 from . import ids
 
 
-def render(app: Dash, data: DataFrame) -> html.Div:
-    df = data.copy()
+def render(data: DataFrame) -> html.Div:
+    df: DataFrame = data.copy()
 
-    @app.callback(
+    @callback(
         Output(ids.PIE_CHART, "children"),
         [
             Input(ids.YEAR_DROPDOWN, "value"),

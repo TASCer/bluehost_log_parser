@@ -1,16 +1,15 @@
-from dash import Dash, dcc, html
+from dash import dcc, html, callback
 from dash.dependencies import Input, Output
 from pandas import DataFrame
 from . import ids
-# from .dropdown_helper import to_dropdown_options
 
 
-def render(app: Dash, source: DataFrame) -> html.Div:
-    df = source.copy()
+def render(source: DataFrame) -> html.Div:
+    df: DataFrame = source.copy()
     all_months: list[str] = df["MONTH"].tolist()
-    unique_months = sorted(set(all_months))
+    unique_months: list[str] = sorted(set(all_months))
 
-    @app.callback(
+    @callback(
         Output(ids.MONTH_DROPDOWN, "value"),
         [
             Input(ids.YEAR_DROPDOWN, "value"),

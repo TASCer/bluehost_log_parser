@@ -1,16 +1,16 @@
-from dash import Dash, dcc, html
+from dash import Dash, dcc, html, callback
 from dash.dependencies import Input, Output
 from pandas import DataFrame
 from . import ids
 # from .dropdown_helper import to_dropdown_options
 
 
-def render(app: Dash, source: DataFrame) -> html.Div:
-    df = source.copy()
+def render(source: DataFrame) -> html.Div:
+    df: DataFrame = source.copy()
     all_years: list[str] = df["YEAR"]
     unique_years: list[str] = sorted(set(all_years), key=int)
 
-    @app.callback(
+    @callback(
         Output(ids.YEAR_DROPDOWN, "value"),
         Input(ids.SELECT_ALL_YEARS_BUTTON, "n_clicks"),
     )

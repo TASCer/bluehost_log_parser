@@ -7,12 +7,9 @@ from dash.dependencies import Input, Output
 from logging import Logger
 from . import ids
 
-# register_page(__name__, path="/logs")
 
-
-# deleteable=True only on column defining? Can remove rows obly for datatable!
-def render(app: Dash, data: DataFrame) -> html.Div:
-    df = data.copy()
+def render(data: DataFrame) -> html.Div:
+    df: DataFrame = data.copy()
     df["SIZE"] = df["SIZE"].apply(lambda s: int("0") if not s.isdigit() else int(s))
     del df["REF_IP"]
 
@@ -30,7 +27,6 @@ def render(app: Dash, data: DataFrame) -> html.Div:
         "editable": True,
         "headerClass": "center-aligned-header",
         "filter": "agTextColumnFilter",
-        "deletable": True,
         "floatingFilter": False,
     }
 

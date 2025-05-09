@@ -1,15 +1,15 @@
-from dash import Dash, dcc, html
+from dash import dcc, html, callback
 from dash.dependencies import Input, Output
 from pandas import DataFrame
 from . import ids
 # from .dropdown_helper import to_dropdown_options
 
 
-def render(app: Dash, data: DataFrame) -> html.Div:
+def render(data: DataFrame) -> html.Div:
     all_referrals: list[str] = data["REF_URL"].tolist()
     unique_referrals = sorted(set(all_referrals))
 
-    @app.callback(
+    @callback(
         Output(ids.REFERRAL_DROPDOWN, "value"),
         [
             Input(ids.YEAR_DROPDOWN, "value"),

@@ -1,15 +1,15 @@
-from dash import Dash, dcc, html
+from dash import dcc, html, callback
 from dash.dependencies import Input, Output
 from pandas import DataFrame
 from . import ids
 # from .dropdown_helper import to_dropdown_options
 
 
-def render(app: Dash, source: DataFrame) -> html.Div:
+def render(source: DataFrame) -> html.Div:
     all_codes: list[str] = source["CODE"].tolist()
     unique_codes = sorted(set(all_codes))
 
-    @app.callback(
+    @callback(
         Output(ids.CODE_DROPDOWN, "value"),
         [
             Input(ids.YEAR_DROPDOWN, "value"),
