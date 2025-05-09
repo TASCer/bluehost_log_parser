@@ -1,6 +1,6 @@
 ![TASCS LOGO](./assets/logo.png)
 
-# Bluehost Apache Weblog Parser version: 1.5.0
+# Bluehost Apache Weblog Parser version: 1.5.2
 
             
 
@@ -25,6 +25,10 @@ sources table
 
 ###### Source IP to Country Name provided by IPWhois utility get_countries
 
+---
+OPTIONAL DEPENDENCIES: 
+1. Dashboard analyses
+1. and testing
 ---
 
 #### src folder contains: 
