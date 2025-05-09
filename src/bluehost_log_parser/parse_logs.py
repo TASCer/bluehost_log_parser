@@ -59,12 +59,12 @@ def process(
             site_my_log_entries: list = []
 
             for log in logs:
-                basic: str = log.split('" "')[0]
-                ip: str = basic.split("- - ")[0]
+                basic_info: str = log.split('" "')[0]
+                ip: str = basic_info.split("- - ")[0]
 
                 if ":" in ip:
                     logger.warning(f"IPv6 entry encountered: {ip}")
-                    logger.warning(f"IPv6 basic: {basic}")
+                    logger.warning(f"IPv6 basic_info: {basic_info}")
 
                     continue
 
@@ -74,13 +74,13 @@ def process(
                 if SOURCE == f"{my_secrets.my_bluehost_ip}":
                     continue
 
-                basic_info: str = basic.split("- - ")[1]
+                basic_info: str = basic_info.split("- - ")[1]
                 server_timestamp: str = basic_info.split("]")[0][1:]
 
-                action1: str = basic_info.split('"')[1]
+                action_info: str = basic_info.split('"')[1]
 
                 try:
-                    ACTION, FILE, TYPE = action1.split(" ")
+                    ACTION, FILE, TYPE = action_info.split(" ")
 
                 except (ValueError, IndexError) as e:
                     logger.error(f"\tACTION1 INFO SPLIT ERROR: {SOURCE}--{e}")
@@ -111,8 +111,8 @@ def process(
                     FILE = action_file1 + action_file2 + " *TRUNCATED*"
 
                 try:
-                    action2: str = basic_info.split('"')[2].strip()
-                    RES_CODE, SIZE = action2.split(" ")
+                    result_info: str = basic_info.split('"')[2].strip()
+                    RES_CODE, SIZE = result_info.split(" ")
 
                 except ValueError as e:
                     logger.error(f"Possible bot, check logs -> {e}")
@@ -124,6 +124,9 @@ def process(
 
                 if AGENT.startswith("-"):
                     AGENT: str = "NA"
+
+                if AGENT.startswith("'b'"):
+                    CLIENT: str = AGENT.replace("'b'", "")
 
                 elif AGENT.startswith("'"):
                     AGENT: str = AGENT.replace("'", "")
@@ -139,11 +142,11 @@ def process(
 
                 elif len(client) == 1:
                     client_os: str = client[0]
-                    CLIENT: str = client_os.replace(";", "")
+                    CLIENT: str = client_os.replace(";", "").lstrip()
 
                 else:
                     client_os: str = client[0]
-                    CLIENT: str = client_os.replace(";", "")
+                    CLIENT: str = client_os.replace(";", "").lstrip()
 
                 if "'" in CLIENT:
                     CLIENT: str = CLIENT.replace("'", "")

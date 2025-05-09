@@ -30,7 +30,7 @@ def process(
     """
     logger.info("<<<<< STARTED: UNZIPPING AND SAVING DOWNLOADED WEBLOGS <<<<<")
 
-    for root, dirs, files in unzipped_path.walk(top_down=False):
+    for root, _, files in unzipped_path.walk(top_down=False):
         for name in files:
             (root / name).unlink()
 
