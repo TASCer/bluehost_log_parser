@@ -14,7 +14,7 @@ wheels/
 
 # Logs
 /_old_logs/*.log
-src/*.log
+*.log
 
 # Folder
 /src/bluehost_log_parser/output/unzipped_logfiles/*
