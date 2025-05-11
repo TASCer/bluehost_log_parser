@@ -20,6 +20,8 @@ build-backend = "hatchling.build"
 
 [dependency-groups]
 dev = ["pytest>=8.3.5", "ruff>=0.11.0"]
+
+[project.optional-dependancies]
 analysis = [
     "dash>=3.0.2",
     "dash-bootstrap-components>=2.0.0",
