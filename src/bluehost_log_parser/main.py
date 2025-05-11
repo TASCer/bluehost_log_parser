@@ -15,8 +15,8 @@ from bluehost_log_parser import update_sources
 from logging import Logger, Formatter
 from pathlib import Path
 
-PROJECT_ROOT = Path.cwd()
-LOGGER_ROOT = Path.cwd().parent
+PROJECT_ROOT: Path = Path.cwd()
+LOGGER_ROOT: Path = Path.cwd().parent.parent
 
 now: dt = dt.date.today()
 todays_date: str = now.strftime("%D").replace("/", "-")
