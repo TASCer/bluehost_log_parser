@@ -27,7 +27,7 @@ dependencies = [
     { name = "sqlalchemy-utils" },
 ]
 
-[package.dev-dependencies]
+[package.optional-dependencies]
 analysis = [
     { name = "dash" },
     { name = "dash-ag-grid" },
@@ -42,25 +42,20 @@ dev = [
 requires-dist = [
     { name = "country-converter", specifier = ">=1.3" },
     { name = "dash", specifier = ">=3.0.4" },
+    { name = "dash", marker = "extra == 'analysis'", specifier = ">=3.0.2" },
     { name = "dash-ag-grid", specifier = ">=31.3.1" },
+    { name = "dash-ag-grid", marker = "extra == 'analysis'", specifier = ">=31.3.1" },
     { name = "dash-bootstrap-components", specifier = ">=2.0.3" },
+    { name = "dash-bootstrap-components", marker = "extra == 'analysis'", specifier = ">=2.0.0" },
     { name = "ipwhois", specifier = ">=1.3.0" },
     { name = "pymysql", specifier = ">=1.1.1" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.3.5" },
     { name = "python-dateutil", specifier = ">=2.9.0.post0" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.11.0" },
     { name = "sqlalchemy", specifier = ">=2.0.39" },
     { name = "sqlalchemy-utils", specifier = ">=0.41.2" },
 ]
-
-[package.metadata.requires-dev]
-analysis = [
-    { name = "dash", specifier = ">=3.0.2" },
-    { name = "dash-ag-grid", specifier = ">=31.3.1" },
-    { name = "dash-bootstrap-components", specifier = ">=2.0.0" },
-]
-dev = [
-    { name = "pytest", specifier = ">=8.3.5" },
-    { name = "ruff", specifier = ">=0.11.0" },
-]
+provides-extras = ["dev", "analysis"]
 
 [[package]]
 name = "certifi"
