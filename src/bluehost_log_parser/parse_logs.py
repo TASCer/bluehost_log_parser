@@ -190,7 +190,7 @@ def process(
 
     if len(all_long_files) > 0:
         logger.warning(
-            f"\t\t{len(all_long_files)} LOG ENTRIES HAD FILE NAME OVER 120 chars."
+            f"\tLOG ENTRIES OVER 120 characers (all-sites) = {len(all_long_files)}"
         )
 
     logger.info("COMPLETED WEBLOG PARSING")
