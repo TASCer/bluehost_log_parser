@@ -30,7 +30,22 @@ def get_country(source_ips: list) -> list[str]:
         except ipwhois.HTTPLookupError as http:
             http_errors += 1
             http: str = str(http).split("&")[0]
+            error: str = http.split("error code")[1].replace(".", "")
 
+            result: dict = {
+                "asn_country_code": None,
+                "asn_description": error,
+                "asn_alpha2": "NA",
+                "country_name": error,
+            }
+            whois_results.append(
+                [
+                    ip,
+                    result["country_name"],
+                    result["asn_alpha2"],
+                    result["asn_description"],
+                ]
+            )
             continue
 
         except ipwhois.ASNParseError as parse_err:
