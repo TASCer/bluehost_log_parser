@@ -13,6 +13,7 @@ logger: Logger = logging.getLogger(__name__)
 now: dt = dt.date.today()
 
 
+# TODO remove old files or specify via date. Check if June & July get parsed
 def secure_copy(
     remote_log_paths: list[str],
     local_zipped_path: Path,
