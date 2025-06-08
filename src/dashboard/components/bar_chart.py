@@ -37,23 +37,23 @@ def render(data: DataFrame) -> html.Div:
         if filtered_data.shape[0] == 0:
             return html.Div("No data selected.", id=ids.BAR_CHART)
 
-        #  ISSUE WITH KEYS month name
+        #  ISSUE WITH KEYS month name. Need VALS!!
         def create_pivot_table() -> DataFrame:
-            pt = filtered_data.pivot_table(
-                values=filtered_data["MONTH"],
-                index=filtered_data["CODE"],
-                aggfunc="sum",
+            pt: DataFrame = filtered_data.pivot_table(
+                values=filtered_data.index(),
+                index=filtered_data["MONTH"],
+                aggfunc="count",
                 fill_value=0,
                 dropna=False,
             )
             return pt.reset_index().sort_values(filtered_data["CODE"], ascending=False)
 
         fig = px.bar(
-            data_frame=filtered_data,
-            # create_pivot_table(),
+            filtered_data,
+            create_pivot_table(),
             x="CODE",
-            y="SOURCE",
-            color="MONTH",
+            y="CODE",
+            color="REF_URL",
         )
         logger.info("PLOT CREATED")
         return html.Div(dcc.Graph(figure=fig), id=ids.BAR_CHART)
