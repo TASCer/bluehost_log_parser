@@ -28,7 +28,7 @@ def process(
     arg: year
     returns: set
     """
-    logger.info("<<<<< STARTED: UNZIPPING AND SAVING DOWNLOADED WEBLOGS <<<<<")
+    logger.info("<<<<< STARTED: UNZIPPING / SAVING DOWNLOADED WEBLOGS <<<<<")
 
     for root, _, files in unzipped_path.walk(top_down=False):
         for name in files:
@@ -61,6 +61,6 @@ def process(
 
         local_files.add(unzipped_file_path)
 
-    logger.info(">>>>> COMPLETED: UNZIPPING AND SAVING DOWNLOADED WEBLOGS >>>>>")
+    logger.info(">>>>> COMPLETED: UNZIPPING / SAVING DOWNLOADED WEBLOGS >>>>>")
 
     return local_files

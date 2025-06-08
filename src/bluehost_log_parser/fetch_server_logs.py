@@ -66,9 +66,9 @@ def secure_copy(
         else:
             try:
                 copy_command = f"pscp -batch {my_secrets.user}@{my_secrets.bh_ip}:{remote_zipped_filename} {my_secrets.local_zipped_path}"
-                result = subprocess.check_output(copy_command)
-                str_result: str = result.decode(encoding="utf-8")
-                logger.info(str_result.strip())
+                response = subprocess.check_output(executable=copy_command)
+                result: str = response.decode(encoding="utf-8")
+                logger.info(result.strip())
 
             except subprocess.CalledProcessError as other_err:
                 logger.error(other_err)
