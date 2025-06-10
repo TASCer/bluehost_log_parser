@@ -8,7 +8,7 @@ from . import ids
 
 def render(data: DataFrame) -> html.Div:
     df: DataFrame = data.copy()
-
+    countries = df.groupby("COUNTRY", as_index=False).count()
     # @callback(
     #     Output(ids.PIE_CHART, "children"),
     #     [
@@ -30,14 +30,14 @@ def render(data: DataFrame) -> html.Div:
     #     fig.update_traces(textinfo="label")
 
     #     return html.Div(dcc.Graph(figure=fig), id=ids.PIE_CHART)
-    # fig = px.scatter_geo(
-    #     df,
-    #     locations="iso_alpha",
-    #     color="continent",
-    #     hover_name="country",
-    #     size="pop",
-    #     projection="natural earth",
-    # )
-    # fig.show()
 
-    # return html.Div(id=ids.PIE_CHART)
+    fig = px.scatter_geo(
+        countries,
+        locations="COUNTRY",
+        color="COUNTRY",
+        hover_name="COUNTRY",
+        size="ACCESSED",
+        projection="natural earth",
+    )
+
+    return html.Div(dcc.Graph(figure=fig), id=ids.MAP_VIEWER)
