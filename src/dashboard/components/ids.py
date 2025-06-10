@@ -1,5 +1,6 @@
 BAR_CHART = "bar-chart"
 PIE_CHART = "pie-chart"
+MAP_VIEWER = "map-viewer"
 
 SELECT_ALL_CODES_BUTTON = "select-all-codes-button"
 CODE_DROPDOWN = "code-dropdown"
