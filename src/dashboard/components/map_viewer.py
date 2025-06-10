@@ -8,7 +8,10 @@ from . import ids
 
 def render(data: DataFrame) -> html.Div:
     df: DataFrame = data.copy()
-    countries = df.groupby("COUNTRY", as_index=False).count()
+    df_slice = df[["COUNTRY", "ACCESSED"]]
+    print("SLICE", df_slice)
+    group_countries = df_slice.groupby("COUNTRY", as_index=False).count()
+    print(group_countries)
     # @callback(
     #     Output(ids.PIE_CHART, "children"),
     #     [
@@ -32,7 +35,7 @@ def render(data: DataFrame) -> html.Div:
     #     return html.Div(dcc.Graph(figure=fig), id=ids.PIE_CHART)
 
     fig = px.scatter_geo(
-        countries,
+        group_countries,
         locations="COUNTRY",
         color="COUNTRY",
         hover_name="COUNTRY",
