@@ -28,7 +28,7 @@ def inserts(unique_ips: set[str]) -> list[str]:
         for ip in unique_ips:
             conn.execute(
                 text(
-                    f"""INSERT IGNORE into {SOURCES_TABLE} values('{ip}', NULL, NULL, NULL);"""
+                    f"""INSERT IGNORE into {SOURCES_TABLE} values('{ip}', NULL, NULL, NULL, NULL);"""
                 )
             )
 
