@@ -8,35 +8,14 @@ from . import ids
 
 def render(data: DataFrame) -> html.Div:
     df: DataFrame = data.copy()
-    df_slice = df[["COUNTRY", "ACCESSED"]]
-    print("SLICE", df_slice)
-    group_countries = df_slice.groupby("COUNTRY", as_index=False).count()
+    # df_slice = df[["COUNTRY", "ALPHA", "ALPHA2"]]
+    # print("SLICE", df_slice)
+    group_countries = df.groupby(["COUNTRY", "ALPHA", "ALPHA2"], as_index=False).count()
     print(group_countries)
-    # @callback(
-    #     Output(ids.PIE_CHART, "children"),
-    #     [
-    #         Input(ids.YEAR_DROPDOWN, "value"),
-    #         Input(ids.MONTH_DROPDOWN, "value"),
-    #         Input(ids.CODE_DROPDOWN, "value"),
-    #         Input(ids.REFERRAL_DROPDOWN, "value"),
-    #     ],
-    # )
-    # def update_pie_chart(
-    #     years: list[str], months: list[str], codes: list[str], referrals: list[str]
-    # ) -> html.Div:
-    #     filtered_data: DataFrame = df.query(
-    #         "YEAR in @years and MONTH in @months and CODE in @codes and REF_URL in @referrals"
-    #     )
-    #     if filtered_data.shape[0] == 0:
-    #         return html.Div("general.no_data", id=ids.PIE_CHART)
-    #     fig = px.pie(filtered_data, values="CODE", names="REF_URL")
-    #     fig.update_traces(textinfo="label")
-
-    #     return html.Div(dcc.Graph(figure=fig), id=ids.PIE_CHART)
 
     fig = px.scatter_geo(
         group_countries,
-        locations="COUNTRY",
+        locations="ALPHA",
         color="COUNTRY",
         hover_name="COUNTRY",
         size="ACCESSED",
@@ -44,3 +23,26 @@ def render(data: DataFrame) -> html.Div:
     )
 
     return html.Div(dcc.Graph(figure=fig), id=ids.MAP_VIEWER)
+
+
+# @callback(
+#     Output(ids.PIE_CHART, "children"),
+#     [
+#         Input(ids.YEAR_DROPDOWN, "value"),
+#         Input(ids.MONTH_DROPDOWN, "value"),
+#         Input(ids.CODE_DROPDOWN, "value"),
+#         Input(ids.REFERRAL_DROPDOWN, "value"),
+#     ],
+# )
+# def update_pie_chart(
+#     years: list[str], months: list[str], codes: list[str], referrals: list[str]
+# ) -> html.Div:
+#     filtered_data: DataFrame = df.query(
+#         "YEAR in @years and MONTH in @months and CODE in @codes and REF_URL in @referrals"
+#     )
+#     if filtered_data.shape[0] == 0:
+#         return html.Div("general.no_data", id=ids.PIE_CHART)
+#     fig = px.pie(filtered_data, values="CODE", names="REF_URL")
+#     fig.update_traces(textinfo="label")
+
+#     return html.Div(dcc.Graph(figure=fig), id=ids.PIE_CHART)
