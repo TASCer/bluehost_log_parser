@@ -56,21 +56,21 @@ def database_check() -> None:
     Function checks if database schema and tables are available
     :return: None
     """
-    logger.info("Checking RDBMS Availability")
+    logger.info("CHECKING RDBMS AVAILABILITY")
     have_database: bool = db_checks.schema()
     have_tables: bool = db_checks.tables()
 
     if have_database and have_tables:
-        logger.info("\t\tRDBMS ONLINE")
+        logger.info("\t\t+ONLINE+")
         return True
 
     else:
-        logger.error(f"**RDBMS OFFLINE: {have_database} / TABLES: {have_tables}**")
+        logger.error(f"-OFFLINE- {have_database} / TABLES: {have_tables}**")
         return False
 
 
 def main(month_num: int | None, year: int | None) -> None:
-    logger.info("***** STARTING WEBLOG PROCESSING *****")
+    logger.info("*** STARTING BLUEHOST LOG PARSER ***")
     if year and month_num:
         dt_string: str = f"{year}-{month_num}-01"
         dt_obj: dt = dt.datetime.strptime(dt_string, "%Y-%m-%d")
@@ -113,7 +113,7 @@ def main(month_num: int | None, year: int | None) -> None:
             "ERROR: BH WebLog Processing",
             "NO LOGS PROCESSED! CHECK log, possible error downloading from Bluehost",
         )
-    # RUNS PARSE AGAIN?
+    # RUNS PARSE AGAIN? How run the entire app once?
     # dashboard.app.main()
 
 
