@@ -26,6 +26,7 @@ DB_URI: str = f"{my_secrets.local_dburi}"
 
 LOGS_TABLE: str = "logs"
 SOURCES_TABLE: str = "sources"
+COUNTRIES_TABLE: str = "countries"
 
 
 def schema():
@@ -67,6 +68,7 @@ def tables():
     logs_tbl: bool = table_check.has_table(LOGS_TABLE, schema=f"{DB_NAME}")
     my_logs_tbl: bool = table_check.has_table(MY_LOGS_TABLE, schema=f"{DB_NAME}")
     sources_tbl: bool = table_check.has_table(SOURCES_TABLE, schema=f"{DB_NAME}")
+    countries_tbl: bool = table_check.has_table(COUNTRIES_TABLE, schema=f"{DB_NAME}")
 
     meta = MetaData()
 
@@ -157,6 +159,27 @@ def tables():
                 Column("DESCRIPTION", types.VARCHAR(160)),
             )
             Index("country", sources.c.COUNTRY)
+
+        except (
+            AttributeError,
+            exc.SQLAlchemyError,
+            exc.ProgrammingError,
+            exc.OperationalError,
+        ) as e:
+            logger.error(str(e))
+            return False
+
+    if not countries_tbl:
+        try:
+            countries = Table(
+                COUNTRIES_TABLE,
+                meta,
+                Column("NAME", types.VARCHAR(120), primary_key=True),
+                Column("ALPHA", types.VARCHAR(3), unique=True),
+                Column("ALPHA2", types.VARCHAR(2), unique=True),
+                Column("NUMBER", types.INT(), unique=True),
+            )
+            Index("name", countries.c.NAME)
 
         except (
             AttributeError,
