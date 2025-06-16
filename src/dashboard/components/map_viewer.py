@@ -8,9 +8,9 @@ from . import ids
 
 def render(data: DataFrame) -> html.Div:
     df: DataFrame = data.copy()
-    # df_slice = df[["COUNTRY", "ALPHA", "ALPHA2"]]
-    # print("SLICE", df_slice)
-    group_countries = df.groupby(["COUNTRY", "ALPHA", "ALPHA2"], as_index=False).count()
+    group_countries: DataFrame = df.groupby(
+        ["COUNTRY", "ALPHA"], as_index=False
+    ).count()
     print(group_countries)
 
     fig = px.scatter_geo(
