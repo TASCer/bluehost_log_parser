@@ -9,13 +9,13 @@ from . import ids
 def render(data: DataFrame) -> html.Div:
     df: DataFrame = data.copy()
     group_countries: DataFrame = df.groupby(
-        ["COUNTRY", "ALPHA"], as_index=False
+        ["COUNTRY", "ALPHA2"], as_index=False
     ).count()
     print(group_countries)
 
     fig = px.scatter_geo(
         group_countries,
-        locations="ALPHA",
+        locations="ALPHA2",
         color="COUNTRY",
         hover_name="COUNTRY",
         size="ACCESSED",

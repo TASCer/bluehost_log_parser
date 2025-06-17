@@ -34,9 +34,9 @@ def whois_updates(whois_data: list[str]) -> None:
                 conn.execute(
                     text(f"""UPDATE `{my_secrets.local_dbname}`.`{SOURCES_TABLE}`
                         SET
-                            `COUNTRY` = '{data[1]}',
-                            `ALPHA2` = '{data[2]}',
-                            `DESCRIPTION` = '{data[3]}'
+                            `COUNTRY` = '{data[3]}',
+                            `ALPHA2` = '{data[1]}',
+                            `DESCRIPTION` = '{data[2]}'
                         WHERE `SOURCE` = '{data[0]}';""")
                 )
             except exc.ProgrammingError as e:

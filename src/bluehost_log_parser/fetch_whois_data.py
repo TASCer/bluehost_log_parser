@@ -90,9 +90,9 @@ def get_country(source_ips: list) -> list[str]:
 
         else:
             asn_alpha2: str = result["asn_country_code"]
-            # country_name: Optional[str] = coco.convert(asn_alpha2, to="name")
+            country_name: Optional[str] = coco.convert(asn_alpha2, to="name")
 
-        whois_results.append([ip, asn_alpha2, asn_description])
+        whois_results.append([ip, asn_alpha2, asn_description, country_name])
 
     stop_time: datetime = dt.datetime.utcnow()
     elapsed_time: int = int((stop_time - start_time).total_seconds())
