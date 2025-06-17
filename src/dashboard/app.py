@@ -1,14 +1,18 @@
 # https://dash.plotly.com/urls
+# https://dash.plotly.com/external-resources
 import dash
 import dash_bootstrap_components as dbc
 import datetime as dt
 import logging
 
 from dash import Dash, dcc, html
+
+# import bluehost_log_parser
 from dashboard.data.loader import load_weblog_data
 from logging import Logger, Formatter
 from pandas import DataFrame
 from bluehost_log_parser.main import LOGGER_ROOT
+from bluehost_log_parser import db_checks
 
 now: dt = dt.date.today()
 todays_date: str = now.strftime("%D").replace("/", "-")
@@ -60,4 +64,7 @@ app.layout = html.Div(
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port="8000")
+    if db_checks.tables():
+        app.run(debug=True, port="8000")
+    else:
+        logger.error("NO DATABASE TABLES FOUND")
