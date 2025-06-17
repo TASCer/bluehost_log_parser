@@ -20,4 +20,6 @@ wheels/
 /src/bluehost_log_parser/output/unzipped_logfiles/*
 src/bluehost_log_parser/input/zipped_logfiles/*
 /input/*
+
+# ETC
 map_test.py
