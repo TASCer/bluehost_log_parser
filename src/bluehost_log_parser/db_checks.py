@@ -5,12 +5,14 @@ from bluehost_log_parser import my_secrets
 from logging import Logger
 from sqlalchemy import (
     create_engine,
+    TextClause,
     exc,
     inspect,
     types,
     Column,
     Table,
     MetaData,
+    text,
     ForeignKey,
     Index,
 )
@@ -154,11 +156,11 @@ def tables():
                 SOURCES_TABLE,
                 meta,
                 Column("SOURCE", types.VARCHAR(15), primary_key=True),
-                Column("COUNTRY", types.VARCHAR(100)),
+                # Column("COUNTRY", types.VARCHAR(100)),
                 Column("ALPHA2", types.VARCHAR(2)),
                 Column("DESCRIPTION", types.VARCHAR(160)),
             )
-            Index("country", sources.c.COUNTRY)
+            Index("source", sources.c.ALPHA2)
 
         except (
             AttributeError,
@@ -193,3 +195,24 @@ def tables():
     meta.create_all(engine)
 
     return True
+
+
+def countries_table():
+    """
+    Function checks to see if all tables are present/created and return True
+    If not return True
+    """
+    logger: Logger = logging.getLogger(__name__)
+
+    try:
+        engine = create_engine(f"mysql+pymysql://{DB_URI}")
+
+    except (exc.SQLAlchemyError, exc.OperationalError) as e:
+        logger.critical(str(e))
+        return False
+
+    with engine.connect() as conn:
+        check: TextClause = text("SELECT EXISTS (SELECT 1 FROM countries);")
+        populated_check = conn.execute(check).fetchone()[0]
+
+    return populated_check
