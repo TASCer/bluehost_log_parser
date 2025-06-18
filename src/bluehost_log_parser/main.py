@@ -102,17 +102,17 @@ def main(month_num: int | None, year: int | None) -> None:
 
     logger.info("***** COMPLETED WEB LOG PROCESSING *****")
 
-    if len(my_processed_logs) > 0 or len(processed_logs) > 0:
-        mailer.send_mail(
-            "COMPLETED: BH WebLog Processing",
-            f"Public: {len(processed_logs)} - SOHO: {len(my_processed_logs)}",
-        )
+    # if len(my_processed_logs) > 0 or len(processed_logs) > 0:
+    #     mailer.send_mail(
+    #         "COMPLETED: BH WebLog Processing",
+    #         f"Public: {len(processed_logs)} - SOHO: {len(my_processed_logs)}",
+    #     )
 
-    else:
-        mailer.send_mail(
-            "ERROR: BH WebLog Processing",
-            "NO LOGS PROCESSED! CHECK log, possible error downloading from Bluehost",
-        )
+    # else:
+    #     mailer.send_mail(
+    #         "ERROR: BH WebLog Processing",
+    #         "NO LOGS PROCESSED! CHECK log, possible error downloading from Bluehost",
+    #     )
     # RUNS PARSE AGAIN? How run the entire app once?
     # dashboard.app.main()
 
