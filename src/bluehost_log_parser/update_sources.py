@@ -3,7 +3,7 @@ import logging
 from bluehost_log_parser import my_secrets
 from logging import Logger
 from sqlalchemy.engine import Engine
-from sqlalchemy import exc, create_engine, text
+from sqlalchemy import exc, create_engine, text, TextClause
 
 LOGS_TABLE = "logs"
 SOURCES_TABLE = "sources"
@@ -50,5 +50,36 @@ def whois_updates(whois_data: list[str]) -> None:
         )
 
 
+def asn_alphas(alpha2s: list[str]) -> list[str]:
+    """
+    Function takes in a list of ASN_ALPHA2 codes and returns its ASN_ALPHA (3-letter code for country name) equivalent from countries table.
+    """
+    logger: Logger = logging.getLogger(__name__)
+
+    try:
+        engine: Engine = create_engine(f"mysql+pymysql://{my_secrets.local_dburi}")
+
+    except exc.SQLAlchemyError as e:
+        logger.critical(str(e))
+        exit()
+
+    asn_alphas = []
+
+    with engine.connect() as conn, conn.begin():
+        logger.info(
+            "Getting ASN_ALPHA (3-letter code for country name) from countries table"
+        )
+        for a in alpha2s:
+            q_alphas: TextClause = text(
+                f"SELECT ALPHA from countries where ALPHA2 = '{a}';"
+            )
+
+            result = conn.execute(q_alphas).fetchone()[0]
+            asn_alphas.append(result)
+
+    return asn_alphas
+
+
 if __name__ == "__main__":
-    whois_updates()
+    # whois_updates()
+    asn_alphas(["AL", "AR"])
