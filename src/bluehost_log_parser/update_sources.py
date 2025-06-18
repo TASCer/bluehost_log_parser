@@ -65,17 +65,26 @@ def asn_alphas(alpha2s: list[str]) -> list[str]:
 
     asn_alphas = []
 
-    with engine.connect() as conn, conn.begin():
-        logger.info(
-            "Getting ASN_ALPHA (3-letter code for country name) from countries table"
-        )
-        for a in alpha2s:
-            q_alphas: TextClause = text(
-                f"SELECT ALPHA from countries where ALPHA2 = '{a}';"
+    try:
+        with engine.connect() as conn, conn.begin():
+            logger.info(
+                "Getting ASN_ALPHA (3-letter code for country name) from countries table"
             )
+            for a in alpha2s:
+                q_alphas: TextClause = text(
+                    f"SELECT ALPHA from countries where ALPHA2 = '{a}';"
+                )
 
-            result = conn.execute(q_alphas).fetchone()[0]
-            asn_alphas.append(result)
+                result = conn.execute(q_alphas).fetchone()[0]
+                asn_alphas.append(result)
+
+    except TypeError:
+        print("check if table 'countries' is/was populated via 'populate_tables.py'")
+        logger.error(
+            "check if table 'countries' is/was populated via 'populate_tables.py'"
+        )
+
+        exit()
 
     return asn_alphas
 
