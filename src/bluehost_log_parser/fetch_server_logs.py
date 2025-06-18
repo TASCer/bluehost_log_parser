@@ -52,7 +52,9 @@ def secure_copy(
                         f"\t{remote_zipped_filename.split('/')[1]} securely copied"
                     )
                 else:
-                    logger.critical(f"Remote scp issue: {remote_zipped_filename}")
+                    logger.critical(
+                        "scp issue: BAD CREDS or ssh-agent not running/loaded with key"
+                    )
                     exit()
 
             except (OSError, FileNotFoundError) as err:
