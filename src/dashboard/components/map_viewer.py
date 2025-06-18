@@ -4,18 +4,21 @@ from dash import dcc, html, callback
 from dash.dependencies import Input, Output
 from pandas import DataFrame
 from . import ids
+from bluehost_log_parser import update_sources
 
 
 def render(data: DataFrame) -> html.Div:
     df: DataFrame = data.copy()
+    asn_alphas: list[str] = update_sources.asn_alphas(df["ALPHA2"])
+    df["ALPHA"] = asn_alphas
     group_countries: DataFrame = df.groupby(
-        ["COUNTRY", "ALPHA2"], as_index=False
+        ["COUNTRY", "ALPHA"], as_index=False
     ).count()
     print(group_countries)
 
     fig = px.scatter_geo(
         group_countries,
-        locations="ALPHA2",
+        locations="ALPHA",
         color="COUNTRY",
         hover_name="COUNTRY",
         size="ACCESSED",
