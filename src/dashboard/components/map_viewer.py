@@ -18,14 +18,12 @@ def render(data: DataFrame) -> html.Div:
 
     """
     df: DataFrame = data.copy()
-
     # TODO rework, too slow
     asn_alphas: list[str] = update_sources.asn_alphas(df["ALPHA2"])
     df["ALPHA"] = asn_alphas
+    df = df[["ALPHA", "ACCESSED"]]
 
-    group_countries: DataFrame = df.groupby(
-        ["COUNTRY", "ALPHA"], as_index=False
-    ).count()
+    group_countries: DataFrame = df.groupby(["ALPHA"], as_index=False).count()
     print(group_countries)  # 64         United States   USA     13906
 
     # countries_filtered = group_countries.filter("ACCESSED" >= 5)
@@ -34,8 +32,8 @@ def render(data: DataFrame) -> html.Div:
     fig = px.scatter_geo(
         group_countries,
         locations="ALPHA",
-        color="COUNTRY",
-        hover_name="COUNTRY",
+        color="ALPHA",
+        hover_name="ALPHA",
         size="ACCESSED",
         projection="natural earth",
         # animation_frame="ACCESSED", # need to rework df to get this to work ()
