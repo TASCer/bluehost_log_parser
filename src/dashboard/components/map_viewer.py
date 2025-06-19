@@ -1,20 +1,35 @@
 import plotly.express as px
+import logging
 
 from dash import dcc, html, callback
 from dash.dependencies import Input, Output
 from pandas import DataFrame
 from . import ids
 from bluehost_log_parser import update_sources
+from logging import Logger
+
+
+logger: Logger = logging.getLogger(__name__)
 
 
 def render(data: DataFrame) -> html.Div:
+    """
+    Function add asn_alpha 3-letter country code to provided df.
+
+    """
     df: DataFrame = data.copy()
+
+    # TODO rework, too slow
     asn_alphas: list[str] = update_sources.asn_alphas(df["ALPHA2"])
     df["ALPHA"] = asn_alphas
+
     group_countries: DataFrame = df.groupby(
         ["COUNTRY", "ALPHA"], as_index=False
     ).count()
-    print(group_countries)
+    print(group_countries)  # 64         United States   USA     13906
+
+    # countries_filtered = group_countries.filter("ACCESSED" >= 5)
+    # print(countries_filtered)
 
     fig = px.scatter_geo(
         group_countries,
@@ -23,7 +38,9 @@ def render(data: DataFrame) -> html.Div:
         hover_name="COUNTRY",
         size="ACCESSED",
         projection="natural earth",
+        # animation_frame="ACCESSED", # need to rework df to get this to work ()
     )
+    logger.info("GEO SCATTER PLOT CREATED")
 
     return html.Div(dcc.Graph(figure=fig), id=ids.MAP_VIEWER)
 
