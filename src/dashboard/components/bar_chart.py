@@ -42,7 +42,7 @@ def render(data: DataFrame) -> html.Div:
             x="CODE",
             color="REF_URL",
         )
-        logger.info("PLOT CREATED")
+        logger.info("BAR CHART CREATED")
 
         return html.Div(dcc.Graph(figure=fig), id=ids.BAR_CHART)
 
