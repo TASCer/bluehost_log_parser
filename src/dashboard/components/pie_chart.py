@@ -1,9 +1,13 @@
 import plotly.express as px
+import logging
 
 from dash import dcc, html, callback
 from dash.dependencies import Input, Output
+from logging import Logger
 from pandas import DataFrame
 from . import ids
+
+logger: Logger = logging.getLogger(__name__)
 
 
 def render(data: DataFrame) -> html.Div:
@@ -28,6 +32,8 @@ def render(data: DataFrame) -> html.Div:
             return html.Div("general.no_data", id=ids.PIE_CHART)
         fig = px.pie(filtered_data, values="CODE", names="REF_URL")
         fig.update_traces(textinfo="label")
+
+        logger.info("PIE CHART CREATED")
 
         return html.Div(dcc.Graph(figure=fig), id=ids.PIE_CHART)
 
