@@ -1,5 +1,3 @@
-# https://dash.plotly.com/urls
-# https://dash.plotly.com/external-resources
 import dash
 import dash_bootstrap_components as dbc
 import datetime as dt
@@ -7,10 +5,8 @@ import logging
 
 from dash import Dash, dcc, html
 
-# import bluehost_log_parser
-from dashboard.data.loader import load_weblog_data
 from logging import Logger, Formatter
-from pandas import DataFrame
+
 from bluehost_log_parser.main import LOGGER_ROOT
 from bluehost_log_parser import db_checks
 
@@ -42,8 +38,6 @@ app = Dash(
 )
 
 
-source: DataFrame = load_weblog_data()
-logger.info("LOADED SOURCE DATA")
 app.layout = html.Div(
     [
         # html.H1("Bluehost Log Analysis"),
