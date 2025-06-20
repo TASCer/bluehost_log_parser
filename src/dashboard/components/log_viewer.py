@@ -1,11 +1,14 @@
 # https://github.com/Coding-with-Adam/Dash-by-Plotly/blob/master/Ag-Grid/introduction/ag-grid-intro2.py
 import dash_ag_grid as dag
+import logging
 
 from pandas import DataFrame
-from dash import Dash, html, register_page
+from dash import html
 from dash.dependencies import Input, Output
 from logging import Logger
 from . import ids
+
+logger: Logger = logging.getLogger(__name__)
 
 
 def render(data: DataFrame) -> html.Div:
@@ -66,6 +69,8 @@ def render(data: DataFrame) -> html.Div:
     #     )
     if df.shape[0] == 0:
         return html.Div("general.no_data", id=ids.PIE_CHART)
+
+    logger.info("Log AG Grid CREATED")
 
     return html.Div(
         children=[grid],
