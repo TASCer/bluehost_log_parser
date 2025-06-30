@@ -193,7 +193,7 @@ def process(
                         f"\t\t{len(site_long_files)} long file names encountered."
                     )
         else:
-            logger.error(f"logfile path: {p} not found")
+            continue
 
     if len(all_long_files) > 0:
         logger.warning(
