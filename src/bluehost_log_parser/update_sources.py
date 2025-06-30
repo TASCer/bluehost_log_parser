@@ -2,6 +2,7 @@ import logging
 
 from bluehost_log_parser import my_secrets
 from logging import Logger
+from pymysql.err import DataError
 from sqlalchemy.engine import Engine
 from sqlalchemy import exc, create_engine, text, TextClause
 
@@ -39,8 +40,10 @@ def whois_updates(whois_data: list[str]) -> None:
                             `DESCRIPTION` = '{data[2]}'
                         WHERE `SOURCE` = '{data[0]}';""")
                 )
-            except exc.ProgrammingError as e:
-                logger.error(e)
+            except exc.ProgrammingError as pe:
+                logger.error(pe)
+            except DataError as de:
+                logger.error(de)
 
         if errors >= 1:
             logger.warning(f"sources table: {errors} errors encountered")
