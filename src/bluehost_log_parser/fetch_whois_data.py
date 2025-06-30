@@ -41,8 +41,8 @@ def get_country(source_ips: list) -> list[str]:
             whois_results.append(
                 [
                     ip,
-                    result["country_name"],
                     result["asn_alpha2"],
+                    result["country_name"],
                     result["asn_description"],
                 ]
             )
