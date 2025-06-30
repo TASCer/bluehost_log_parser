@@ -25,6 +25,16 @@ def create_year_column(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def split_timestamp(df: pd.DataFrame) -> pd.DataFrame:
+    df["DATE"] = df["ACCESSED"].dt.date
+    # df["TIME"] = df["ACCESSED"].dt.strftime("%h-%M-%f")
+    print(df.info())
+    print(df.head())
+    # df[["DATE", "TIME"]]
+
+    # return df
+
+
 def create_month_column(df: pd.DataFrame) -> pd.DataFrame:
     df["MONTH"] = df["ACCESSED"].dt.strftime("%B")
     return df
@@ -40,8 +50,8 @@ def load_weblog_data() -> pd.DataFrame:
             sql="""SELECT l.*, s.COUNTRY, s.ALPHA2 FROM `bluehost-weblogs`.logs l join sources s on l.SOURCE = s.SOURCE where ACCESSED like '2025-06%%' and COUNTRY != "404";""",
             con=conn,
         )
-    # where ACCESSED like '2025-04%%'
     preprocessor = compose(
+        # split_timestamp,
         create_year_column,
         create_month_column,
     )

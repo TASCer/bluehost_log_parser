@@ -14,31 +14,32 @@ logger: Logger = logging.getLogger(__name__)
 
 def render(data: DataFrame) -> html.Div:
     """
-    Function add asn_alpha 3-letter country code to provided df.
+    Function finds and adds asn_alpha 3-letter country code to the provided df.
 
     """
     df: DataFrame = data.copy()
     # TODO rework, too slow
     asn_alphas: list[str] = update_sources.asn_alphas(df["ALPHA2"])
     df["ALPHA"] = asn_alphas
-    df = df[["ALPHA", "ACCESSED"]]
+    df = df[["ALPHA", "ACCESSED", "COUNTRY"]]
 
-    group_countries: DataFrame = df.groupby(["ALPHA"], as_index=False).count()
-    print(group_countries)  # 64         United States   USA     13906
+    group_countries: DataFrame = df.groupby(
+        ["COUNTRY", "ALPHA"], as_index=False
+    ).count()
 
-    # countries_filtered = group_countries.filter("ACCESSED" >= 5)
-    # print(countries_filtered)
+    group_countries = group_countries.sort_values(by="ACCESSED", ascending=False)
+    top_countries = group_countries[:11].reset_index(drop=True)
 
     fig = px.scatter_geo(
-        group_countries,
+        top_countries,
         locations="ALPHA",
-        color="ALPHA",
+        color="COUNTRY",
         hover_name="ALPHA",
         size="ACCESSED",
         projection="natural earth",
         # animation_frame="ACCESSED", # need to rework df to get this to work ()
     )
-    logger.info("GEO SCATTER PLOT CREATED")
+    logger.info("GEO SCATTER MAP CREATED")
 
     return html.Div(dcc.Graph(figure=fig), id=ids.MAP_VIEWER)
 
