@@ -37,6 +37,10 @@ def render(data: DataFrame) -> html.Div:
         hover_name="ALPHA",
         size="ACCESSED",
         projection="natural earth",
+        width=1600,
+        height=800,
+        title="SOURCE ACTIVITY LOCATIONS",
+        fitbounds="locations",
         # animation_frame="ACCESSED", # need to rework df to get this to work ()
     )
     logger.info("GEO SCATTER MAP CREATED")
