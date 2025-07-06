@@ -36,7 +36,7 @@ def secure_copy(
         month_name: str = now.strftime("%b")
         year: str = str(now.year)
 
-    logger.info("STARTED: downloading of remote website logs")
+    logger.info("STARTED: secure download of remote website logfiles")
 
     for path in remote_log_paths:
         remote_zipped_filename: str = path + month_name + "-" + year + ".gz"
@@ -48,9 +48,7 @@ def secure_copy(
                 )
 
                 if copy_command == 0:
-                    logger.info(
-                        f"\t{remote_zipped_filename.split('/')[1]} securely copied"
-                    )
+                    logger.info(f"\t{remote_zipped_filename.split('/')[1]} downloaded")
                 else:
                     logger.critical(
                         "scp issue: BAD CREDS or ssh-agent not running/loaded with key"
