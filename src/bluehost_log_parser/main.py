@@ -11,7 +11,6 @@ from bluehost_log_parser import mailer
 from bluehost_log_parser import parse_logs
 from bluehost_log_parser import unzip_fetched_logs
 from bluehost_log_parser import update_sources
-
 from logging import Logger, Formatter
 from pathlib import Path
 
@@ -102,22 +101,25 @@ def main(month_num: int | None, year: int | None) -> None:
 
     logger.info("***** COMPLETED WEB LOG PROCESSING *****")
 
-    # if len(my_processed_logs) > 0 or len(processed_logs) > 0:
-    #     mailer.send_mail(
-    #         "COMPLETED: BH WebLog Processing",
-    #         f"Public: {len(processed_logs)} - SOHO: {len(my_processed_logs)}",
-    #     )
+    if len(my_processed_logs) > 0 or len(processed_logs) > 0:
+        mailer.send_mail(
+            "COMPLETED: BH WebLog Processing",
+            f"Public: {len(processed_logs)} - SOHO: {len(my_processed_logs)}",
+        )
 
-    # else:
-    #     mailer.send_mail(
-    #         "ERROR: BH WebLog Processing",
-    #         "NO LOGS PROCESSED! CHECK log, possible error downloading from Bluehost",
-    #     )
+    else:
+        mailer.send_mail(
+            "ERROR: BH WebLog Processing",
+            "NO LOGS PROCESSED! CHECK log, possible error downloading from Bluehost",
+        )
     # RUNS PARSE AGAIN? How run the entire app once?
     # dashboard.app.main()
 
 
 if __name__ == "__main__":
+    # import dashboard
+    # from dashboard import app
+
     if database_check():
         parser = argparse.ArgumentParser(description="ADHOC month/year log processing")
         parser.add_argument(
@@ -141,3 +143,5 @@ if __name__ == "__main__":
     else:
         print("Database has an issue")
         logger.error("Database has an issue")
+    # RUNS PARSE AGAIN? How run the entire app once?
+    # app.app()
