@@ -37,3 +37,8 @@ analysis = [
     "dash-bootstrap-components>=2.0.0",
     "dash-ag-grid>=31.3.1",
 ]
+
+[dependency-groups]
+dev = [
+    "ty>=0.0.1a14",
+]
