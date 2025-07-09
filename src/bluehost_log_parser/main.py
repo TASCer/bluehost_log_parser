@@ -2,6 +2,7 @@ import argparse
 import datetime as dt
 import logging
 
+import datetime
 from bluehost_log_parser import db_checks
 from bluehost_log_parser import fetch_whois_data
 from bluehost_log_parser import fetch_server_logs
@@ -50,7 +51,7 @@ REMOTE_LOGFILE_BASE_PATHS: list = [
 ]
 
 
-def database_check() -> None:
+def database_check() -> bool:
     """
     Function checks if database schema and tables are available
     :return: None
@@ -71,19 +72,19 @@ def database_check() -> None:
 def main(month_num: int | None, year: int | None) -> None:
     logger.info("*** STARTING BLUEHOST LOG PARSER ***")
     if year and month_num:
-        dt_string: str = f"{year}-{month_num}-01"
-        dt_obj: dt = dt.datetime.strptime(dt_string, "%Y-%m-%d")
-        month_name: str = dt_obj.strftime("%b")
+        date_string: str = f"{year}-{month_num}-01"
+        date_obj: datetime = dt.datetime.strptime(date_string, "%Y-%m-%d")
+        month_name: str = date_obj.strftime("%b")
         year: str = str(year)
 
     else:
         month_name: str = now.strftime("%b")
         year: str = str(now.year)
 
-    fetch_server_logs.secure_copy(
-        REMOTE_LOGFILE_BASE_PATHS, LOCAL_ZIPPED_PATH, month_name, year
-    )
-    unzipped_log_files: set[str] = unzip_fetched_logs.process(
+    # fetch_server_logs.secure_copy(
+    #     REMOTE_LOGFILE_BASE_PATHS, LOCAL_ZIPPED_PATH, month_name, year
+    # )
+    unzipped_log_files: set[Path] = unzip_fetched_logs.process(
         LOCAL_ZIPPED_PATH, LOCAL_UNZIPPED_PATH, month_name, year
     )
 
@@ -97,21 +98,24 @@ def main(month_num: int | None, year: int | None) -> None:
         results: list[str] = fetch_whois_data.get_country(no_country_name)
         update_sources.whois_updates(results)
 
+    else:
+        logger.info("NO SOURCE IP NEEDS Whois DATA.")
+
     insert_activity.update(processed_logs, my_processed_logs)
 
     logger.info("***** COMPLETED WEB LOG PROCESSING *****")
 
-    if len(my_processed_logs) > 0 or len(processed_logs) > 0:
-        mailer.send_mail(
-            "COMPLETED: BH WebLog Processing",
-            f"Public: {len(processed_logs)} - SOHO: {len(my_processed_logs)}",
-        )
+    # if len(my_processed_logs) > 0 or len(processed_logs) > 0:
+    #     mailer.send_mail(
+    #         "COMPLETED: BH WebLog Processing",
+    #         f"Public: {len(processed_logs)} - SOHO: {len(my_processed_logs)}",
+    #     )
 
-    else:
-        mailer.send_mail(
-            "ERROR: BH WebLog Processing",
-            "NO LOGS PROCESSED! CHECK log, possible error downloading from Bluehost",
-        )
+    # else:
+    #     mailer.send_mail(
+    #         "ERROR: BH WebLog Processing",
+    #         "NO LOGS PROCESSED! CHECK log, possible error downloading from Bluehost",
+    #     )
     # RUNS PARSE AGAIN? How run the entire app once?
     # dashboard.app.main()
 
