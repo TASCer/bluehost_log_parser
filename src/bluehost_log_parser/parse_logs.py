@@ -65,8 +65,7 @@ def process(
                     ip: str = basic_info.split("- - ")[0]
 
                     if ":" in ip:
-                        logger.warning(f"IPv6 entry encountered: {ip}")
-                        logger.warning(f"IPv6 basic_info: {basic_info}")
+                        logger.warning(f"IPv6: {basic_info}")
 
                         continue
 
@@ -206,4 +205,5 @@ def process(
 
 
 if __name__ == "__main__":
-    process()
+    pass
+    # process()
