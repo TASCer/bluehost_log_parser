@@ -12,7 +12,7 @@ SOURCES_TABLE = "sources"
 
 logger: Logger = logging.getLogger(__name__)
 
-now: dt = dt.date.today()
+now: datetime = dt.date.today()
 
 
 def get_country(source_ips: list) -> list[str]:
@@ -27,10 +27,15 @@ def get_country(source_ips: list) -> list[str]:
             obj: IPWhois = ipwhois.IPWhois(ip, timeout=10)
             result: dict = obj.lookup_rdap()
 
-        except ipwhois.HTTPLookupError as http:
+        except ipwhois.HTTPLookupError as http_err:
             http_errors += 1
-            http: str = str(http).split("&")[0]
-            error: str = http.split("error code")[1].replace(".", "")
+            if "&" in str(http_err):
+                http: str = str(http_err).split("&")[0]
+                error: str = http.split("error code")[1].replace(".", "")
+
+            else:
+                http: list = str(http_err).split()
+                error: str = http[-1]
 
             result: dict = {
                 "asn_country_code": None,
