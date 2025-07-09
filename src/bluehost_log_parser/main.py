@@ -81,10 +81,10 @@ def main(month_num: int | None, year: int | None) -> None:
         month_name: str = now.strftime("%b")
         year: str = str(now.year)
 
-    # fetch_server_logs.secure_copy(
-    #     REMOTE_LOGFILE_BASE_PATHS, LOCAL_ZIPPED_PATH, month_name, year
-    # )
-    unzipped_log_files: set[Path] = unzip_fetched_logs.process(
+    fetch_server_logs.secure_copy(
+        REMOTE_LOGFILE_BASE_PATHS, LOCAL_ZIPPED_PATH, month_name, year
+    )
+    unzipped_log_files: set[str] = unzip_fetched_logs.process(
         LOCAL_ZIPPED_PATH, LOCAL_UNZIPPED_PATH, month_name, year
     )
 
@@ -105,17 +105,17 @@ def main(month_num: int | None, year: int | None) -> None:
 
     logger.info("***** COMPLETED WEB LOG PROCESSING *****")
 
-    # if len(my_processed_logs) > 0 or len(processed_logs) > 0:
-    #     mailer.send_mail(
-    #         "COMPLETED: BH WebLog Processing",
-    #         f"Public: {len(processed_logs)} - SOHO: {len(my_processed_logs)}",
-    #     )
+    if len(my_processed_logs) > 0 or len(processed_logs) > 0:
+        mailer.send_mail(
+            "COMPLETED: BH WebLog Processing",
+            f"Public: {len(processed_logs)} - SOHO: {len(my_processed_logs)}",
+        )
 
-    # else:
-    #     mailer.send_mail(
-    #         "ERROR: BH WebLog Processing",
-    #         "NO LOGS PROCESSED! CHECK log, possible error downloading from Bluehost",
-    #     )
+    else:
+        mailer.send_mail(
+            "ERROR: BH WebLog Processing",
+            "NO LOGS PROCESSED! CHECK log, possible error downloading from Bluehost",
+        )
     # RUNS PARSE AGAIN? How run the entire app once?
     # dashboard.app.main()
 
