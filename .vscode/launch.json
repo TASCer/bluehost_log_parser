@@ -6,6 +6,8 @@
     "configurations": [
 
 
+
+
         {
             "name": "Python: main",
             "type": "python",
@@ -15,6 +17,18 @@
             "console": "integratedTerminal",
             "justMyCode": true
         },
+
+        {
+            "name": "Python: one-off",
+            "type": "python",
+            "cwd": "${workspaceFolder}/src/bluehost_log_parser/",
+            "request": "launch",
+            "program": "main.py",
+            "args": ["-m", "2", "-y", "2025"],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+
 
         {
             "name": "Python: dash",
