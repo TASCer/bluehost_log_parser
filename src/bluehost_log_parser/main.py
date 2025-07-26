@@ -37,12 +37,14 @@ root_logger.addHandler(fh)
 logger: Logger = logging.getLogger(__name__)
 
 # REMOTE BLUEHOST BASE LOG PATHS. **DOES NOT INCLUDE** "month-year.gz"
-REMOTE_TASCS_BASE_PATH = "logs/cag.bis.mybluehost.me-ssl_log-"
-REMOTE_HOA_BASE_PATH = "logs/hoa.tascs.net-ssl_log-"
-REMOTE_ROADSPIES_BASE_PATH = "logs/roadspies.cag.bis.mybluehost.me-ssl_log-"
+REMOTE_TASCS_BASE_PATH: str = "logs/cag.bis.mybluehost.me-ssl_log-"
+REMOTE_HOA_BASE_PATH: str = "logs/hoa.tascs.net-ssl_log-"
+REMOTE_ROADSPIES_BASE_PATH: str = "logs/roadspies.cag.bis.mybluehost.me-ssl_log-"
 
 LOCAL_ZIPPED_PATH: Path = PROJECT_ROOT / "input" / "zipped_logfiles"
+Path(LOCAL_ZIPPED_PATH).mkdir(parents=True, exist_ok=True)
 LOCAL_UNZIPPED_PATH: Path = PROJECT_ROOT / "output" / "unzipped_logfiles"
+Path(LOCAL_UNZIPPED_PATH).mkdir(parents=True, exist_ok=True)
 
 REMOTE_LOGFILE_BASE_PATHS: list = [
     REMOTE_TASCS_BASE_PATH,
