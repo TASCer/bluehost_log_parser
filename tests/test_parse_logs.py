@@ -1,6 +1,6 @@
 import re
 
-from parse_logs import LogEntry
+from bluehost_log_parser.parse_logs import LogEntry
 
 
 with open(r"../assets/sample_unzipped_logfile") as logs:
