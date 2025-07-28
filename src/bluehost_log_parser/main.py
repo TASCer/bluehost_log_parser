@@ -71,11 +71,11 @@ def database_check() -> bool:
         return False
 
 
-def main(month_num: int | None, year: int | None) -> None:
+def main(month: int | None, year: int | None) -> None:
     logger.info("*** STARTING BLUEHOST LOG PARSER ***")
-    if year and month_num:
-        date_string: str = f"{year}-{month_num}-01"
-        date_obj: datetime = dt.datetime.strptime(date_string, "%Y-%m-%d")
+    if month and year:
+        given_date: str = f"{year}-{month}-01"
+        date_obj: datetime = dt.datetime.strptime(given_date, "%Y-%m-%d")
         month_name: str = date_obj.strftime("%b")
         year: str = str(year)
 
@@ -86,7 +86,7 @@ def main(month_num: int | None, year: int | None) -> None:
     fetch_server_logs.secure_copy(
         REMOTE_LOGFILE_BASE_PATHS, LOCAL_ZIPPED_PATH, month_name, year
     )
-    unzipped_log_files: set[str] = unzip_fetched_logs.process(
+    unzipped_log_files: set[Path] = unzip_fetched_logs.process(
         LOCAL_ZIPPED_PATH, LOCAL_UNZIPPED_PATH, month_name, year
     )
 
@@ -118,19 +118,14 @@ def main(month_num: int | None, year: int | None) -> None:
             "ERROR: BH WebLog Processing",
             "NO LOGS PROCESSED! CHECK log, possible error downloading from Bluehost",
         )
-    # RUNS PARSE AGAIN? How run the entire app once?
-    # dashboard.app.main()
 
 
 if __name__ == "__main__":
-    # import dashboard
-    # from dashboard import app
-
     if database_check():
         parser = argparse.ArgumentParser(description="ADHOC month/year log processing")
         parser.add_argument(
             "-m",
-            "--month_num",
+            "--month",
             type=int,
             choices=[m for m in range(1, 13)],
             help="Enter a Month number: 1-12",
@@ -149,5 +144,3 @@ if __name__ == "__main__":
     else:
         print("Database has an issue")
         logger.error("Database has an issue")
-    # RUNS PARSE AGAIN? How run the entire app once?
-    # app.app()
