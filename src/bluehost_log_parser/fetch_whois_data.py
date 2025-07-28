@@ -87,15 +87,16 @@ def get_country(source_ips: list) -> list[str]:
 
             continue
 
-        elif result["asn_country_code"].islower():
+        else:
+            asn_alpha2: str = result["asn_country_code"]
+            country_name: Optional[str] = coco.convert(asn_alpha2, to="name")
+
+        if result["asn_country_code"].islower():
             asn_alpha2: str = asn_alpha2.upper()
             logger.warning(
                 f"RDAP responded with lowercase country for {ip}, should be upper"
             )
 
-        else:
-            asn_alpha2: str = result["asn_country_code"]
-            country_name: Optional[str] = coco.convert(asn_alpha2, to="name")
 
         whois_results.append([ip, asn_alpha2, asn_description, country_name])
 
