@@ -65,7 +65,7 @@ def secure_copy(
 
         else:
             try:
-                copy_command = f"pscp -batch {my_secrets.user}@{my_secrets.bh_ip}:{remote_zipped_filename} {my_secrets.local_zipped_path}"
+                copy_command = f"pscp -batch {my_secrets.user}@{my_secrets.my_bluehost_ip}:{remote_zipped_filename} {local_zipped_path}"
                 response = subprocess.check_output(executable=copy_command)
                 result: str = response.decode(encoding="utf-8")
                 logger.info(result.strip())
