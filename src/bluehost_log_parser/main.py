@@ -2,7 +2,7 @@ import argparse
 import datetime as dt
 import logging
 
-import datetime
+from datetime import datetime
 from bluehost_log_parser import db_checks
 from bluehost_log_parser import fetch_whois_data
 from bluehost_log_parser import fetch_server_logs
@@ -18,7 +18,7 @@ from pathlib import Path
 PROJECT_ROOT: Path = Path.cwd()
 LOGGER_ROOT: Path = Path.cwd().parent.parent
 
-now: dt = dt.date.today()
+now: datetime = dt.date.today()
 todays_date: str = now.strftime("%D").replace("/", "-")
 
 root_logger: Logger = logging.getLogger()
@@ -36,7 +36,7 @@ root_logger.addHandler(fh)
 
 logger: Logger = logging.getLogger(__name__)
 
-# REMOTE BLUEHOST BASE LOG PATHS. **DOES NOT INCLUDE** "month-year.gz"
+# REMOTE BLUEHOST SERVER'S BASE LOG PATHS. **DOES NOT INCLUDE** "month-year.gz"
 REMOTE_TASCS_BASE_PATH: str = "logs/cag.bis.mybluehost.me-ssl_log-"
 REMOTE_HOA_BASE_PATH: str = "logs/hoa.tascs.net-ssl_log-"
 REMOTE_ROADSPIES_BASE_PATH: str = "logs/roadspies.cag.bis.mybluehost.me-ssl_log-"
