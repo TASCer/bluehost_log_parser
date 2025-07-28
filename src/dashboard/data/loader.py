@@ -25,7 +25,7 @@ def create_year_column(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def split_timestamp(df: pd.DataFrame) -> pd.DataFrame:
+def split_timestamp(df: pd.DataFrame) -> pd.DataFrame | None:
     df["DATE"] = df["ACCESSED"].dt.date
     # df["TIME"] = df["ACCESSED"].dt.strftime("%h-%M-%f")
     print(df.info())
