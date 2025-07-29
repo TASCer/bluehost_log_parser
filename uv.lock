@@ -33,13 +33,11 @@ analysis = [
     { name = "dash-ag-grid" },
     { name = "dash-bootstrap-components" },
 ]
-dev = [
-    { name = "pytest" },
-    { name = "ruff" },
-]
 
 [package.dev-dependencies]
 dev = [
+    { name = "pytest" },
+    { name = "ruff" },
     { name = "ty" },
 ]
 
@@ -54,16 +52,18 @@ requires-dist = [
     { name = "dash-bootstrap-components", marker = "extra == 'analysis'", specifier = ">=2.0.0" },
     { name = "ipwhois", specifier = ">=1.3.0" },
     { name = "pymysql", specifier = ">=1.1.1" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.3.5" },
     { name = "python-dateutil", specifier = ">=2.9.0.post0" },
-    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.11.0" },
     { name = "sqlalchemy", specifier = ">=2.0.39" },
     { name = "sqlalchemy-utils", specifier = ">=0.41.2" },
 ]
-provides-extras = ["dev", "analysis"]
+provides-extras = ["analysis"]
 
 [package.metadata.requires-dev]
-dev = [{ name = "ty", specifier = ">=0.0.1a14" }]
+dev = [
+    { name = "pytest", specifier = ">=8.3.5" },
+    { name = "ruff", specifier = ">=0.11.0" },
+    { name = "ty", specifier = ">=0.0.1a14" },
+]
 
 [[package]]
 name = "certifi"
