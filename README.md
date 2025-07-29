@@ -1,14 +1,15 @@
 ![TASCS LOGO](./assets/logo.png)
 
-# Bluehost Apache Weblog Parser version: 1.5.2
+# Bluehost Apache Weblog Parser version: 1.6.0
 
-#### Created as a replacement of cPanel's View Latest Activity and Google Analytics
+#### Created as a replacement of cPanel's "View Latest Activity" and Google Analytics
 
 ---
 
 1. Securely (passphrased private cert) download compressed Apache weblogs from hosting provider
     * Windows uses: Putty Pageant 0.80
-    * Linux uses: ssh-agent
+    * Linux uses: ssh-agent 
+      * for cron jobs it uses [keychain](https://linux.die.net/man/1/keychain))
 1. Decompress and save server log files locally
 1. PARSE log files
 1. LOAD unique sources from parsed logs into sources table
@@ -26,8 +27,11 @@ sources table
 ---
 OPTIONAL DEPENDENCIES:
 
-1. Dashboard analyses
-1. and testing
+1. analyses (dashboard via Dash/Plotly)
+
+OPTIONAL DEV DEPENDENCIES:
+
+1. dev (testing, linting)
 
 ---
 
