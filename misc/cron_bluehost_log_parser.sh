@@ -1,18 +1,16 @@
 #!/bin/bash
 
-# KEYCHAIN WIP
-# Load keychain variables and check for id_dsa
+# KEYCHAIN WORKS ON RPI4 Need to config on DEBIAN
+# https://linux.die.net/man/1/keychain
+
 [ -z "$HOSTNAME" ] && HOSTNAME=`uname -n`
 . $HOME/.keychain/$HOSTNAME-sh 2>/dev/null
-#ssh-add -l 2>/dev/null | grep -q id_dsa || exit 1
 
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+echo $SCRIPT_DIR
+# TRY ONE THEN OTHER UNTIL I CAN SET A PROJECT DIR
+cd /home/todd/bluehost_log_parser/src/bluehost_log_parser || cd /home/todd/python_projects/bluehost_log_parser/src/bluehost_log_parser
 
-# DEBIAN
-# cd /home/todd/python_projects/bluehost_log_parser/src/bluehost_log_parser
-
-# RPI4
-cd /home/todd/bluehost_log_parser/src/bluehost_log_parser
 
 /home/todd/.local/bin/uv run main.py
 
-# https://linux.die.net/man/1/keychain
