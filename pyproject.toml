@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "bluehost-log-parser"
-version = "1.5.2"
+version = "1.6.0"
 dependencies = [
     "sqlalchemy-utils>=0.41.2",
     "sqlalchemy>=2.0.39",
@@ -39,6 +39,4 @@ analysis = [
 ]
 
 [dependency-groups]
-dev = [
-    "ty>=0.0.1a14",
-]
+dev = ["ty>=0.0.1a14"]

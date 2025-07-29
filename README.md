@@ -52,7 +52,7 @@ OPTIONAL DEPENDENCIES:
 * [ ] TASC 1 - CREATE in /src your own 'my_secrets.py' file from the 'sample_my_secret.py' found in /misc
 * [ ] TASC 2 - ENSURE your keychain/ssh-agent is running for access to remote log files
 
-#### LAUNCH TODO's
+#### PARSE TODO's
 
 * [ ] TASC 1 - run 'uv run main.py' from src/bluehost_log_parser/
 
