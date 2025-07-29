@@ -86,7 +86,7 @@ def main(month: int | None, year: int | None) -> None:
     fetch_server_logs.secure_copy(
         REMOTE_LOGFILE_BASE_PATHS, LOCAL_ZIPPED_PATH, month_name, year
     )
-    unzipped_log_files: set[Path] = unzip_fetched_logs.process(
+    unzipped_log_files: list[Path] = unzip_fetched_logs.process(
         LOCAL_ZIPPED_PATH, LOCAL_UNZIPPED_PATH, month_name, year
     )
 

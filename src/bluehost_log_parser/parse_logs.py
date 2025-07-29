@@ -28,7 +28,7 @@ class LogEntry(NamedTuple):
 
 
 def process(
-    log_paths: set[Path], month_name: str | None, year: str | None
+    log_paths: list[Path], month_name: str | None, year: str | None
 ) -> Tuple[list[str], list[LogEntry], list[LogEntry]]:
     """
     Function takes a set of unzipped log paths and month and year

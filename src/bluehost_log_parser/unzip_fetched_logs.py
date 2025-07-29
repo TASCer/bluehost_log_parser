@@ -14,11 +14,11 @@ unzipped_paths: set = set()
 
 
 def process(
-    zipped_files: set[Path],
+    zipped_files: Path,
     unzipped_path: Path,
     month_name: str,
     year: str,
-) -> set[Path]:
+) -> list[Path]:
     """
     Takes in a set of str paths for locally copied zipped bluehost website log files
     Unzips file and saves to file
@@ -34,7 +34,7 @@ def process(
         for name in files:
             (root / name).unlink()
 
-    local_files: set = set()
+    local_files: list = []
 
     for zipped_file in zipped_files.iterdir():
         try:
@@ -51,7 +51,7 @@ def process(
             logger.critical(f"{e}")
             local_file_name: None = None
 
-        local_files.add(unzipped_file_path)
+        local_files.append(unzipped_file_path)
 
     logger.info(">>>>> COMPLETED: UNZIPPING / SAVING DOWNLOADED WEBLOGS >>>>>")
 
