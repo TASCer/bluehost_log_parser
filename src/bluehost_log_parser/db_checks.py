@@ -1,6 +1,7 @@
 import logging
 import sqlalchemy as sa
 
+from bluehost_log_parser.insert_activity import MY_LOGS_TABLE
 from bluehost_log_parser import my_secrets
 from logging import Logger
 from sqlalchemy import (
@@ -17,8 +18,8 @@ from sqlalchemy import (
     Index,
 )
 from sqlalchemy_utils import database_exists, create_database
+from typing import Any
 
-from bluehost_log_parser.insert_activity import MY_LOGS_TABLE
 
 DB_HOSTNAME: str = f"{my_secrets.local_dbhost}"
 DB_NAME: str = f"{my_secrets.local_dbname}"
@@ -65,7 +66,7 @@ def tables():
         logger.critical(str(e))
         return False
 
-    table_check: inspect = sa.inspect(engine)
+    table_check: Any = sa.inspect(engine)
 
     logs_tbl: bool = table_check.has_table(LOGS_TABLE, schema=f"{DB_NAME}")
     my_logs_tbl: bool = table_check.has_table(MY_LOGS_TABLE, schema=f"{DB_NAME}")
