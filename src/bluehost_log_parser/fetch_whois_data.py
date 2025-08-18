@@ -97,6 +97,9 @@ def get_country(source_ips: list) -> list[str]:
                 f"RDAP responded with lowercase country for {ip}, should be upper"
             )
 
+        if "'" in country_name:
+            country_name: str = country_name.replace("'", "''")     
+    
         whois_results.append([ip, asn_alpha2, asn_description, country_name])
 
     stop_time: datetime = dt.datetime.utcnow()
