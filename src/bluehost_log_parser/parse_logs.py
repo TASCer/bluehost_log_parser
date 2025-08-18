@@ -130,9 +130,9 @@ def process(
                         AGENT: str = "NA"
 
                     if AGENT.startswith("'b'"):
-                        CLIENT: str = AGENT.replace("'b'", "")
+                        AGENT: str = AGENT.replace("'b'", "")
 
-                    elif AGENT.startswith("'"):
+                    elif "'" in AGENT:
                         AGENT: str = AGENT.replace("'", "")
 
                     REF_IP: str = agent_list[-1].strip()
@@ -144,11 +144,12 @@ def process(
                     if not client:
                         CLIENT, client_format = 2 * ("NA",)
 
-                    elif len(client) == 1:
+
+                    if len(client) == 1:
                         client_os: str = client[0]
                         CLIENT: str = client_os.replace(";", "").lstrip()
 
-                    else:
+                    if len(client) > 1:
                         client_os: str = client[0]
                         CLIENT: str = client_os.replace(";", "").lstrip()
 
