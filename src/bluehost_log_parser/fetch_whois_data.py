@@ -3,7 +3,7 @@ import datetime as dt
 import ipwhois
 import logging
 
-from datetime import datetime
+from datetime import datetime, date
 from ipwhois import IPWhois
 from logging import Logger
 from typing import Optional
@@ -12,7 +12,7 @@ SOURCES_TABLE = "sources"
 
 logger: Logger = logging.getLogger(__name__)
 
-now: datetime = dt.date.today()
+now: date = dt.date.today()
 
 
 def get_country(source_ips: list) -> list[str]:
