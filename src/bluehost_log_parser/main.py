@@ -83,40 +83,37 @@ def main(month: int | None, year: int | None) -> None:
         month_name: str = now.strftime("%b")
         year: str = str(now.year)
 
-    fetch_server_logs.secure_copy(
+    logs_fetched: bool = fetch_server_logs.secure_copy(
         REMOTE_LOGFILE_BASE_PATHS, LOCAL_ZIPPED_PATH, month_name, year
     )
-    unzipped_log_files: list[Path] = unzip_fetched_logs.process(
-        LOCAL_ZIPPED_PATH, LOCAL_UNZIPPED_PATH, month_name, year
-    )
 
-    ips, processed_logs, my_processed_logs = parse_logs.process(
-        unzipped_log_files, month_name, year
-    )
-
-    unique_sources: set = set(ips)
-    no_country_name: list[str] = insert_unique_sources.inserts(unique_sources)
-    if no_country_name:
-        results: list[str] = fetch_whois_data.get_country(no_country_name)
-        update_sources.whois_updates(results)
-
-    else:
-        logger.info("NO SOURCE IP NEEDS Whois DATA.")
-
-    insert_activity.update(processed_logs, my_processed_logs)
-
-    logger.info("***** COMPLETED WEB LOG PROCESSING *****")
-
-    if len(my_processed_logs) > 0 or len(processed_logs) > 0:
-        mailer.send_mail(
-            "COMPLETED: BH WebLog Processing",
-            f"Public: {len(processed_logs)} - SOHO: {len(my_processed_logs)}",
+    if logs_fetched:
+        unzipped_log_files: list[Path] = unzip_fetched_logs.process(
+            LOCAL_ZIPPED_PATH, LOCAL_UNZIPPED_PATH, month_name, year
         )
 
+        ips, processed_logs, my_processed_logs = parse_logs.process(
+            unzipped_log_files, month_name, year
+        )
+
+        unique_sources: set = set(ips)
+        no_country_name: list[str] = insert_unique_sources.inserts(unique_sources)
+        if no_country_name:
+            results: list[str] = fetch_whois_data.get_country(no_country_name)
+            update_sources.whois_updates(results)
+
+        else:
+            logger.info("NO SOURCE IP NEEDS Whois DATA.")
+
+        insert_activity.update(processed_logs, my_processed_logs)
+
+        logger.info("***** COMPLETED WEB LOG PROCESSING *****")
+
     else:
         mailer.send_mail(
-            "ERROR: BH WebLog Processing",
-            "NO LOGS PROCESSED! CHECK log, possible error downloading from Bluehost",
+            subject="ERROR: During Processing",
+            text="Error downloading from Bluehost, check log",
+            attachment_path=f"{LOGGER_ROOT}/{todays_date}.log",
         )
 
 
