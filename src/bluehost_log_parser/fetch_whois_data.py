@@ -98,8 +98,8 @@ def get_country(source_ips: list) -> list[str]:
             )
 
         if "'" in country_name:
-            country_name: str = country_name.replace("'", "''")     
-    
+            country_name: str = country_name.replace("'", "''")
+
         whois_results.append([ip, asn_alpha2, asn_description, country_name])
 
     stop_time: datetime = dt.datetime.utcnow()

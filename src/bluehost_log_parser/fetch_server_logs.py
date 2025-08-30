@@ -32,7 +32,6 @@ def secure_copy(
     if not ssh_agent_check.is_ssh_agent_running_env():
         return False
 
-
     if year and month_name:
         month_name: str = month_name
         year: str = year
