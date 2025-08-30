@@ -144,7 +144,6 @@ def process(
                     if not client:
                         CLIENT, client_format = 2 * ("NA",)
 
-
                     if len(client) == 1:
                         client_os: str = client[0]
                         CLIENT: str = client_os.replace(";", "").lstrip()
