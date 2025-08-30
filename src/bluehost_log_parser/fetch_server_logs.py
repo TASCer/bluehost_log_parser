@@ -4,6 +4,7 @@ import os
 import platform
 import subprocess
 
+from bluehost_log_parser.utils import ssh_agent_check
 from bluehost_log_parser import my_secrets, mailer
 from datetime import datetime
 from logging import Logger
@@ -20,7 +21,7 @@ def secure_copy(
     local_zipped_path: Path,
     month_name: str | None,
     year: str | None,
-) -> None:
+) -> bool:
     """
     Takes in a list of paths for location of website log files
     If historical
@@ -28,6 +29,9 @@ def secure_copy(
     param: month
     param: year
     """
+    if not ssh_agent_check.is_ssh_agent_running_env():
+        return False
+
 
     if year and month_name:
         month_name: str = month_name
@@ -78,5 +82,7 @@ def secure_copy(
                 logger.critical(f"File not found - {file_e}")
 
                 continue
+
+    return True
 
     logger.info("COMPLETED: download of remote website logs")
