@@ -1,4 +1,4 @@
-# https://www.justintodata.com/send-email-using-python-tutorial/
+# TODO add link to analysis dash site
 import datetime as dt
 import logging
 from bluehost_log_parser import my_secrets
@@ -32,17 +32,17 @@ def send_mail(subject: str, text: str, attachment_path: object = None) -> None:
     logger: Logger = logging.getLogger(__name__)
 
     msg: MIMEMultipart = MIMEMultipart("alternative")
-    msg["Subject"]: str = f"{subject}"
-    msg["From"]: str = email_sender
-    msg["To"]: str = email_reciever[0]
+    msg["Subject"] = f"{subject}"
+    msg["From"] = email_sender
+    msg["To"] = email_reciever[0]
 
     if attachment_path:
         html_attachments: str = """\
           <html>
             <body>
-              <p><b>Python BLUEHOST Weblogs Report Mailer</b></p>
+              <p><b>BH Weblogs Parser Mailer</b></p>
               <br>
-              <p>Please find the xxxxxx report attached.</p>
+              <p>Please find the domain report attached.</p>
               <br>
               <p>Visit below for more information</p>
               <a href="https://tascs.test">TASCS - HOA</a>       
@@ -64,7 +64,7 @@ def send_mail(subject: str, text: str, attachment_path: object = None) -> None:
             <html>
               <body>
                 <p>{text}
-                <p><b>Python Bluehost WebLog Report</b>
+                <p><b>BH Weblogs Parser Mailer</b>
                 <br>
                    Visit <a href="https://www.tascs.test">TASCS</a> 
                    for more information.
