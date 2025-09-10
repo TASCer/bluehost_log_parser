@@ -6,13 +6,13 @@ import subprocess
 
 from bluehost_log_parser.utils import ssh_agent_check
 from bluehost_log_parser import my_secrets, mailer
-from datetime import datetime
+from datetime import date
 from logging import Logger
 from pathlib import Path
 
 logger: Logger = logging.getLogger(__name__)
 
-now: datetime = dt.date.today()
+now: date = dt.date.today()
 
 
 # TODO remove old files or specify via date. Check if June & July get parsed
