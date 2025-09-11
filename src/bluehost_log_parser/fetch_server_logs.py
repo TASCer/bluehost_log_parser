@@ -83,5 +83,3 @@ def secure_copy(
                 continue
 
     return True
-
-    logger.info("COMPLETED: download of remote website logs")
