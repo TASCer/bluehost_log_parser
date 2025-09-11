@@ -2,8 +2,9 @@ import logging
 import sqlalchemy as sa
 
 from bluehost_log_parser.insert_activity import MY_LOGS_TABLE
-from bluehost_log_parser import my_secrets
+from bluehost_log_parser import my_secrets, populate_tables
 from logging import Logger
+from pathlib import Path
 from sqlalchemy import (
     create_engine,
     TextClause,
@@ -68,14 +69,14 @@ def tables():
 
     table_check: Any = sa.inspect(engine)
 
-    logs_tbl: bool = table_check.has_table(LOGS_TABLE, schema=f"{DB_NAME}")
-    my_logs_tbl: bool = table_check.has_table(MY_LOGS_TABLE, schema=f"{DB_NAME}")
-    sources_tbl: bool = table_check.has_table(SOURCES_TABLE, schema=f"{DB_NAME}")
-    countries_tbl: bool = table_check.has_table(COUNTRIES_TABLE, schema=f"{DB_NAME}")
+    logs_table: bool = table_check.has_table(LOGS_TABLE, schema=f"{DB_NAME}")
+    my_logs_table: bool = table_check.has_table(MY_LOGS_TABLE, schema=f"{DB_NAME}")
+    sources_table: bool = table_check.has_table(SOURCES_TABLE, schema=f"{DB_NAME}")
+    countries_table: bool = table_check.has_table(COUNTRIES_TABLE, schema=f"{DB_NAME}")
 
     meta = MetaData()
 
-    if not logs_tbl:
+    if not logs_table:
         try:
             logs = Table(
                 LOGS_TABLE,
@@ -113,7 +114,7 @@ def tables():
             logger.error(str(e))
             return False
 
-    if not my_logs_tbl:
+    if not my_logs_table:
         try:
             my_logs = Table(
                 MY_LOGS_TABLE,
@@ -151,7 +152,7 @@ def tables():
             logger.error(str(e))
             return False
 
-    if not sources_tbl:
+    if not sources_table:
         try:
             sources = Table(
                 SOURCES_TABLE,
@@ -172,7 +173,7 @@ def tables():
             logger.error(str(e))
             return False
 
-    if not countries_tbl:
+    if not countries_table:
         try:
             countries = Table(
                 COUNTRIES_TABLE,
@@ -195,25 +196,34 @@ def tables():
 
     meta.create_all(engine)
 
-    return True
+    with engine.begin() as conn:
+        result = conn.execute(text("SELECT EXISTS (SELECT 1 FROM countries);"))#.fetchone()
+        print(result, type(result))
+        check = [r[0] for r in result]
+        print(check)
+    if check[0] == 0:
+        populate_tables.countries()
 
 
-def countries_table():
-    """
-    Function checks to see if all tables are present/created and return True
-    If not return True
-    """
-    logger: Logger = logging.getLogger(__name__)
+    return True 
 
-    try:
-        engine = create_engine(f"mysql+pymysql://{DB_URI}")
 
-    except (exc.SQLAlchemyError, exc.OperationalError) as e:
-        logger.critical(str(e))
-        return False
+# def countries_table():
+#     """
+#     Function checks to see if all tables are present/created and return True
+#     If not return True
+#     """
+#     logger: Logger = logging.getLogger(__name__)
 
-    with engine.connect() as conn:
-        check: TextClause = text("SELECT EXISTS (SELECT 1 FROM countries);")
-        populated_check = conn.execute(check).fetchone()[0]
+#     try:
+#         engine = create_engine(f"mysql+pymysql://{DB_URI}")
 
-    return populated_check
+#     except (exc.SQLAlchemyError, exc.OperationalError) as e:
+#         logger.critical(str(e))
+#         return False
+
+#     with engine.connect() as conn:
+#         check: TextClause = text("SELECT EXISTS (SELECT 1 FROM countries);")
+#         populated_check = conn.execute(check).fetchone()[0]
+
+#     return populated_check
