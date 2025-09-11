@@ -7,10 +7,10 @@ from logging import Logger
 from pathlib import Path
 from sqlalchemy import (
     create_engine,
-    TextClause,
+    CursorResult,
     exc,
-    inspect,
     types,
+    Engine,
     Column,
     Table,
     MetaData,
@@ -40,7 +40,7 @@ def schema():
     """
     logger: Logger = logging.getLogger(__name__)
     try:
-        engine = create_engine(f"mysql+pymysql://{DB_URI}")
+        engine: Engine = create_engine(f"mysql+pymysql://{DB_URI}")
 
         if not database_exists(engine.url):
             create_database(engine.url)
@@ -197,33 +197,11 @@ def tables():
     meta.create_all(engine)
 
     with engine.begin() as conn:
-        result = conn.execute(text("SELECT EXISTS (SELECT 1 FROM countries);"))#.fetchone()
-        print(result, type(result))
+        result: CursorResult[Any] = conn.execute(text("SELECT EXISTS (SELECT 1 FROM countries);"))#.fetchone()
         check = [r[0] for r in result]
-        print(check)
     if check[0] == 0:
         populate_tables.countries()
 
 
     return True 
 
-
-# def countries_table():
-#     """
-#     Function checks to see if all tables are present/created and return True
-#     If not return True
-#     """
-#     logger: Logger = logging.getLogger(__name__)
-
-#     try:
-#         engine = create_engine(f"mysql+pymysql://{DB_URI}")
-
-#     except (exc.SQLAlchemyError, exc.OperationalError) as e:
-#         logger.critical(str(e))
-#         return False
-
-#     with engine.connect() as conn:
-#         check: TextClause = text("SELECT EXISTS (SELECT 1 FROM countries);")
-#         populated_check = conn.execute(check).fetchone()[0]
-
-#     return populated_check
