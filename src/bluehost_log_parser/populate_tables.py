@@ -1,12 +1,13 @@
 import logging
 
+from pathlib import Path
+from bluehost_log_parser.my_secrets import local_dburi
 from sqlalchemy import create_engine, exc, text, Engine
 from logging import Logger
-from bluehost_log_parser.db_checks import COUNTRIES_TABLE
-from bluehost_log_parser.my_secrets import local_dburi
-
 
 logger: Logger = logging.getLogger(__name__)
+
+COUNTRY_SEED_DATA: Path = Path.cwd().parent.parent / "misc" / "countries.txt"
 
 
 def countries() -> None:
@@ -15,7 +16,7 @@ def countries() -> None:
 
     except (exc.SQLAlchemyError, exc.OperationalError) as e:
         logger.critical(str(e))
-
+    # TODO use Path here
     with open("../../misc/countries.txt") as fh:
         data: list[str] = fh.readlines()
 
@@ -29,7 +30,7 @@ def countries() -> None:
 
             conn.execute(
                 text(
-                    f"""INSERT IGNORE into {COUNTRIES_TABLE} values('{name}', '{alpha}', '{alpha2}', '{number}');"""
+                    f"""INSERT IGNORE into countries values('{name}', '{alpha}', '{alpha2}', '{number}');"""
                 )
             )
 
