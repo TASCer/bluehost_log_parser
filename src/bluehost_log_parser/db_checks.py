@@ -197,11 +197,11 @@ def tables():
     meta.create_all(engine)
 
     with engine.begin() as conn:
-        result: CursorResult[Any] = conn.execute(text("SELECT EXISTS (SELECT 1 FROM countries);"))#.fetchone()
-        check = [r[0] for r in result]
+        result: CursorResult[Any] = conn.execute(
+            text("SELECT EXISTS (SELECT 1 FROM countries);")
+        )
+        check: list[Any] = [r[0] for r in result]
     if check[0] == 0:
         populate_tables.countries()
 
-
-    return True 
-
+    return True
