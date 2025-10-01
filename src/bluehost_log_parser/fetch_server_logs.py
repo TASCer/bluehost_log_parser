@@ -19,8 +19,8 @@ now: date = dt.date.today()
 def secure_copy(
     remote_log_paths: list[str],
     local_zipped_path: Path,
-    month_name: str | None,
-    year: str | None,
+    month_name: str,
+    year: str,
 ) -> bool:
     """
     Takes in a list of paths for location of website log files
@@ -32,13 +32,6 @@ def secure_copy(
     if not ssh_agent_check.is_ssh_agent_running_env():
         return False
 
-    if year and month_name:
-        month_name: str = month_name
-        year: str = year
-
-    else:
-        month_name: str = now.strftime("%b")
-        year: str = str(now.year)
 
     logger.info("STARTED: secure download of remote website logfiles")
 
@@ -69,17 +62,17 @@ def secure_copy(
 
         # else:
         #     try:
-                # copy_command = f"pscp -batch {my_secrets.user}@{my_secrets.my_bluehost_ip}:{remote_zipped_filename} {local_zipped_path}"
-                # response = subprocess.check_output(executable=copy_command)
-                # result: str = response.decode(encoding="utf-8")
-                # logger.info(result.strip())
+        # copy_command = f"pscp -batch {my_secrets.user}@{my_secrets.my_bluehost_ip}:{remote_zipped_filename} {local_zipped_path}"
+        # response = subprocess.check_output(executable=copy_command)
+        # result: str = response.decode(encoding="utf-8")
+        # logger.info(result.strip())
 
-            # except subprocess.CalledProcessError as other_err:
-            #     logger.error(other_err)
+        # except subprocess.CalledProcessError as other_err:
+        #     logger.error(other_err)
 
-            # except FileNotFoundError as file_e:
-            #     logger.critical(f"File not found - {file_e}")
+        # except FileNotFoundError as file_e:
+        #     logger.critical(f"File not found - {file_e}")
 
-            #     continue
+        #     continue
 
     return True
