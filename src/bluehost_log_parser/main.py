@@ -75,26 +75,26 @@ def main(month: int | None, year: int | None) -> None:
     logger.info("*** STARTING BLUEHOST LOG PARSER ***")
 
     if month and year:
-        given_date: str = f"{year}-{month}-01"
-        date_obj: datetime = dt.datetime.strptime(given_date, "%Y-%m-%d")
-        month_name: str = date_obj.strftime("%b")
+        arg_date: str = f"{year}-{month}-01"
+        date_obj: datetime = dt.datetime.strptime(arg_date, "%Y-%m-%d")
+        month_name_abbr: str = date_obj.strftime("%b")
         year_2_str: str = str(year)
 
     else:
-        month_name: str = now.strftime("%b")
+        month_name_abbr: str = now.strftime("%b")
         year_2_str: str = str(now.year)
 
     logs_fetched: bool = fetch_server_logs.secure_copy(
-        REMOTE_LOGFILE_BASE_PATHS, LOCAL_ZIPPED_PATH, month_name, year_2_str
+        REMOTE_LOGFILE_BASE_PATHS, LOCAL_ZIPPED_PATH, month_name_abbr, year_2_str
     )
 
     if logs_fetched:
         unzipped_log_files: list[Path] = unzip_fetched_logs.process(
-            LOCAL_ZIPPED_PATH, LOCAL_UNZIPPED_PATH, month_name, year_2_str
+            LOCAL_ZIPPED_PATH, LOCAL_UNZIPPED_PATH, month_name_abbr, year_2_str
         )
 
         ips, processed_logs, my_processed_logs = parse_logs.process(
-            unzipped_log_files, month_name, year_2_str
+            unzipped_log_files, month_name_abbr, year_2_str
         )
 
         unique_sources: set = set(ips)
@@ -140,8 +140,16 @@ if __name__ == "__main__":
         )
         args = parser.parse_args()
 
-        main(**vars(args))
 
+        if all(vars(args).values()):
+            main(**vars(args))
+
+        elif any(vars(args).values()):
+            print(f"Need both -m month AND -y year. Args passed: {vars(args)}")
+            logger.error(f"Need both -m month AND -y year. Args passed: {vars(args)}")
+
+        main(**vars(args))
+            
     else:
         print("Database has an issue")
         logger.error("Database has an issue")
