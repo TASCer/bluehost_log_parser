@@ -6,7 +6,9 @@ import logging
 from datetime import datetime, date
 from ipwhois import IPWhois
 from logging import Logger
-from typing import Optional
+from typing import Any, Optional
+
+from pytz import timezone
 
 SOURCES_TABLE = "sources"
 
@@ -20,7 +22,7 @@ def get_country(source_ips: list) -> list[str]:
 
     http_errors = 0
     whois_results: list = []
-    start_time: datetime = dt.datetime.utcnow()
+    start_time: datetime = dt.datetime.now(timezone("UTC"))
 
     for ip in source_ips:
         try:
@@ -34,7 +36,7 @@ def get_country(source_ips: list) -> list[str]:
                 error: str = http.split("error code")[1].replace(".", "")
 
             else:
-                http: list = str(http_err).split()
+                http: str = str(http_err).split()[0]
                 error: str = http[-1]
 
             result: dict = {
@@ -89,7 +91,7 @@ def get_country(source_ips: list) -> list[str]:
 
         else:
             asn_alpha2: str = result["asn_country_code"]
-            country_name: Optional[str] = coco.convert(asn_alpha2, to="name")
+            country_name = coco.convert(asn_alpha2, to="name")
 
         if result["asn_country_code"].islower():
             asn_alpha2: str = asn_alpha2.upper()
@@ -102,7 +104,7 @@ def get_country(source_ips: list) -> list[str]:
 
         whois_results.append([ip, asn_alpha2, asn_description, country_name])
 
-    stop_time: datetime = dt.datetime.utcnow()
+    stop_time: datetime = dt.datetime.now(timezone("UTC"))
     elapsed_time: int = int((stop_time - start_time).total_seconds())
 
     logger.info(

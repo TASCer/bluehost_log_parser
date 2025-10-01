@@ -6,7 +6,7 @@
     "configurations": [
 
         {
-            "name": "Python: main",
+            "name": "Py: main",
             "type": "python",
             "cwd": "${workspaceFolder}/src/bluehost_log_parser/",
             "request": "launch",
@@ -16,7 +16,7 @@
         },
 
         {
-            "name": "Python: one-off",
+            "name": "Py: adhoc",
             "type": "python",
             "cwd": "${workspaceFolder}/src/bluehost_log_parser/",
             "request": "launch",
@@ -28,7 +28,7 @@
 
 
         {
-            "name": "Python: dash",
+            "name": "Py: dash",
             "type": "python",
             "cwd": "${workspaceFolder}/src/dashboard/",
             "request": "launch",
