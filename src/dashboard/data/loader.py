@@ -1,3 +1,5 @@
+# TODO rework database activity for use in dropdowns?
+
 import logging
 import pandas as pd
 
@@ -25,14 +27,11 @@ def create_year_column(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def split_timestamp(df: pd.DataFrame) -> pd.DataFrame | None:
+def split_timestamp(df: pd.DataFrame) -> pd.DataFrame:
     df["DATE"] = df["ACCESSED"].dt.date
-    # df["TIME"] = df["ACCESSED"].dt.strftime("%h-%M-%f")
-    print(df.info())
-    print(df.head())
-    # df[["DATE", "TIME"]]
+    df["TIME"] = df["ACCESSED"].dt.time
 
-    # return df
+    return df
 
 
 def create_month_column(df: pd.DataFrame) -> pd.DataFrame:
@@ -51,7 +50,7 @@ def load_weblog_data() -> pd.DataFrame:
             con=conn,
         )
     preprocessor = compose(
-        # split_timestamp,
+        split_timestamp,
         create_year_column,
         create_month_column,
     )
