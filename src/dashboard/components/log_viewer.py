@@ -15,10 +15,11 @@ def render(data: DataFrame) -> html.Div:
     df: DataFrame = data.copy()
     df["SIZE"] = df["SIZE"].apply(lambda s: int("0") if not s.isdigit() else int(s))
     del df["REF_IP"]
+    del df["ACCESSED"]
 
     columnDefs = []
     for i in df.columns:
-        if i == "ACCESSED":
+        if i == "DATE":
             columnDefs.append({"field": i, "filter": "agDateColumnFilter"})
         elif i == "SIZE" or i == "YEAR":
             columnDefs.append({"field": i, "filter": "agNumberColumnFilter"})
