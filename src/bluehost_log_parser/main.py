@@ -140,7 +140,6 @@ if __name__ == "__main__":
         )
         args = parser.parse_args()
 
-
         if all(vars(args).values()):
             main(**vars(args))
 
@@ -149,7 +148,7 @@ if __name__ == "__main__":
             logger.error(f"Need both -m month AND -y year. Args passed: {vars(args)}")
 
         main(**vars(args))
-            
+
     else:
         print("Database has an issue")
         logger.error("Database has an issue")

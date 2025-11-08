@@ -32,7 +32,6 @@ def secure_copy(
     if not ssh_agent_check.is_ssh_agent_running_env():
         return False
 
-
     logger.info("STARTED: secure download of remote website logfiles")
 
     for path in remote_log_paths:
