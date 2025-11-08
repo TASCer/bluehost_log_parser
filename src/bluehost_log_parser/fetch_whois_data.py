@@ -91,7 +91,7 @@ def get_country(source_ips: list) -> list[str]:
 
         else:
             asn_alpha2: str = result["asn_country_code"]
-            country_name = coco.convert(asn_alpha2, to="name")
+            country_name: str = str(coco.convert(asn_alpha2, to="name"))
 
         if result["asn_country_code"].islower():
             asn_alpha2: str = asn_alpha2.upper()
