@@ -207,6 +207,9 @@ def tables():
     if create_views.all(engine):
         return True
 
+    else:
+        return False
+
 if __name__ == "__main__":
     engine = create_engine(f"mysql+pymysql://{DB_URI}")
     print(tables())
