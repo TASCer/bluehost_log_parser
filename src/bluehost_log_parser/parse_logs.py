@@ -22,13 +22,13 @@ class LogEntry(NamedTuple):
     FILE: str
     TYPE: str
     RES_CODE: str
-    SIZE: int
+    SIZE: str
     REF_URL: str
     REF_IP: str
 
 
 def process(
-    log_paths: list[Path], month_name: str | None, year: str | None
+    log_paths: list[Path], month_name_abbr: str | None, year_2_str: str | None
 ) -> Tuple[list[str], list[LogEntry], list[LogEntry]]:
     """
     Function takes a set of unzipped log paths and month and year
@@ -43,16 +43,16 @@ def process(
     all_sources: list = []
     all_long_files: list = []
 
-    if year and month_name:
-        month_name: str = month_name
-        year: str = year
+    if year_2_str and month_name_abbr:
+        month_name: str = month_name_abbr
+        year: str = year_2_str
 
     else:
         month_name: str = now.strftime("%b")
         year: str = str(now.year)
 
     for p in log_paths:
-        if month_name in p.name:
+        if month_name in p.name and year in p.name:
             logger.info(f"Parsing {p.name} logs")
             with open(f"{p}") as logs:
                 site_log_entries: list = []
@@ -84,7 +84,7 @@ def process(
                         ACTION, FILE, TYPE = action_info.split(" ")
 
                     except (ValueError, IndexError) as e:
-                        logger.error(f"\tACTION1 INFO SPLIT ERROR: {SOURCE}--{e}")
+                        logger.error(f"\tACTION SPLIT ERROR: {SOURCE}--{action_info}")
                         continue
 
                     if FILE.startswith("/:"):
@@ -99,13 +99,13 @@ def process(
                         all_long_files.append((server_timestamp, SOURCE))
 
                         try:
-                            action_list: str = FILE.split("?")
+                            action_list: list = FILE.split("?")
                             action_file1: str = action_list[0]
                             action_file2: str = action_list[1][:80]
 
                         except IndexError:
                             try:
-                                action_list: str = FILE.split("+")
+                                action_list: list = FILE.split("+")
                                 action_file1: str = action_list[0]
                                 action_file2: str = ""
 
@@ -133,7 +133,8 @@ def process(
                         AGENT: str = AGENT.replace("'b'", "")
 
                     elif "'" in AGENT:
-                        AGENT: str = AGENT.replace("'", "")
+                        AGENT: str = AGENT.split("'")[1]
+                        # AGENT: str = AGENT.replace("'", "")
 
                     REF_IP: str = agent_list[-1].strip()
                     REF_URL: str = agent_list[-2]
@@ -150,9 +151,9 @@ def process(
 
                     if len(client) > 1:
                         client_os: str = client[0]
-                        CLIENT: str = client_os.replace(";", "").lstrip()
+                        CLIENT: str = str(client_os.replace(";", "").lstrip())
 
-                    if "'" in CLIENT:
+                    if "'" in str(CLIENT):
                         CLIENT: str = CLIENT.replace("'", "")
 
                     site_sources.append(SOURCE)
