@@ -2,7 +2,7 @@ import logging
 import sqlalchemy as sa
 
 from bluehost_log_parser.insert_activity import MY_LOGS_TABLE
-from bluehost_log_parser import my_secrets, populate_tables
+from bluehost_log_parser import my_secrets, populate_tables, create_views
 from logging import Logger
 from pathlib import Path
 from sqlalchemy import (
@@ -179,8 +179,8 @@ def tables():
                 COUNTRIES_TABLE,
                 meta,
                 Column("NAME", types.VARCHAR(120), primary_key=True),
-                Column("ALPHA", types.VARCHAR(3), unique=True),
                 Column("ALPHA2", types.VARCHAR(2), unique=True),
+                Column("ALPHA3", types.VARCHAR(3), unique=True),
                 Column("NUMBER", types.INT(), unique=True),
             )
             Index("name", countries.c.NAME)
@@ -204,4 +204,9 @@ def tables():
     if check[0] == 0:
         populate_tables.countries()
 
-    return True
+    if create_views.all(engine):
+        return True
+
+if __name__ == "__main__":
+    engine = create_engine(f"mysql+pymysql://{DB_URI}")
+    print(tables())
