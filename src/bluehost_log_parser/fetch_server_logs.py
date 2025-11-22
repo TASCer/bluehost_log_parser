@@ -23,11 +23,14 @@ def secure_copy(
     year: str,
 ) -> bool:
     """
-    Takes in a list of paths for location of website log files
-    If historical
-    param: paths
-    param: month
-    param: year
+    Function copies webserver host log files locally.
+
+    :param remote_log_paths: list of Paths
+    :param local_zipped_path: lovation to unzip log file
+    :param month_name: short month name
+    :param year: year as str
+
+    :return: True if all log files copied locally
     """
     if not ssh_agent_check.is_ssh_agent_running_env():
         return False

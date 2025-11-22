@@ -11,6 +11,8 @@ from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from logging import Logger
+from pathlib import Path
+
 from ssl import Purpose
 
 now: datetime = dt.datetime.now()
@@ -24,11 +26,14 @@ email_user = my_secrets.postfix_user
 email_password = my_secrets.postfix_password
 
 
-def send_mail(subject: str, text: str, attachment_path: object = None) -> None:
+def send_mail(subject: str, text: str, attachment_path: Path | None = None) -> None:
     """
-    Takes a subject, text body, and optional file attachment
-    Sends email to receiver_email contacts
-    """
+    Function sends email messages.
+
+    :param subject: _description_
+    :param text: _description_
+    :param attachment_path: _description_, defaults to None
+    """    
     logger: Logger = logging.getLogger(__name__)
 
     msg: MIMEMultipart = MIMEMultipart("alternative")
@@ -55,7 +60,7 @@ def send_mail(subject: str, text: str, attachment_path: object = None) -> None:
             part_attachments.set_payload(attachment.read())
             encoders.encode_base64(part_attachments)
             part_attachments.add_header(
-                "Content-Disposition", "attachment", filename=attachment_path
+                "Content-Disposition", "attachment", filename=str(attachment_path)
             )
             msg.attach(part_attachments)
             msg.attach(html)
@@ -103,7 +108,7 @@ def send_mail(subject: str, text: str, attachment_path: object = None) -> None:
 
 
 if __name__ == "__main__":
-    send_mail("test", "test", attachment_path="../_old_logs/01-02-25.log")
+    send_mail("test", "test", attachment_path=Path.cwd().parent.parent.parent / "_old_logs" / "11-21-25.log")
 
 
 # SSL MODULE TESTING [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:997)  1123 on RPI4
