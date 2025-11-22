@@ -27,11 +27,11 @@ def parse_timestamp(ts: str) -> datetime:
 
 def update(log_entries: list, my_log_entries: list) -> None:
     """
-    Function takes in list of:
-    -public log entries
-    -SOHO/testing log entries
-    Inserts log entries into their respective tables
-    """
+    Function updates database tables with latest parsed logs.
+    
+    :param log_entries: all logs not from my SOHO
+    :param my_log_entries: all logs from SOHO
+    """    
     logger: Logger = logging.getLogger(__name__)
     try:
         engine: Engine = create_engine(f"mysql+pymysql://{my_secrets.local_dburi}")

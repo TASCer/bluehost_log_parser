@@ -18,6 +18,12 @@ now: date = dt.date.today()
 
 
 def get_country(source_ips: list) -> list[str]:
+    """
+    Function retrieves ASN country and descriptor data from Whois. 
+
+    :param source_ips: list of unique ip addresses accessing web sites
+    :return: list of responses
+    """
     logger.info("STARTED querying Whois for country names and descriptions.")
 
     http_errors = 0

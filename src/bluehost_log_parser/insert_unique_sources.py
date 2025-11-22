@@ -11,10 +11,12 @@ SOURCES_TABLE = "sources"
 
 def inserts(unique_ips: set[str]) -> list[str]:
     """
-    Inserts unique sources into table with unique source ip addresses from latest processing
-    :param: set
-    :return: list
-    """
+    Function  inserts latest unique source ips into table
+
+    :param unique_ips: set of ip addresses
+
+    :return: list of source ips missing country name
+    """    
     logger: Logger = logging.getLogger(__name__)
 
     try:

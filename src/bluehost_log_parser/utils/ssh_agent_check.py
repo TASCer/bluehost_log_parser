@@ -2,8 +2,12 @@ import os
 from venv import logger
 
 
-def is_ssh_agent_running_env():
-    """Checks if SSH agent is running by inspecting environment variables."""
+def is_ssh_agent_running_env() -> bool:
+    """
+    Function checks if SSH Agent is running by inspecting environment variables.
+
+    :return: True if running
+    """
     if "SSH_AUTH_SOCK" in os.environ:
         print(
             f"SSH agent appears to be running. SSH_AUTH_SOCK: {os.environ['SSH_AUTH_SOCK']}"
@@ -23,6 +27,3 @@ def is_ssh_agent_running_env():
 
         return False
 
-
-if __name__ == "__main__":
-    is_ssh_agent_running_env()

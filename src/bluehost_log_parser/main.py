@@ -8,7 +8,7 @@ from bluehost_log_parser import fetch_whois_data
 from bluehost_log_parser import fetch_server_logs
 from bluehost_log_parser import insert_activity
 from bluehost_log_parser import insert_unique_sources
-from bluehost_log_parser import mailer
+from bluehost_log_parser.utils import mailer
 from bluehost_log_parser import parse_logs
 from bluehost_log_parser import unzip_fetched_logs
 from bluehost_log_parser import update_sources
@@ -36,7 +36,7 @@ root_logger.addHandler(fh)
 
 logger: Logger = logging.getLogger(__name__)
 
-# REMOTE BLUEHOST SERVER'S BASE LOG PATHS. **DOES NOT INCLUDE** "month-year.gz"
+# NOTE: REMOTE BLUEHOST SERVER'S BASE LOG PATHS. **DOES NOT INCLUDE** "month-year.gz"
 REMOTE_TASCS_BASE_PATH: str = "logs/cag.bis.mybluehost.me-ssl_log-"
 REMOTE_HOA_BASE_PATH: str = "logs/hoa.tascs.net-ssl_log-"
 REMOTE_ROADSPIES_BASE_PATH: str = "logs/roadspies.cag.bis.mybluehost.me-ssl_log-"
@@ -55,8 +55,9 @@ REMOTE_LOGFILE_BASE_PATHS: list = [
 
 def database_check() -> bool:
     """
-    Function checks if database schema and tables are available
-    :return: None
+    Function checks if database schema and tables are available.
+
+    :return: True if available
     """
     logger.info("CHECKING RDBMS AVAILABILITY")
     have_database: bool = db_checks.schema()
@@ -72,6 +73,12 @@ def database_check() -> bool:
 
 
 def main(month: int | None, year: int | None) -> None:
+    """
+    Function controls the application.
+
+    :param month: optional month number to process another month's log
+    :param year: optional year number to process another month's log
+    """
     logger.info("*** STARTING BLUEHOST LOG PARSER ***")
 
     if month and year:
@@ -117,7 +124,7 @@ def main(month: int | None, year: int | None) -> None:
         mailer.send_mail(
             subject="ERROR: During Processing",
             text="Error downloading from Bluehost, check log",
-            attachment_path=f"{LOGGER_ROOT}/{todays_date}.log",
+            attachment_path=Path.cwd().parent.parent / f"{todays_date}.log",
         )
 
 
