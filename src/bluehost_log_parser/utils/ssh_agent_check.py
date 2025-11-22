@@ -26,4 +26,3 @@ def is_ssh_agent_running_env() -> bool:
         )
 
         return False
-

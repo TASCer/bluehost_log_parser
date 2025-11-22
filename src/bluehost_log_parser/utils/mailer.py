@@ -33,7 +33,7 @@ def send_mail(subject: str, text: str, attachment_path: Path | None = None) -> N
     :param subject: _description_
     :param text: _description_
     :param attachment_path: _description_, defaults to None
-    """    
+    """
     logger: Logger = logging.getLogger(__name__)
 
     msg: MIMEMultipart = MIMEMultipart("alternative")
@@ -108,7 +108,11 @@ def send_mail(subject: str, text: str, attachment_path: Path | None = None) -> N
 
 
 if __name__ == "__main__":
-    send_mail("test", "test", attachment_path=Path.cwd().parent.parent.parent / "_old_logs" / "11-21-25.log")
+    send_mail(
+        "test",
+        "test",
+        attachment_path=Path.cwd().parent.parent.parent / "_old_logs" / "11-21-25.log",
+    )
 
 
 # SSL MODULE TESTING [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:997)  1123 on RPI4
