@@ -18,7 +18,6 @@ COUNTRIES_TABLE: str = "countries"
 VIEW_COUNTRY_ACTIVITY = "country_activity"
 
 
-# TODO CREATE AND ADD GROUPBY
 def all(engine) -> bool:
     """
     Function creates all local database Views.
