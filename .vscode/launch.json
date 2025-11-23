@@ -5,6 +5,7 @@
     "version": "0.2.0",
     "configurations": [
 
+
         {
             "name": "Py: main",
             "type": "python",
@@ -14,6 +15,17 @@
             "console": "integratedTerminal",
             "justMyCode": true
         },
+
+        {
+            "name": "Py: cur file",
+            "type": "python",
+            "cwd": "${workspaceFolder}/src/bluehost_log_parser/",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+
 
         {
             "name": "Py: adhoc",
