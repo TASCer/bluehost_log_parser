@@ -16,7 +16,7 @@ def inserts(unique_ips: set[str]) -> list[str]:
     :param unique_ips: set of ip addresses
 
     :return: list of source ips missing country name
-    """    
+    """
     logger: Logger = logging.getLogger(__name__)
 
     try:
