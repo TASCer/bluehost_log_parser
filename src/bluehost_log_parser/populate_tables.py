@@ -16,8 +16,8 @@ def countries() -> None:
 
     except (exc.SQLAlchemyError, exc.OperationalError) as e:
         logger.critical(str(e))
-    # TODO use Path here
-    with open("../../misc/countries.txt") as fh:
+
+    with open(Path.cwd().parent.parent / "misc" / "countries.txt") as fh:
         data: list[str] = fh.readlines()
 
     with engine.connect() as conn, conn.begin():

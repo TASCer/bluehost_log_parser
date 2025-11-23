@@ -4,7 +4,6 @@ import sqlalchemy as sa
 from bluehost_log_parser.insert_activity import MY_LOGS_TABLE
 from bluehost_log_parser import my_secrets, populate_tables, create_views
 from logging import Logger
-from pathlib import Path
 from sqlalchemy import (
     create_engine,
     CursorResult,
@@ -209,6 +208,7 @@ def tables():
 
     else:
         return False
+
 
 if __name__ == "__main__":
     engine = create_engine(f"mysql+pymysql://{DB_URI}")
