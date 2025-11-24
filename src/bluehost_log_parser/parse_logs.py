@@ -83,7 +83,7 @@ def process(
                     try:
                         ACTION, FILE, TYPE = action_info.split(" ")
 
-                    except (ValueError, IndexError) as e:
+                    except (ValueError, IndexError):
                         logger.error(f"\tACTION SPLIT ERROR: {SOURCE}--{action_info}")
                         continue
 
@@ -94,7 +94,9 @@ def process(
                         FILE: str = FILE.replace("'", "")
 
                     if len(FILE) >= 120:
-                        logger.warning(f"\tLONG FILENAME: {FILE}")
+                        logger.warning(
+                            f"\tLONG FILENAME: {len(FILE)=} starts: {FILE[:40]}"
+                        )
                         site_long_files.append(SOURCE)
                         all_long_files.append((server_timestamp, SOURCE))
 
@@ -110,6 +112,8 @@ def process(
                                 action_file2: str = ""
 
                             except IndexError as e:
+                                action_file1: str = FILE[:80]
+                                action_file2: str = ""
                                 logger.error(e)
 
                         FILE = action_file1 + action_file2 + " *TRUNCATED*"
