@@ -26,7 +26,7 @@ def secure_copy(
     Function copies webserver host log files locally.
 
     :param remote_log_paths: list of Paths
-    :param local_zipped_path: lovation to unzip log file
+    :param local_zipped_path: location to unzip log file
     :param month_name: short month name
     :param year: year as str
 
@@ -35,7 +35,7 @@ def secure_copy(
     if not ssh_agent_check.is_ssh_agent_running_env():
         return False
 
-    logger.info("STARTED: secure download of remote website logfiles")
+    logger.info("STARTED secure download of remote website logfiles:")
 
     for path in remote_log_paths:
         remote_zipped_filename: str = path + month_name + "-" + year + ".gz"
@@ -62,7 +62,7 @@ def secure_copy(
                 )
                 exit()
 
-        # else:
+        # if not platform.system() == "Linux":
         #     try:
         # copy_command = f"pscp -batch {my_secrets.user}@{my_secrets.my_bluehost_ip}:{remote_zipped_filename} {local_zipped_path}"
         # response = subprocess.check_output(executable=copy_command)
