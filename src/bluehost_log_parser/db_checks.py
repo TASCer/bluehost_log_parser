@@ -32,7 +32,7 @@ SOURCES_TABLE: str = "sources"
 COUNTRIES_TABLE: str = "countries"
 
 
-def schema():
+def schema() -> bool:
     """
     Function checks to see if schema/DB_NAME is present/created and return True
     If not return False.
@@ -52,7 +52,7 @@ def schema():
     return True
 
 
-def tables():
+def tables() -> bool:
     """
     Function checks to see if all tables are present/created and return True
     If not return True
@@ -94,13 +94,15 @@ def tables():
                 ),
                 Column("CLIENT", types.VARCHAR(200), primary_key=True, nullable=False),
                 Column("AGENT", types.VARCHAR(100), primary_key=True, nullable=False),
-                Column("ACTION", types.VARCHAR(12), primary_key=True, nullable=False),
+                Column("METHOD", types.VARCHAR(12), primary_key=True, nullable=False),
                 Column("FILE", types.VARCHAR(120), primary_key=True, nullable=False),
-                Column("TYPE", types.VARCHAR(20), primary_key=True, nullable=False),
-                Column("CODE", types.VARCHAR(10), primary_key=True, nullable=False),
+                Column("HTTP", types.VARCHAR(20), primary_key=True, nullable=False),
+                Column("RESPONSE", types.VARCHAR(10), primary_key=True, nullable=False),
                 Column("SIZE", types.VARCHAR(100), primary_key=True, nullable=False),
-                Column("REF_URL", types.VARCHAR(100), primary_key=True, nullable=False),
-                Column("REF_IP", types.VARCHAR(100), primary_key=True, nullable=False),
+                Column(
+                    "REFERRER", types.VARCHAR(100), primary_key=True, nullable=False
+                ),
+
             )
             Index("accessed", logs.c.ACCESSED)
 
@@ -132,13 +134,14 @@ def tables():
                 ),
                 Column("CLIENT", types.VARCHAR(200), primary_key=True, nullable=False),
                 Column("AGENT", types.VARCHAR(100), primary_key=True, nullable=False),
-                Column("ACTION", types.VARCHAR(12), primary_key=True, nullable=False),
+                Column("METHOD", types.VARCHAR(12), primary_key=True, nullable=False),
                 Column("FILE", types.VARCHAR(120), primary_key=True, nullable=False),
-                Column("TYPE", types.VARCHAR(20), primary_key=True, nullable=False),
-                Column("CODE", types.VARCHAR(10), primary_key=True, nullable=False),
+                Column("HTTP", types.VARCHAR(20), primary_key=True, nullable=False),
+                Column("RESPONSE", types.VARCHAR(10), primary_key=True, nullable=False),
                 Column("SIZE", types.VARCHAR(100), primary_key=True, nullable=False),
-                Column("REF_URL", types.VARCHAR(100), primary_key=True, nullable=False),
-                Column("REF_IP", types.VARCHAR(100), primary_key=True, nullable=False),
+                Column(
+                    "REFERRER", types.VARCHAR(100), primary_key=True, nullable=False
+                ),
             )
             Index("accessed", my_logs.c.ACCESSED)
 
@@ -159,6 +162,7 @@ def tables():
                 Column("SOURCE", types.VARCHAR(15), primary_key=True),
                 Column("COUNTRY", types.VARCHAR(100)),
                 Column("ALPHA2", types.VARCHAR(2)),
+                Column("ALPHA3", types.VARCHAR(3)),
                 Column("DESCRIPTION", types.VARCHAR(160)),
             )
             Index("source", sources.c.ALPHA2)
