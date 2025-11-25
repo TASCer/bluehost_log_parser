@@ -6,7 +6,7 @@ import logging
 from datetime import datetime, date
 from ipwhois import IPWhois
 from logging import Logger
-from typing import Any, Optional
+# from typing import Any, Optional
 
 from pytz import timezone
 
