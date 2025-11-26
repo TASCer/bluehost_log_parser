@@ -7,15 +7,6 @@ with open(r"../assets/sample_unzipped_logfile") as logs:
     data = logs.readlines()
     parse_logs.process(data)
 
-
-
-
-
-
-
-
-
-
     # for log in logs:
     #     basic: str = log.split('" "')[0]
     #     ip: str = basic.split("- - ")[0]
