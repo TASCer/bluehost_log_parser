@@ -1,7 +1,7 @@
 import logging
 import sqlalchemy as sa
 
-from bluehost_log_parser.insert_activity import MY_LOGS_TABLE
+from bluehost_log_parser.insert_activity import SOHO_LOGS_TABLE, PUBLIC_LOGS_TABLE
 from bluehost_log_parser import my_secrets, populate_tables, create_views
 from logging import Logger
 from sqlalchemy import (
@@ -27,7 +27,7 @@ DB_USER: str = f"{my_secrets.local_dbuser}"
 DB_PW: str = f"{my_secrets.local_dbpassword}"
 DB_URI: str = f"{my_secrets.local_dburi}"
 
-LOGS_TABLE: str = "logs"
+PUBLIC_LOGS_TABLE: str = "public_logs"
 SOURCES_TABLE: str = "sources"
 COUNTRIES_TABLE: str = "countries"
 
@@ -68,8 +68,8 @@ def tables() -> bool:
 
     table_check: Any = sa.inspect(engine)
 
-    logs_table: bool = table_check.has_table(LOGS_TABLE, schema=f"{DB_NAME}")
-    my_logs_table: bool = table_check.has_table(MY_LOGS_TABLE, schema=f"{DB_NAME}")
+    logs_table: bool = table_check.has_table(PUBLIC_LOGS_TABLE, schema=f"{DB_NAME}")
+    my_logs_table: bool = table_check.has_table(SOHO_LOGS_TABLE, schema=f"{DB_NAME}")
     sources_table: bool = table_check.has_table(SOURCES_TABLE, schema=f"{DB_NAME}")
     countries_table: bool = table_check.has_table(COUNTRIES_TABLE, schema=f"{DB_NAME}")
 
@@ -78,7 +78,7 @@ def tables() -> bool:
     if not logs_table:
         try:
             logs = Table(
-                LOGS_TABLE,
+                PUBLIC_LOGS_TABLE,
                 meta,
                 Column(
                     "ACCESSED",
@@ -101,6 +101,8 @@ def tables() -> bool:
                 Column("SIZE", types.VARCHAR(100), primary_key=True, nullable=False),
                 Column(
                     "REFERRER", types.VARCHAR(100), primary_key=True, nullable=False
+                ),
+                Column("SITE", types.VARCHAR(40), primary_key=True, nullable=False
                 ),
 
             )
@@ -118,7 +120,7 @@ def tables() -> bool:
     if not my_logs_table:
         try:
             my_logs = Table(
-                MY_LOGS_TABLE,
+                SOHO_LOGS_TABLE,
                 meta,
                 Column(
                     "ACCESSED",
@@ -139,9 +141,9 @@ def tables() -> bool:
                 Column("HTTP", types.VARCHAR(20), primary_key=True, nullable=False),
                 Column("RESPONSE", types.VARCHAR(10), primary_key=True, nullable=False),
                 Column("SIZE", types.VARCHAR(100), primary_key=True, nullable=False),
-                Column(
-                    "REFERRER", types.VARCHAR(100), primary_key=True, nullable=False
-                ),
+                Column("REFERRER", types.VARCHAR(100), primary_key=True, nullable=False),
+                Column("SITE", types.VARCHAR(40), primary_key=True, nullable=False),
+
             )
             Index("accessed", my_logs.c.ACCESSED)
 
