@@ -1,48 +1,218 @@
+# TODO What to do with unmatched logs? Seems missing size value causing issues. Rematching on fail works. Need to refactor as redundant
 import datetime as dt
 import logging
 import re
 
 from logging import Logger
 from pathlib import Path
-from typing import NamedTuple, Tuple
 from bluehost_log_parser import my_secrets
+from bluehost_log_parser.schema import LogEntry
 
 logger: Logger = logging.getLogger(__name__)
 
 now: dt.datetime = dt.datetime.now()
 todays_date: str = now.strftime("%D").replace("/", "-")
 
+# regex for Common Log Format (CLF)
+weblog_pattern = re.compile(
+    r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) - - \[(.*?)\] "(.*?)" (\d+) (\d+) "(.*?)" "(.*?)" (.*?)\s'
+)
 
-class LogEntry(NamedTuple):
-    server_timestamp: str
-    SOURCE: str
-    CLIENT: str
-    AGENT: str
-    ACTION: str
-    FILE: str
-    TYPE: str
-    RES_CODE: str
-    SIZE: str
-    REF_URL: str
-    REF_IP: str
+# regex for unmatched. Missing file size digits.
+weblog_pattern_no_match = re.compile(
+    r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) - - \[(.*?)\] "(.*?)" (\d+) (-) "(.*?)" "(.*?)" (.*?)\s')
 
 
-def process(
+def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry]]:
+    """
+    Function processes the log file for each web site.
+
+    :param log_file: Path of logfile
+    :return: tuple of unique ips and LogEntrys from PUBLIC and SOHO
+    """
+    site_log_entries: list = []
+    site_my_log_entries: list = []
+    site_sources: set = set()
+
+    site_long_files = 0
+    unmatched = 0
+    matched = 0
+
+    with open(f"{log_file}") as logs:
+        for log in logs:
+            match = weblog_pattern.match(log)
+            
+            if match:
+                matched += 1
+                ip_address = match.group(1)
+                timestamp = match.group(2)
+                request = match.group(3)
+                status_code = match.group(4)
+                bytes_sent = match.group(5)
+                referrer = match.group(6)
+                user_agent_data = match.group(7)
+                site = match.group(8)
+
+                # skip parsing system cron jobs performed on bluehost server
+                if ip_address == f"{my_secrets.my_bluehost_ip}":
+                    continue
+
+                site_sources.add(ip_address)
+
+                if ":" in ip_address:
+                    logger.warning(f"IPv6: {log}")
+                    continue
+
+                try:
+                    user_agent = user_agent_data.split(" ")[0].strip()
+                    client_os = (
+                        user_agent_data.split(" ")[1].replace("(", "").replace(";", "")
+                    )
+                    client_version = user_agent_data.split(" ")[2:6]
+                    client_version = " ".join(
+                        [c.replace(";", "") for c in client_version]
+                    )
+                    client_version = "".join(
+                        [c.replace(")", "") for c in client_version]
+                    )
+
+                    client = client_os + client_version
+
+                except IndexError:
+                    user_agent = "NA"
+                    client = "NA"
+
+                method, file, http_type = request.split()
+                http_type = http_type.replace("')", "")
+                file = file.replace("'[0]", "")
+
+                site_sources.add(ip_address)
+
+                entry: LogEntry = LogEntry(
+                    server_timestamp=timestamp,
+                    SOURCE=ip_address,
+                    METHOD=method,
+                    FILE=file,
+                    HTTP=http_type,
+                    REFERRER=referrer,
+                    RESPONSE=status_code,
+                    SIZE=bytes_sent,
+                    AGENT=user_agent,
+                    CLIENT=client,
+                    SITE=site,
+                )
+
+                if ip_address == my_secrets.my_home_ip:
+                    site_my_log_entries.append(entry)
+
+                elif ip_address != my_secrets.my_home_ip:
+                    site_log_entries.append(entry)
+            else:
+                unmatched += 1
+                match = weblog_pattern_no_match.match(log)
+
+                try:
+                    unmatched -= 1
+                    ip_address = match.group(1)
+                    timestamp = match.group(2)
+                    request = match.group(3)
+                    status_code = match.group(4)
+                    bytes_sent = match.group(5)
+                    referrer = match.group(6)
+                    user_agent_data = match.group(7)
+                    site = match.group(8)
+
+                    # skip parsing system cron jobs performed on bluehost server
+                    if ip_address == f"{my_secrets.my_bluehost_ip}":
+                        continue
+
+                    site_sources.add(ip_address)
+
+                    if ":" in ip_address:
+                        logger.warning(f"IPv6: {log}")
+                        continue
+
+                    try:
+                        user_agent = user_agent_data.split(" ")[0].strip()
+                        client_os = (
+                            user_agent_data.split(" ")[1].replace("(", "").replace(";", "")
+                        )
+                        client_version = user_agent_data.split(" ")[2:6]
+                        client_version = " ".join(
+                            [c.replace(";", "") for c in client_version]
+                        )
+                        client_version = "".join(
+                            [c.replace(")", "") for c in client_version]
+                        )
+
+                        client = client_os + client_version
+
+                    except IndexError:
+                        user_agent = "NA"
+                        client = "NA"
+
+                    method, file, http_type = request.split()
+                    http_type = http_type.replace("')", "")
+                    file = file.replace("'[0]", "")
+
+                    site_sources.add(ip_address)
+
+                    entry: LogEntry = LogEntry(
+                        server_timestamp=timestamp,
+                        SOURCE=ip_address,
+                        METHOD=method,
+                        FILE=file,
+                        HTTP=http_type,
+                        REFERRER=referrer,
+                        RESPONSE=status_code,
+                        SIZE=bytes_sent,
+                        AGENT=user_agent,
+                        CLIENT=client,
+                        SITE=site,
+                    )
+
+                    if ip_address == my_secrets.my_home_ip:
+                        site_my_log_entries.append(entry)
+
+                    elif ip_address != my_secrets.my_home_ip:
+                        site_log_entries.append(entry)
+
+                except:
+                    logger.warning(f"still no re match: {log}")
+                    unmatched +=1
+
+        print(f"{log_file.name}: {unmatched=} {matched=}")
+
+    logger.info(
+        f"\t\t{len(site_log_entries)} PUBLIC logs with {len(set(site_sources))} unique source ip"
+    )
+    logger.info(f"\t\t{len(site_my_log_entries)} SOHO logs")
+    logger.info(
+        f"\t\t{len(site_log_entries) + len(site_my_log_entries)} SITE LOG ENTRIES"
+    )
+
+    if site_long_files >= 1:
+        logger.warning(f"\t\t{site_long_files} long file names encountered.")
+
+    return site_sources, site_log_entries, site_my_log_entries
+
+
+def start_processing(
     log_paths: list[Path], month_name_abbr: str | None, year_2_str: str | None
-) -> Tuple[list[str], list[LogEntry], list[LogEntry]]:
+) -> tuple[list[str], list[LogEntry], list[LogEntry]]:
     """
-    Function takes a set of unzipped log paths and month and year
-    Parses log file and returns tuple
-    :param log_paths:
-    :param month_name:
-    :param year:
-    :return:
-    """
-    all_log_entries: list = []
-    all_my_log_entries: list = []
-    all_sources: list = []
-    all_long_files: list = []
+    Function processes all current production website access logs.
 
+    :param log_paths: list of Paths pointing to unzipped logfiles
+    :param month_name: abbreciated month name
+    :param year: year as str
+    :return: tuple of ip addresses, ny LogEntry, other LogEntry
+    """
+
+    all_public_log_entries: list = []
+    all_soho_log_entries: list = []
+    all_sources: list = []
+    all_long_files = 0
     if year_2_str and month_name_abbr:
         month_name: str = month_name_abbr
         year: str = year_2_str
@@ -54,161 +224,15 @@ def process(
     for p in log_paths:
         if month_name in p.name and year in p.name:
             logger.info(f"Parsing {p.name} logs")
-            with open(f"{p}") as logs:
-                site_log_entries: list = []
-                site_sources: list = []
-                site_long_files: list = []
-                site_my_log_entries: list = []
+            sources, public_logs, soho_logs = process_log(p)
+            all_sources.extend(sources)
+            all_public_log_entries.extend(public_logs)
+            all_soho_log_entries.extend(soho_logs)
 
-                for log in logs:
-                    basic_info: str = log.split('" "')[0]
-                    ip: str = basic_info.split("- - ")[0]
-
-                    if ":" in ip:
-                        logger.warning(f"IPv6: {basic_info}")
-
-                        continue
-
-                    SOURCE: str = ip.rstrip()
-
-                    # skip parsing system cron jobs performed on bluehost server
-                    if SOURCE == f"{my_secrets.my_bluehost_ip}":
-                        continue
-
-                    basic_info: str = basic_info.split("- - ")[1]
-                    server_timestamp: str = basic_info.split("]")[0][1:]
-
-                    action_info: str = basic_info.split('"')[1]
-
-                    try:
-                        ACTION, FILE, TYPE = action_info.split(" ")
-
-                    except (ValueError, IndexError):
-                        logger.error(f"\tACTION SPLIT ERROR: {SOURCE}--{action_info}")
-                        continue
-
-                    if FILE.startswith("/:"):
-                        FILE: str = FILE.replace(":", "")
-
-                    if "'" in FILE:
-                        FILE: str = FILE.replace("'", "")
-
-                    if len(FILE) >= 120:
-                        logger.warning(
-                            f"\tLONG FILENAME: {len(FILE)=} starts: {FILE[:40]}"
-                        )
-                        site_long_files.append(SOURCE)
-                        all_long_files.append((server_timestamp, SOURCE))
-
-                        try:
-                            action_list: list = FILE.split("?")
-                            action_file1: str = action_list[0]
-                            action_file2: str = action_list[1][:80]
-
-                        except IndexError:
-                            try:
-                                action_list: list = FILE.split("+")
-                                action_file1: str = action_list[0]
-                                action_file2: str = ""
-
-                            except IndexError as e:
-                                action_file1: str = FILE[:80]
-                                action_file2: str = ""
-                                logger.error(e)
-
-                        FILE = action_file1 + action_file2 + " *TRUNCATED*"
-
-                    try:
-                        result_info: str = basic_info.split('"')[2].strip()
-                        RES_CODE, SIZE = result_info.split(" ")
-
-                    except ValueError as e:
-                        logger.error(f"Possible bot, check logs -> {e}")
-                        continue
-
-                    agent_info: str = log.split('" "')[1]
-                    agent_list: list = agent_info.split(" ")
-                    AGENT: str = agent_list[0].replace('"', "")
-
-                    if AGENT.startswith("-"):
-                        AGENT: str = "NA"
-
-                    if AGENT.startswith("'b'"):
-                        AGENT: str = AGENT.replace("'b'", "")
-
-                    elif "'" in AGENT:
-                        AGENT: str = AGENT.split("'")[1]
-                        # AGENT: str = AGENT.replace("'", "")
-
-                    REF_IP: str = agent_list[-1].strip()
-                    REF_URL: str = agent_list[-2]
-
-                    # FINDS ALL BETWEEN (    )
-                    client: list[str] = re.findall(r"\((.*?)\)", log)
-
-                    if not client:
-                        CLIENT, client_format = 2 * ("NA",)
-
-                    if len(client) == 1:
-                        client_os: str = client[0]
-                        CLIENT: str = client_os.replace(";", "").lstrip()
-
-                    if len(client) > 1:
-                        client_os: str = client[0]
-                        CLIENT: str = str(client_os.replace(";", "").lstrip())
-
-                    if "'" in str(CLIENT):
-                        CLIENT: str = CLIENT.replace("'", "")
-
-                    site_sources.append(SOURCE)
-                    all_sources.append(SOURCE)
-                    entry: LogEntry = LogEntry(
-                        server_timestamp=server_timestamp,
-                        SOURCE=SOURCE,
-                        ACTION=ACTION,
-                        FILE=FILE,
-                        TYPE=TYPE,
-                        REF_URL=REF_URL,
-                        REF_IP=REF_IP,
-                        RES_CODE=RES_CODE,
-                        SIZE=SIZE,
-                        AGENT=AGENT,
-                        CLIENT=CLIENT,
-                    )
-
-                    if SOURCE == my_secrets.my_home_ip:
-                        all_my_log_entries.append(entry)
-                        site_my_log_entries.append(entry)
-
-                    elif SOURCE != my_secrets.my_home_ip:
-                        site_log_entries.append(entry)
-                        all_log_entries.append(entry)
-
-                logger.info(
-                    f"\t\t{len(site_log_entries)} NON SOHO logs with {len(set(site_sources))} unique source ip"
-                )
-                logger.info(f"\t\t{len(site_my_log_entries)} SOHO logs")
-                logger.info(
-                    f"\t\t{len(site_log_entries) + len(site_my_log_entries)} SITE LOG ENTRIES"
-                )
-
-                if len(site_long_files) >= 1:
-                    logger.warning(
-                        f"\t\t{len(site_long_files)} long file names encountered."
-                    )
-        else:
-            continue
-
-    if len(all_long_files) > 0:
+    if all_long_files > 0:
         logger.warning(
-            f"\tLOG ENTRIES OVER 120 characers (all-sites) = {len(all_long_files)}"
+            f"\tLOG ENTRIES OVER 120 characers (all-sites) = {all_long_files}"
         )
 
     logger.info("COMPLETED WEBLOG PARSING")
-
-    return all_sources, all_log_entries, all_my_log_entries
-
-
-if __name__ == "__main__":
-    pass
-    # process()
+    return all_sources, all_public_log_entries, all_soho_log_entries
