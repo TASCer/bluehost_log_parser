@@ -18,3 +18,4 @@ class LogEntry(NamedTuple):
     SIZE: str
     REFERRER: str
     HTTP: str
+    SITE: str
