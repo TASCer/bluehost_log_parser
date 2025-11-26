@@ -5,6 +5,7 @@ import logging
 from datetime import datetime, date
 from bluehost_log_parser import db_checks
 from bluehost_log_parser import fetch_whois_data
+
 from bluehost_log_parser import fetch_server_logs
 from bluehost_log_parser import insert_activity
 from bluehost_log_parser import insert_unique_sources
@@ -100,20 +101,20 @@ def main(month: int | None, year: int | None) -> None:
             LOCAL_ZIPPED_PATH, LOCAL_UNZIPPED_PATH, month_name_abbr, year_2_str
         )
 
-        ips, processed_logs, my_processed_logs = parse_logs.process(
-            unzipped_log_files, month_name_abbr, year_2_str
+        source_ips, public_processed_logs, my_processed_logs = (
+            parse_logs.start_processing(unzipped_log_files, month_name_abbr, year_2_str)
         )
 
-        unique_sources: set = set(ips)
+        unique_sources: set = set(source_ips)
         no_country_name: list[str] = insert_unique_sources.inserts(unique_sources)
         if no_country_name:
             results: list[str] = fetch_whois_data.get_country(no_country_name)
             update_sources.whois_updates(results)
 
         else:
-            logger.info("NO SOURCE IP NEEDS Whois DATA.")
+            logger.info("Whois Information Not Needed.")
 
-        insert_activity.update(processed_logs, my_processed_logs)
+        insert_activity.update_log_tables(public_processed_logs, my_processed_logs)
 
         logger.info("***** COMPLETED WEB LOG PROCESSING *****")
         mailer.send_mail(
@@ -157,5 +158,5 @@ if __name__ == "__main__":
         main(**vars(args))
 
     else:
-        print("Database has an issue")
+        print(f"Database has an issue. Check log: '{todays_date}.log' in project root")
         logger.error("Database has an issue")
