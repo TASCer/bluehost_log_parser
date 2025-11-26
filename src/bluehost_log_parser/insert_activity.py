@@ -7,15 +7,18 @@ from logging import Logger
 from sqlalchemy.engine import Engine
 from sqlalchemy import exc, create_engine, text
 
-LOGS_TABLE = "logs"
-MY_LOGS_TABLE = "my_logs"
+PUBLIC_LOGS_TABLE = "public_logs"
+SOHO_LOGS_TABLE = "soho_logs"
+
+logger: Logger = logging.getLogger(__name__)
 
 
 def parse_timestamp(ts: str) -> datetime:
     """
     Function takes in a str from log file and returns a datetime
-    :param ts:
-    :return: datetime
+
+    :param ts: string timestamp
+    :return: datetime timestamp
     """
     ts = ts.replace(":", " ", 1)
     ts_split: list[str] = ts.split(" ", 2)
@@ -25,7 +28,62 @@ def parse_timestamp(ts: str) -> datetime:
     return ts_parsed
 
 
-def update(log_entries: list, my_log_entries: list) -> None:
+def my_log_updates(db_engine, soho_logs):
+    """
+    Function inserts latest LogEntrys into the my_logs table.
+
+    :param db_engine: database engine
+    :param soho_logs: list of LogEntry coming from SOHO clients
+    """
+    with db_engine.connect() as conn, conn.begin():
+        for log in soho_logs:
+            ts_parsed = parse_timestamp(log.server_timestamp)
+
+            try:
+                conn.execute(
+                    text(
+                        f"""INSERT IGNORE INTO {SOHO_LOGS_TABLE} VALUES('{ts_parsed}', '{log.SOURCE}', '{log.CLIENT}', '{log.AGENT}', '{log.METHOD}', '{log.FILE}', '{log.HTTP}', '{log.RESPONSE}', '{log.SIZE}', '{log.REFERRER}', '{log.SITE}');"""
+                    )
+                )
+            except (exc.SQLAlchemyError, exc.ProgrammingError, exc.DataError) as e:
+                logger.error(e)
+
+    logger.info(
+        f"{len(soho_logs)} entries from SOHO added to '{SOHO_LOGS_TABLE}' table"
+    )
+
+
+def public_log_updates(db_engine, public_logs):
+    """
+    Function inserts latest LogEntrys into the logs table.
+
+    :param db_engine: database engine
+    :param soho_logs: list of LogEntrys coming from PUBLIC clients
+    """
+    with db_engine.connect() as conn, conn.begin():
+        for log in public_logs:
+            ts_parsed: datetime = parse_timestamp(log.server_timestamp)
+
+            try:
+                conn.execute(
+                    text(
+                        f"""INSERT IGNORE INTO {PUBLIC_LOGS_TABLE} VALUES('{ts_parsed}', '{log.SOURCE}', '{log.CLIENT}', '{log.AGENT}', '{log.METHOD}', '{log.FILE}', '{log.HTTP}', '{log.RESPONSE}', '{log.SIZE}', '{log.REFERRER}', '{log.SITE}');"""
+                    )
+                )
+            except (
+                exc.SQLAlchemyError,
+                exc.ProgrammingError,
+                exc.DataError,
+                exc.InvalidRequestError,
+            ) as e:
+                logger.error(e)
+
+    logger.info(
+        f"{len(public_logs)} entries from public added to '{PUBLIC_LOGS_TABLE}' table"
+    )
+
+
+def update_log_tables(log_entries: list, my_log_entries: list) -> None:
     """
     Function updates database tables with latest parsed logs.
 
@@ -40,61 +98,5 @@ def update(log_entries: list, my_log_entries: list) -> None:
         logger.critical(str(e))
         exit()
 
-    with engine.connect() as conn, conn.begin():
-        for (
-            ts,
-            ip,
-            client,
-            agent_name,
-            action,
-            file,
-            conn_type,
-            action_code,
-            action_size,
-            ref_url,
-            ref_ip,
-        ) in log_entries:
-            ts_parsed: datetime = parse_timestamp(ts)
-
-            try:
-                conn.execute(
-                    text(
-                        f"""INSERT IGNORE INTO {LOGS_TABLE} VALUES('{ts_parsed}', '{ip}', '{client}', '{agent_name}', '{action}', '{file}', '{conn_type}', '{action_code}', '{action_size}', '{ref_url}', '{ref_ip}');"""
-                    )
-                )
-            except (
-                exc.SQLAlchemyError,
-                exc.ProgrammingError,
-                exc.DataError,
-                exc.InvalidRequestError,
-            ) as e:
-                logger.error(e)
-
-    logger.info(f"{len(log_entries)} entries added to {LOGS_TABLE} table")
-
-    with engine.connect() as conn, conn.begin():
-        for (
-            ts,
-            ip,
-            client,
-            agent_name,
-            action,
-            file,
-            conn_type,
-            action_code,
-            action_size,
-            ref_url,
-            ref_ip,
-        ) in my_log_entries:
-            ts_parsed = parse_timestamp(ts)
-
-            try:
-                conn.execute(
-                    text(
-                        f"""INSERT IGNORE INTO {MY_LOGS_TABLE} VALUES('{ts_parsed}', '{ip}', '{client}', '{agent_name}', '{action}', '{file}', '{conn_type}', '{action_code}', '{action_size}', '{ref_url}', '{ref_ip}');"""
-                    )
-                )
-            except (exc.SQLAlchemyError, exc.ProgrammingError, exc.DataError) as e:
-                logger.error(e)
-
-    logger.info(f"{len(my_log_entries)} entries added to {MY_LOGS_TABLE} table")
+    public_log_updates(engine, log_entries)
+    my_log_updates(engine, my_log_entries)
