@@ -4,14 +4,13 @@ import datetime as dt
 import logging
 
 from dash import Dash, dcc, html
-from datetime import datetime
 
 from logging import Logger, Formatter
 
 from bluehost_log_parser.main import LOGGER_ROOT
 from bluehost_log_parser import db_checks
 
-now: datetime = dt.date.today()
+now = dt.date.today()
 todays_date: str = now.strftime("%D").replace("/", "-")
 
 logger: Logger = logging.getLogger()
