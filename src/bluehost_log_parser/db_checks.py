@@ -27,7 +27,6 @@ DB_USER: str = f"{my_secrets.local_dbuser}"
 DB_PW: str = f"{my_secrets.local_dbpassword}"
 DB_URI: str = f"{my_secrets.local_dburi}"
 
-PUBLIC_LOGS_TABLE: str = "public_logs"
 SOURCES_TABLE: str = "sources"
 COUNTRIES_TABLE: str = "countries"
 
@@ -102,9 +101,7 @@ def tables() -> bool:
                 Column(
                     "REFERRER", types.VARCHAR(100), primary_key=True, nullable=False
                 ),
-                Column("SITE", types.VARCHAR(40), primary_key=True, nullable=False
-                ),
-
+                Column("SITE", types.VARCHAR(40), primary_key=True, nullable=False),
             )
             Index("accessed", logs.c.ACCESSED)
 
@@ -141,9 +138,10 @@ def tables() -> bool:
                 Column("HTTP", types.VARCHAR(20), primary_key=True, nullable=False),
                 Column("RESPONSE", types.VARCHAR(10), primary_key=True, nullable=False),
                 Column("SIZE", types.VARCHAR(100), primary_key=True, nullable=False),
-                Column("REFERRER", types.VARCHAR(100), primary_key=True, nullable=False),
+                Column(
+                    "REFERRER", types.VARCHAR(100), primary_key=True, nullable=False
+                ),
                 Column("SITE", types.VARCHAR(40), primary_key=True, nullable=False),
-
             )
             Index("accessed", my_logs.c.ACCESSED)
 
