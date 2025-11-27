@@ -73,9 +73,9 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
                     user_agent = "NA"
                     client = "NA"
 
-                method, file, http_type = request.split()
+                method, request, http_type = request.split()
                 http_type = http_type.replace("')", "")
-                file = file.replace("'[0]", "")
+                request = request.replace("'[0]", "")
 
                 site_sources.add(ip_address)
 
@@ -83,7 +83,7 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
                     server_timestamp=timestamp,
                     SOURCE=ip_address,
                     METHOD=method,
-                    FILE=file,
+                    REQUEST=request,
                     HTTP=http_type,
                     REFERRER=referrer,
                     RESPONSE=status_code,
@@ -137,9 +137,9 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
                             user_agent = "NA"
                             client = "NA"
 
-                        method, file, http_type = request.split()
+                        method, request, http_type = request.split()
                         http_type = http_type.replace("')", "")
-                        file = file.replace("'[0]", "")
+                        request = request.replace("'[0]", "")
 
                         site_sources.add(ip_address)
 
@@ -147,7 +147,7 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
                             server_timestamp=timestamp,
                             SOURCE=ip_address,
                             METHOD=method,
-                            FILE=file,
+                            REQUEST=request,
                             HTTP=http_type,
                             REFERRER=referrer,
                             RESPONSE=status_code,
@@ -217,5 +217,5 @@ def start_processing(
             f"\tLOG ENTRIES OVER 120 characers (all-sites) = {all_long_files}"
         )
 
-    logger.info("COMPLETED WEBLOG PARSING")
+    logger.info("PARSING COMPLETED")
     return all_sources, all_public_log_entries, all_soho_log_entries

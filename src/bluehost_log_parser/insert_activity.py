@@ -42,7 +42,7 @@ def my_log_updates(db_engine, soho_logs):
             try:
                 conn.execute(
                     text(
-                        f"""INSERT IGNORE INTO {SOHO_LOGS_TABLE} VALUES('{ts_parsed}', '{log.SOURCE}', '{log.CLIENT}', '{log.AGENT}', '{log.METHOD}', '{log.FILE}', '{log.HTTP}', '{log.RESPONSE}', '{log.SIZE}', '{log.REFERRER}', '{log.SITE}');"""
+                        f"""INSERT IGNORE INTO {SOHO_LOGS_TABLE} VALUES('{ts_parsed}', '{log.SOURCE}', '{log.CLIENT}', '{log.AGENT}', '{log.METHOD}', '{log.REQUEST}', '{log.HTTP}', '{log.RESPONSE}', '{log.SIZE}', '{log.REFERRER}', '{log.SITE}');"""
                     )
                 )
             except (exc.SQLAlchemyError, exc.ProgrammingError, exc.DataError) as e:
@@ -67,7 +67,7 @@ def public_log_updates(db_engine, public_logs):
             try:
                 conn.execute(
                     text(
-                        f"""INSERT IGNORE INTO {PUBLIC_LOGS_TABLE} VALUES('{ts_parsed}', '{log.SOURCE}', '{log.CLIENT}', '{log.AGENT}', '{log.METHOD}', '{log.FILE}', '{log.HTTP}', '{log.RESPONSE}', '{log.SIZE}', '{log.REFERRER}', '{log.SITE}');"""
+                        f"""INSERT IGNORE INTO {PUBLIC_LOGS_TABLE} VALUES('{ts_parsed}', '{log.SOURCE}', '{log.CLIENT}', '{log.AGENT}', '{log.METHOD}', '{log.REQUEST}', '{log.HTTP}', '{log.RESPONSE}', '{log.SIZE}', '{log.REFERRER}', '{log.SITE}');"""
                     )
                 )
             except (

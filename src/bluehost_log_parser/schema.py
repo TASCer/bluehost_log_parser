@@ -13,7 +13,7 @@ class LogEntry(NamedTuple):
     CLIENT: str
     AGENT: str
     METHOD: str
-    FILE: str
+    REQUEST: str
     RESPONSE: str
     SIZE: str
     REFERRER: str
