@@ -6,7 +6,7 @@ from . import ids
 
 
 def render(data: DataFrame) -> html.Div:
-    all_referrals: list[str] = data["REF_URL"].tolist()
+    all_referrals: list[str] = data["REFERRER"].tolist()
     unique_referrals = sorted(set(all_referrals))
 
     @callback(
