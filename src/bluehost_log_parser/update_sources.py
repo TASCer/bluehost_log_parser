@@ -75,7 +75,7 @@ def asn_alphas(alpha2s: list[str]) -> list[str]:
             )
             for a in alpha2s:
                 q_alphas: TextClause = text(
-                    f"SELECT ALPHA from countries where ALPHA2 = '{a}';"
+                    f"SELECT ALPHA3 from countries where ALPHA2 = '{a}';"
                 )
 
                 result = conn.execute(q_alphas).fetchone()[0]
@@ -94,4 +94,4 @@ def asn_alphas(alpha2s: list[str]) -> list[str]:
 
 if __name__ == "__main__":
     # whois_updates()
-    asn_alphas(["AL", "AR"])
+   print(asn_alphas(["AL", "AR"]))
