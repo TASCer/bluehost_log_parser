@@ -23,14 +23,14 @@ def countries() -> None:
     with engine.connect() as conn, conn.begin():
         for c in data:
             country: list[str] = c.rstrip().split("\t")
-            name, alpha2, alpha, number = country
+            name, alpha2, alpha3, number = country
 
             if "'" in name:
                 name: str = name.replace("'", "''")
 
             conn.execute(
                 text(
-                    f"""INSERT IGNORE into countries values('{name}', '{alpha}', '{alpha2}', '{number}');"""
+                    f"""INSERT IGNORE into countries values('{name}', '{alpha2}', '{alpha3}', '{number}');"""
                 )
             )
 
