@@ -55,7 +55,7 @@ def whois_updates(whois_data: list[str]) -> None:
 
 def asn_alphas(alpha2s: list[str]) -> list[str]:
     """
-    Function takes in a list of ASN_ALPHA2 codes and returns its ASN_ALPHA (3-letter code for country name) equivalent from countries table.
+    Function takes in a list of ASN_ALPHA2 codes and returns its ASN_ALPHA3 (3-letter code for country name) equivalent from countries table.
     """
     logger: Logger = logging.getLogger(__name__)
 
@@ -66,7 +66,7 @@ def asn_alphas(alpha2s: list[str]) -> list[str]:
         logger.critical(str(e))
         exit()
 
-    asn_alphas = []
+    asn_alpha3s = []
 
     try:
         with engine.connect() as conn, conn.begin():
@@ -74,12 +74,10 @@ def asn_alphas(alpha2s: list[str]) -> list[str]:
                 "Getting ASN_ALPHA (3-letter code for country name) from countries table"
             )
             for a in alpha2s:
-                q_alphas: TextClause = text(
-                    f"SELECT ALPHA3 from countries where ALPHA2 = '{a}';"
-                )
+                q_alpha3 = conn.execute(text(f"SELECT ALPHA3 from countries where ALPHA2 = '{a}';")).first()
 
-                result = conn.execute(q_alphas).fetchone()[0]
-                asn_alphas.append(result)
+                if q_alpha3:
+                    asn_alpha3s.append(q_alpha3[0])
 
     except TypeError:
         print("check if table 'countries' is/was populated via 'populate_tables.py'")
@@ -89,7 +87,7 @@ def asn_alphas(alpha2s: list[str]) -> list[str]:
 
         exit()
 
-    return asn_alphas
+    return asn_alpha3s
 
 
 if __name__ == "__main__":
