@@ -1,3 +1,4 @@
+# TODO add view on my logs for non 200 codes
 import logging
 
 from bluehost_log_parser import my_secrets

@@ -94,4 +94,4 @@ def asn_alphas(alpha2s: list[str]) -> list[str]:
 
 if __name__ == "__main__":
     # whois_updates()
-   print(asn_alphas(["AL", "AR"]))
+    print(asn_alphas(["AL", "AR"]))
