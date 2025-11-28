@@ -49,7 +49,7 @@ def my_log_updates(db_engine, soho_logs):
                 logger.error(e)
 
     logger.info(
-        f"{len(soho_logs)} entries from SOHO added to '{SOHO_LOGS_TABLE}' table"
+        f"{len(soho_logs)} log entries inserted into table: '{SOHO_LOGS_TABLE}'"
     )
 
 
@@ -79,7 +79,7 @@ def public_log_updates(db_engine, public_logs):
                 logger.error(e)
 
     logger.info(
-        f"{len(public_logs)} entries from public added to '{PUBLIC_LOGS_TABLE}' table"
+        f"{len(public_logs)} log entries inserted into table: '{PUBLIC_LOGS_TABLE}'"
     )
 
 
