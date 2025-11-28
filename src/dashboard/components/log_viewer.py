@@ -13,12 +13,12 @@ logger: Logger = logging.getLogger(__name__)
 
 def render(data: DataFrame) -> html.Div:
     df: DataFrame = data.copy()
-    # df["SIZE"] = df["SIZE"].apply(lambda s: int("0") if not s.isdigit() else int(s))
-    # del df["REF_IP"]
     del df["ACCESSED"]
 
     columnDefs = []
     for i in df.columns:
+        if i == "YEAR" or i == "MONTH" or i == "ALPHA2":
+            continue
         if i == "DATE":
             columnDefs.append({"field": i, "filter": "agDateColumnFilter"})
         elif i == "SIZE" or i == "YEAR":
@@ -54,20 +54,6 @@ def render(data: DataFrame) -> html.Div:
         columnDefs=columnDefs,
     )
 
-    # @app.callback(
-    #     Output(ids.PIE_CHART, "children"),
-    #     [
-    #         Input(ids.YEAR_DROPDOWN, "value"),
-    #         Input(ids.MONTH_DROPDOWN, "value"),
-    #         Input(ids.CODE_DROPDOWN, "value"),
-    #     ],
-    # )
-    # def update_pie_chart(
-    #     years: list[str], months: list[str], codes: list[str]
-    # ) -> html.Div:
-    # filtered_data = df.query(
-    #         "YEAR in @years and MONTH in @months and CODE in @codes"
-    #     )
     if df.shape[0] == 0:
         return html.Div("general.no_data", id=ids.PIE_CHART)
 
