@@ -74,7 +74,9 @@ def asn_alphas(alpha2s: list[str]) -> list[str]:
                 "Getting ASN_ALPHA (3-letter code for country name) from countries table"
             )
             for a in alpha2s:
-                q_alpha3 = conn.execute(text(f"SELECT ALPHA3 from countries where ALPHA2 = '{a}';")).first()
+                q_alpha3 = conn.execute(
+                    text(f"SELECT ALPHA3 from countries where ALPHA2 = '{a}';")
+                ).first()
 
                 if q_alpha3:
                     asn_alpha3s.append(q_alpha3[0])

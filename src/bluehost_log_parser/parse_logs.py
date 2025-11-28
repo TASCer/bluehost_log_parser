@@ -1,4 +1,4 @@
-# TODO What to do with unmatched logs? Seems missing size value causing issues. Rematching on fail works. Need to refactor as redundant
+# TODO Refactor regex matches? exisying seems redundant
 import datetime as dt
 import logging
 import re
@@ -18,7 +18,7 @@ weblog_pattern = re.compile(
     r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) - - \[(.*?)\] "(.*?)" (\d+) (\d+) "(.*?)" "(.*?)" (.*?)\s'
 )
 
-# regex for unmatched. Missing file size digits ("-").
+# regex for unmatched above. Missing file size digits ("-").
 weblog_pattern_no_response = re.compile(
     r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) - - \[(.*?)\] "(.*?)" (\d+) (-) "(.*?)" "(.*?)" (.*?)\s'
 )
@@ -104,7 +104,7 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
                     no_response_match
                     and no_response_match.group(1) != f"{my_secrets.my_bluehost_ip}"
                 ):
-                    no_response_unmatched +=1
+                    no_response_unmatched += 1
                     user_agent_data = no_response_match.group(7)
                     request = no_response_match.group(3)
                     try:
@@ -160,8 +160,6 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
                         logger.warning(f"still no re match: {log}")
                         unmatched += 1
 
-    print(matches, no_response_unmatched, unmatched)
-
     logger.info(
         f"\t\t{len(site_public_entries)} PUBLIC logs with {len(set(site_sources))} unique source ip"
     )
@@ -169,6 +167,7 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
     logger.info(
         f"\t\t{len(site_public_entries) + len(site_soho_entries)} SITE LOG ENTRIES"
     )
+    logger.info(f"{matches=} {no_response_unmatched=} {unmatched=}")
 
     return site_sources, site_public_entries, site_soho_entries
 
@@ -211,4 +210,5 @@ def start_processing(
         )
 
     logger.info("PARSING COMPLETED")
+
     return all_sources, all_public_log_entries, all_soho_log_entries
