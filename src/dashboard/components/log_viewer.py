@@ -13,8 +13,8 @@ logger: Logger = logging.getLogger(__name__)
 
 def render(data: DataFrame) -> html.Div:
     df: DataFrame = data.copy()
-    df["SIZE"] = df["SIZE"].apply(lambda s: int("0") if not s.isdigit() else int(s))
-    del df["REF_IP"]
+    # df["SIZE"] = df["SIZE"].apply(lambda s: int("0") if not s.isdigit() else int(s))
+    # del df["REF_IP"]
     del df["ACCESSED"]
 
     columnDefs = []

@@ -19,19 +19,24 @@ def render(data: DataFrame) -> html.Div:
         [
             Input(ids.YEAR_DROPDOWN, "value"),
             Input(ids.MONTH_DROPDOWN, "value"),
-            Input(ids.CODE_DROPDOWN, "value"),
-            Input(ids.REFERRAL_DROPDOWN, "value"),
+            Input(ids.RESPONSE_DROPDOWN, "value"),
+            Input(ids.REFERRER_DROPDOWN, "value"),
+            Input(ids.SITE_DROPDOWN, "value"),
         ],
     )
     def update_bar_chart(
-        years: list[str], months: list[str], codes: list[str], referrals: list[str]
+        years: list[str],
+        months: list[str],
+        responses: list[str],
+        referrers: list[str],
+        sites: list[str],
     ) -> html.Div:
         logger.debug(
-            f"YEARS: {years} MONTHS:{months} CODES:{codes} REFERRALS:{referrals}"
+            f"YEARS: {years} MONTHS:{months} RESPONSES:{responses} REFERRERS:{referrers} SITES: {sites}"
         )
 
         filtered_data = df.query(
-            "YEAR in @years and MONTH in @months and CODE in @codes and REF_URL in @referrals"
+            "YEAR in @years and MONTH in @months and RESPONSE in @responses and REFERRER in @referrers and SITE in @sites"
         )
 
         if filtered_data.shape[0] == 0:
@@ -39,8 +44,8 @@ def render(data: DataFrame) -> html.Div:
 
         fig = px.histogram(
             filtered_data,
-            x="CODE",
-            color="REF_URL",
+            x="RESPONSE",
+            color="REFERRER",
         )
         logger.info("BAR CHART CREATED")
 

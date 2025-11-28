@@ -2,11 +2,12 @@ import dash
 from dash import html
 from dashboard.components import (
     bar_chart,
-    code_dropdown,
     month_dropdown,
     pie_chart,
     referral_dropdown,
+    response_dropdown,
     year_dropdown,
+    site_dropdown,
 )
 from pandas import DataFrame
 from dashboard.data import loader
@@ -25,8 +26,9 @@ layout = html.Div(
                 children=[
                     year_dropdown.render(source),
                     month_dropdown.render(source),
-                    code_dropdown.render(source),
+                    response_dropdown.render(source),
                     referral_dropdown.render(source),
+                    site_dropdown.render(source),
                 ],
             ),
             bar_chart.render(source),

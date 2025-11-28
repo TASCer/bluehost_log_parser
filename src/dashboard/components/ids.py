@@ -2,11 +2,14 @@ BAR_CHART = "bar-chart"
 PIE_CHART = "pie-chart"
 MAP_VIEWER = "map-viewer"
 
-SELECT_ALL_CODES_BUTTON = "select-all-codes-button"
-CODE_DROPDOWN = "code-dropdown"
+SELECT_ALL_RESPONSES_BUTTON = "select-all-responses-button"
+RESPONSE_DROPDOWN = "response-dropdown"
 
-SELECT_ALL_REFERRALS_BUTTON = "select-all-referrals-button"
-REFERRAL_DROPDOWN = "referral-dropdown"
+SELECT_ALL_REFERRERS_BUTTON = "select-all-referrers-button"
+REFERRER_DROPDOWN = "referrer-dropdown"
+
+SELECT_ALL_SITES_BUTTON = "select-all-sites-button"
+SITE_DROPDOWN = "site-dropdown"
 
 SELECT_ALL_MONTHS_BUTTON = "select-all-months-button"
 MONTH_DROPDOWN = "month-dropdown"
