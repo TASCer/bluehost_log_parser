@@ -18,8 +18,9 @@ def render(data: DataFrame) -> html.Div:
 
     """
     df: DataFrame = data.copy()
+    df_alpha2s = df["ALPHA2"].to_list()
     # TODO rework, too slow
-    asn_alphas: list[str] = update_sources.asn_alphas(df["ALPHA2"])
+    asn_alphas = update_sources.asn_alphas(df_alpha2s)
     df["ALPHA"] = asn_alphas
     df = df[["ALPHA", "ACCESSED", "COUNTRY"]]
 
