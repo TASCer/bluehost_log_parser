@@ -32,7 +32,7 @@ logger: Logger = logging.getLogger(__name__)
 app = Dash(
     __name__,
     external_stylesheets=[dbc.themes.BOOTSTRAP],
-    description="View Apache Weblog data",
+    description="View and Analyze Apache Weblog data",
     title="Analyze Weblogs",
     use_pages=True,
 )
@@ -40,7 +40,6 @@ app = Dash(
 
 app.layout = html.Div(
     [
-        # html.H1("Bluehost Log Analysis"),
         html.Div(
             [
                 html.Div(

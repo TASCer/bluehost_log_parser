@@ -22,7 +22,6 @@ layout = html.Div(
         children=[
             html.Hr(),
             html.Div(
-                className="dropdown-button",
                 children=[
                     year_dropdown.render(source),
                     month_dropdown.render(source),
