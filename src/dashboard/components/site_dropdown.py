@@ -8,7 +8,8 @@ from . import ids
 def render(source: DataFrame) -> html.Div:
     all_sites: list[str] = source["SITE"].tolist()
     unique_sites: list[str] = sorted(set(all_sites))
-
+    unique_sites = [s for s in unique_sites if "443" in s]
+    
     @callback(
         Output(ids.SITE_DROPDOWN, "value"),
         [
