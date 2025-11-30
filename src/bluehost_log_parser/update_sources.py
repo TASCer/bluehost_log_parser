@@ -4,7 +4,7 @@ from bluehost_log_parser import my_secrets
 from logging import Logger
 from pymysql.err import DataError
 from sqlalchemy.engine import Engine
-from sqlalchemy import exc, create_engine, text, TextClause
+from sqlalchemy import exc, create_engine, text
 
 LOGS_TABLE = "logs"
 SOURCES_TABLE = "sources"

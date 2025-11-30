@@ -4,9 +4,9 @@ import logging
 
 from pandas import DataFrame
 from dash import html
-from dash.dependencies import Input, Output
 from logging import Logger
 from . import ids
+
 
 logger: Logger = logging.getLogger(__name__)
 
@@ -57,7 +57,7 @@ def render(data: DataFrame) -> html.Div:
     if df.shape[0] == 0:
         return html.Div("general.no_data", id=ids.PIE_CHART)
 
-    logger.info("Log AG Grid CREATED")
+    logger.info("Log Viewer AG Grid CREATED")
 
     return html.Div(
         children=[grid],

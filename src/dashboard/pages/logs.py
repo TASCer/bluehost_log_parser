@@ -9,7 +9,6 @@ dash.register_page(__name__, path="/")
 
 source: DataFrame = loader.load_weblog_data()
 
-
 layout = html.Div(
     [
         html.Div(

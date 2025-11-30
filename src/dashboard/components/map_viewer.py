@@ -1,8 +1,7 @@
 import plotly.express as px
 import logging
 
-from dash import dcc, html, callback
-from dash.dependencies import Input, Output
+from dash import dcc, html
 from pandas import DataFrame
 from . import ids
 from bluehost_log_parser import update_sources

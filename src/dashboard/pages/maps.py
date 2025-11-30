@@ -1,5 +1,5 @@
 import dash
-from dash import html  # , dcc, callback, Input, Output
+from dash import html
 from dashboard.components import map_viewer
 from pandas import DataFrame
 from dashboard.data import loader
