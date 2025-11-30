@@ -119,7 +119,7 @@ def get_country(source_ips: list) -> list[str]:
 
     if elapsed_time >= 60:
         minutes: int = elapsed_time // 60
-        whois_rate: int = len(source_ips) // minutes
+        whois_rate: float = len(source_ips) / minutes
         logger.info(f"\t ~{whois_rate= } lookups per minute")
 
     return whois_results
