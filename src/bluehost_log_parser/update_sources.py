@@ -71,7 +71,7 @@ def asn_alphas(alpha2s: list[str]) -> list[str]:
     try:
         with engine.connect() as conn, conn.begin():
             logger.info(
-                "Getting ASN_ALPHA (3-letter code for country name) from countries table"
+                "Getting ASN_ALPHA3 from 'countries table' (used for country name in dashboard scatter map) "
             )
             for a in alpha2s:
                 q_alpha3 = conn.execute(
