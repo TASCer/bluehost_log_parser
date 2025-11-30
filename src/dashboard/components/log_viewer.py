@@ -28,6 +28,7 @@ def render(data: DataFrame) -> html.Div:
             columnDefs.append({"field": i})
 
     defaultColDef = {
+        "resizable": True,
         "editable": True,
         "headerClass": "center-aligned-header",
         "filter": "agTextColumnFilter",
