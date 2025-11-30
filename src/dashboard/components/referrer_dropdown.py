@@ -25,7 +25,7 @@ def render(data: DataFrame) -> html.Div:
 
     return html.Div(
         children=[
-            html.H6("referral.url"),
+            html.H6("referrer"),
             dcc.Dropdown(
                 id=ids.REFERRER_DROPDOWN,
                 options=unique_referrers[:10],
