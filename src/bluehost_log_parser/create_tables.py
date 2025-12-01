@@ -68,7 +68,7 @@ def log_tables(engine: Engine, log_table_name) -> None:
     meta.create_all(engine)
 
 
-def sources_table(engine):
+def sources_table(engine) -> None:
     try:
         sources = Table(
             SOURCES_TABLE,
