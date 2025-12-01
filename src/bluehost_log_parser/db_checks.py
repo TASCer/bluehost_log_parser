@@ -73,7 +73,7 @@ def tables() -> bool:
 
     if not countries_table:
         create_tables.countries_table(engine)
-        # populate table from tsv file
+        # populate table from tab separated file
         with engine.begin() as conn:
             result: CursorResult[Any] = conn.execute(
                 text("SELECT EXISTS (SELECT 1 FROM countries);")

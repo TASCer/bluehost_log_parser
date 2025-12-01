@@ -2,7 +2,7 @@
 import logging
 
 from bluehost_log_parser import my_secrets
-from bluehost_log_parser.insert_activity import SOHO_LOGS_TABLE, PUBLIC_LOGS_TABLE
+from bluehost_log_parser.insert_activity import PUBLIC_LOGS_TABLE  # , SOHO_LOGS_TABLE
 from logging import Logger
 from sqlalchemy import exc, create_engine, text
 

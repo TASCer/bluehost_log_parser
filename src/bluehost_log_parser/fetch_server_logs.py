@@ -2,7 +2,6 @@ import datetime as dt
 import logging
 import os
 import platform
-import subprocess
 
 from bluehost_log_parser.utils import mailer, ssh_agent_check
 from bluehost_log_parser import my_secrets
@@ -63,6 +62,8 @@ def secure_copy(
                 exit()
 
         # if not platform.system() == "Linux":
+        # import subprocess
+
         #     try:
         # copy_command = f"pscp -batch {my_secrets.user}@{my_secrets.my_bluehost_ip}:{remote_zipped_filename} {local_zipped_path}"
         # response = subprocess.check_output(executable=copy_command)

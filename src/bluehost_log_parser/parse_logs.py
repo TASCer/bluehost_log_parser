@@ -167,7 +167,7 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
     logger.info(
         f"\t\t{len(site_public_entries) + len(site_soho_entries)} SITE LOG ENTRIES"
     )
-    logger.info(f"{matches=} {no_response_unmatched=} {unmatched=}")
+    logger.info(f"{matches=} / {no_response_unmatched=} / {unmatched=}")
 
     return site_sources, site_public_entries, site_soho_entries
 
@@ -181,7 +181,7 @@ def start_processing(
     :param log_paths: list of Paths pointing to unzipped logfiles
     :param month_name: abbreciated month name
     :param year: year as str
-    :return: tuple of ip addresses, ny LogEntry, other LogEntry
+    :return: tuple of ip addresses, soho LogEntry, public LogEntry
     """
 
     all_public_log_entries: list = []
