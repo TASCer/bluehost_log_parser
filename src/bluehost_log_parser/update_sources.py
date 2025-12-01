@@ -59,6 +59,8 @@ def asn_alphas(alpha2s: list[str]) -> list[str]:
     """
     logger: Logger = logging.getLogger(__name__)
 
+    logger.info("Getting ASN_ALPHA3 from 'countries table' (used for country name in dashboard scatter map)")
+
     try:
         engine: Engine = create_engine(f"mysql+pymysql://{my_secrets.local_dburi}")
 
@@ -70,9 +72,6 @@ def asn_alphas(alpha2s: list[str]) -> list[str]:
 
     try:
         with engine.connect() as conn, conn.begin():
-            logger.info(
-                "Getting ASN_ALPHA3 from 'countries table' (used for country name in dashboard scatter map) "
-            )
             for a in alpha2s:
                 q_alpha3 = conn.execute(
                     text(f"SELECT ALPHA3 from countries where ALPHA2 = '{a}';")
