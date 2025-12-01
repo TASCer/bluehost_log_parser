@@ -2,9 +2,9 @@
 import logging
 
 from bluehost_log_parser import my_secrets
-from bluehost_log_parser.insert_activity import PUBLIC_LOGS_TABLE  # , SOHO_LOGS_TABLE
+from bluehost_log_parser.insert_activity import PUBLIC_LOGS_TABLE  #see TODO , SOHO_LOGS_TABLE
 from logging import Logger
-from sqlalchemy import exc, create_engine, text
+from sqlalchemy import exc, create_engine, text, Engine
 
 logger: Logger = logging.getLogger(__name__)
 
@@ -20,9 +20,9 @@ VIEW_COUNTRY_ACTIVITY = "country_activity"
 
 def all(engine) -> bool:
     """
-    Function creates all local database Views.
+    Function creates all local database views.
 
-    :param engine: datanase engine
+    :param engine: database engine
     :return: True if all views created
     """
     with engine.connect() as conn, conn.begin():
@@ -53,5 +53,5 @@ def all(engine) -> bool:
 
 
 if __name__ == "__main__":
-    engine = create_engine(f"mysql+pymysql://{DB_URI}")
+    engine: Engine = create_engine(f"mysql+pymysql://{DB_URI}")
     print(all(engine=engine))

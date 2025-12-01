@@ -21,7 +21,14 @@ VIEW_COUNTRY_ACTIVITY = "country_activity"
 meta = MetaData()
 
 
-def log_tables(engine: Engine, log_table_name):
+def log_tables(engine: Engine, log_table_name) -> None:
+    """
+    Function creates database tables consisting of webserver logs.
+
+    :param engine: database engine
+    :param log_table_name: log table name
+    :return: None
+    """
     try:
         logs = Table(
             log_table_name,
@@ -57,7 +64,6 @@ def log_tables(engine: Engine, log_table_name):
         exc.OperationalError,
     ) as e:
         logger.error(str(e))
-        return False
 
     meta.create_all(engine)
 
@@ -82,12 +88,11 @@ def sources_table(engine):
         exc.OperationalError,
     ) as e:
         logger.error(str(e))
-        return False
 
     meta.create_all(engine)
 
 
-def countries_table(engine):
+def countries_table(engine) -> None:
     try:
         countries = Table(
             COUNTRIES_TABLE,
@@ -106,6 +111,5 @@ def countries_table(engine):
         exc.OperationalError,
     ) as e:
         logger.error(str(e))
-        return False
 
     meta.create_all(engine)
