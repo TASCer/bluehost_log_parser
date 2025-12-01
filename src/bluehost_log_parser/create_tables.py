@@ -68,30 +68,6 @@ def log_tables(engine: Engine, log_table_name) -> None:
     meta.create_all(engine)
 
 
-def sources_table(engine) -> None:
-    try:
-        sources = Table(
-            SOURCES_TABLE,
-            meta,
-            Column("SOURCE", types.VARCHAR(15), primary_key=True),
-            Column("COUNTRY", types.VARCHAR(100)),
-            Column("ALPHA2", types.VARCHAR(2)),
-            Column("ALPHA3", types.VARCHAR(3)),
-            Column("DESCRIPTION", types.VARCHAR(160)),
-        )
-        Index("source", sources.c.ALPHA2)
-
-    except (
-        AttributeError,
-        exc.SQLAlchemyError,
-        exc.ProgrammingError,
-        exc.OperationalError,
-    ) as e:
-        logger.error(str(e))
-
-    meta.create_all(engine)
-
-
 def countries_table(engine) -> None:
     try:
         countries = Table(
@@ -113,3 +89,29 @@ def countries_table(engine) -> None:
         logger.error(str(e))
 
     meta.create_all(engine)
+
+
+def sources_table(engine) -> None:
+    try:
+        sources = Table(
+            SOURCES_TABLE,
+            meta,
+            Column("SOURCE", types.VARCHAR(15), primary_key=True),
+            Column("COUNTRY", types.VARCHAR(100)),
+            Column("ALPHA2", types.VARCHAR(2)),
+            Column("ALPHA3", types.VARCHAR(3), ForeignKey("countries.ALPHA3")),
+            Column("DESCRIPTION", types.VARCHAR(160)),
+        )
+        Index("source", sources.c.ALPHA2)
+
+    except (
+        AttributeError,
+        exc.SQLAlchemyError,
+        exc.ProgrammingError,
+        exc.OperationalError,
+    ) as e:
+        logger.error(str(e))
+
+    meta.create_all(engine)
+
+
