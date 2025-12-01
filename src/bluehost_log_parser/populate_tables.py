@@ -11,13 +11,16 @@ COUNTRY_SEED_DATA: Path = Path.cwd().parent.parent / "misc" / "countries.txt"
 
 
 def countries() -> None:
+    """
+    Function populates the 'countries' database table.
+    """
     try:
         engine: Engine = create_engine(f"mysql+pymysql://{local_dburi}")
 
     except (exc.SQLAlchemyError, exc.OperationalError) as e:
         logger.critical(str(e))
 
-    with open(Path.cwd().parent.parent / "misc" / "countries.txt") as fh:
+    with COUNTRY_SEED_DATA.open() as fh:
         data: list[str] = fh.readlines()
 
     with engine.connect() as conn, conn.begin():
