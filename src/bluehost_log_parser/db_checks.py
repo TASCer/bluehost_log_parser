@@ -1,25 +1,20 @@
 import logging
 import sqlalchemy as sa
 
+from bluehost_log_parser import create_tables
 from bluehost_log_parser.insert_activity import SOHO_LOGS_TABLE, PUBLIC_LOGS_TABLE
+from bluehost_log_parser.create_tables import SOURCES_TABLE, COUNTRIES_TABLE
 from bluehost_log_parser import my_secrets, populate_tables, create_views
 from logging import Logger
 from sqlalchemy import (
     create_engine,
     CursorResult,
     exc,
-    types,
     Engine,
-    Column,
-    Table,
-    MetaData,
     text,
-    ForeignKey,
-    Index,
 )
 from sqlalchemy_utils import database_exists, create_database
 from typing import Any
-
 
 DB_HOSTNAME: str = f"{my_secrets.local_dbhost}"
 DB_NAME: str = f"{my_secrets.local_dbname}"
@@ -27,14 +22,12 @@ DB_USER: str = f"{my_secrets.local_dbuser}"
 DB_PW: str = f"{my_secrets.local_dbpassword}"
 DB_URI: str = f"{my_secrets.local_dburi}"
 
-SOURCES_TABLE: str = "sources"
-COUNTRIES_TABLE: str = "countries"
-
 
 def schema() -> bool:
     """
-    Function checks to see if schema/DB_NAME is present/created and return True
-    If not return False.
+    Function checks if database schema (name) is created and available.
+
+    :return: True if exists/created
     """
     logger: Logger = logging.getLogger(__name__)
     try:
@@ -53,13 +46,14 @@ def schema() -> bool:
 
 def tables() -> bool:
     """
-    Function checks to see if all tables are present/created and return True
-    If not return True
+    Function checks if database tables are created and available.
+
+    :return: True if exists/created
     """
     logger: Logger = logging.getLogger(__name__)
 
     try:
-        engine = create_engine(f"mysql+pymysql://{DB_URI}")
+        engine: Engine = create_engine(f"mysql+pymysql://{DB_URI}")
 
     except (exc.SQLAlchemyError, exc.OperationalError) as e:
         logger.critical(str(e))
@@ -67,145 +61,32 @@ def tables() -> bool:
 
     table_check: Any = sa.inspect(engine)
 
-    public_logs_table: bool = table_check.has_table(PUBLIC_LOGS_TABLE, schema=f"{DB_NAME}")
+    public_logs_table: bool = table_check.has_table(
+        PUBLIC_LOGS_TABLE, schema=f"{DB_NAME}"
+    )
     soho_logs_table: bool = table_check.has_table(SOHO_LOGS_TABLE, schema=f"{DB_NAME}")
     sources_table: bool = table_check.has_table(SOURCES_TABLE, schema=f"{DB_NAME}")
     countries_table: bool = table_check.has_table(COUNTRIES_TABLE, schema=f"{DB_NAME}")
 
-    meta = MetaData()
-
-    if not public_logs_table:
-        try:
-            logs = Table(
-                PUBLIC_LOGS_TABLE,
-                meta,
-                Column(
-                    "ACCESSED",
-                    types.TIMESTAMP(timezone=True),
-                    primary_key=True,
-                    nullable=False,
-                ),
-                Column(
-                    "SOURCE",
-                    types.VARCHAR(15),
-                    ForeignKey("sources.SOURCE"),
-                    nullable=False,
-                ),
-                Column("CLIENT", types.VARCHAR(200), primary_key=True, nullable=False),
-                Column("AGENT", types.VARCHAR(100), primary_key=True, nullable=False),
-                Column("METHOD", types.VARCHAR(12), primary_key=True, nullable=False),
-                Column("REQUEST", types.VARCHAR(120), primary_key=True, nullable=False),
-                Column("HTTP", types.VARCHAR(20), primary_key=True, nullable=False),
-                Column("RESPONSE", types.VARCHAR(10), primary_key=True, nullable=False),
-                Column("SIZE", types.VARCHAR(100), primary_key=True, nullable=False),
-                Column(
-                    "REFERRER", types.VARCHAR(100), primary_key=True, nullable=False
-                ),
-                Column("SITE", types.VARCHAR(40), primary_key=True, nullable=False),
-            )
-            Index("accessed", logs.c.ACCESSED)
-
-        except (
-            AttributeError,
-            exc.SQLAlchemyError,
-            exc.ProgrammingError,
-            exc.OperationalError,
-        ) as e:
-            logger.error(str(e))
-            return False
-
-    if not soho_logs_table:
-        try:
-            my_logs = Table(
-                SOHO_LOGS_TABLE,
-                meta,
-                Column(
-                    "ACCESSED",
-                    types.TIMESTAMP(timezone=True),
-                    primary_key=True,
-                    nullable=False,
-                ),
-                Column(
-                    "SOURCE",
-                    types.VARCHAR(15),
-                    ForeignKey("sources.SOURCE"),
-                    nullable=False,
-                ),
-                Column("CLIENT", types.VARCHAR(200), primary_key=True, nullable=False),
-                Column("AGENT", types.VARCHAR(100), primary_key=True, nullable=False),
-                Column("METHOD", types.VARCHAR(12), primary_key=True, nullable=False),
-                Column("REQUEST", types.VARCHAR(120), primary_key=True, nullable=False),
-                Column("HTTP", types.VARCHAR(20), primary_key=True, nullable=False),
-                Column("RESPONSE", types.VARCHAR(10), primary_key=True, nullable=False),
-                Column("SIZE", types.VARCHAR(100), primary_key=True, nullable=False),
-                Column(
-                    "REFERRER", types.VARCHAR(100), primary_key=True, nullable=False
-                ),
-                Column("SITE", types.VARCHAR(40), primary_key=True, nullable=False),
-            )
-            Index("accessed", my_logs.c.ACCESSED)
-
-        except (
-            AttributeError,
-            exc.SQLAlchemyError,
-            exc.ProgrammingError,
-            exc.OperationalError,
-        ) as e:
-            logger.error(str(e))
-            return False
-
     if not sources_table:
-        try:
-            sources = Table(
-                SOURCES_TABLE,
-                meta,
-                Column("SOURCE", types.VARCHAR(15), primary_key=True),
-                Column("COUNTRY", types.VARCHAR(100)),
-                Column("ALPHA2", types.VARCHAR(2)),
-                Column("ALPHA3", types.VARCHAR(3)),
-                Column("DESCRIPTION", types.VARCHAR(160)),
-            )
-            Index("source", sources.c.ALPHA2)
-
-        except (
-            AttributeError,
-            exc.SQLAlchemyError,
-            exc.ProgrammingError,
-            exc.OperationalError,
-        ) as e:
-            logger.error(str(e))
-            return False
+        create_tables.sources_table(engine)
 
     if not countries_table:
-        try:
-            countries = Table(
-                COUNTRIES_TABLE,
-                meta,
-                Column("NAME", types.VARCHAR(120), primary_key=True),
-                Column("ALPHA2", types.VARCHAR(2), unique=True),
-                Column("ALPHA3", types.VARCHAR(3), unique=True),
-                Column("NUMBER", types.INT(), unique=True),
+        create_tables.countries_table(engine)
+        # populate table from tsv file
+        with engine.begin() as conn:
+            result: CursorResult[Any] = conn.execute(
+                text("SELECT EXISTS (SELECT 1 FROM countries);")
             )
-            Index("name", countries.c.NAME)
+            check: list[Any] = [r[0] for r in result]
+        if check[0] == 0:
+            populate_tables.countries()
 
-        except (
-            AttributeError,
-            exc.SQLAlchemyError,
-            exc.ProgrammingError,
-            exc.OperationalError,
-        ) as e:
-            logger.error(str(e))
-            return False
+    if not public_logs_table:
+        create_tables.log_tables(engine, PUBLIC_LOGS_TABLE)
 
-    meta.create_all(engine)
-
-    with engine.begin() as conn:
-        result: CursorResult[Any] = conn.execute(
-            text("SELECT EXISTS (SELECT 1 FROM countries);")
-        )
-        check: list[Any] = [r[0] for r in result]
-    if check[0] == 0:
-        populate_tables.countries()
+    if not soho_logs_table:
+        create_tables.log_tables(engine, SOHO_LOGS_TABLE)
 
     if create_views.all(engine):
         return True
