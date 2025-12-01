@@ -8,7 +8,7 @@ from sqlalchemy import exc, create_engine, text
 
 LOGS_TABLE = "logs"
 SOURCES_TABLE = "sources"
-
+COUNTRIES_TABLE = "countries"
 
 def whois_updates(whois_data: list[str]) -> None:
     """
@@ -31,12 +31,19 @@ def whois_updates(whois_data: list[str]) -> None:
         errors: int = 0
 
         for data in whois_data:
+            print("ALPHA2?", data[1])
             try:
+                q_alpha3 = conn.execute(text(f"""SELECT `ALPHA3` from `{my_secrets.local_dbname}`.`{COUNTRIES_TABLE}` WHERE ALPHA2 = '{data[1]}';""")).first()
+                
+                if q_alpha3:
+                    alpha3 = [a for a in q_alpha3][0] 
+                
                 conn.execute(
                     text(f"""UPDATE `{my_secrets.local_dbname}`.`{SOURCES_TABLE}`
                         SET
                             `COUNTRY` = '{data[3]}',
                             `ALPHA2` = '{data[1]}',
+                            `ALPHA3` = '{alpha3}',
                             `DESCRIPTION` = '{data[2]}'
                         WHERE `SOURCE` = '{data[0]}';""")
                 )
