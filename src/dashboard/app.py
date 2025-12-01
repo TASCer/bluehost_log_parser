@@ -58,7 +58,6 @@ app.layout = html.Div(
 
 if __name__ == "__main__":
     if db_checks.tables():
-        logger.info("Launching DASH dashboard")
         app.run(debug=False, port="8000")
     else:
         logger.error("NO DATABASE TABLES FOUND")

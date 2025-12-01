@@ -67,14 +67,14 @@ def tables() -> bool:
 
     table_check: Any = sa.inspect(engine)
 
-    logs_table: bool = table_check.has_table(PUBLIC_LOGS_TABLE, schema=f"{DB_NAME}")
-    my_logs_table: bool = table_check.has_table(SOHO_LOGS_TABLE, schema=f"{DB_NAME}")
+    public_logs_table: bool = table_check.has_table(PUBLIC_LOGS_TABLE, schema=f"{DB_NAME}")
+    soho_logs_table: bool = table_check.has_table(SOHO_LOGS_TABLE, schema=f"{DB_NAME}")
     sources_table: bool = table_check.has_table(SOURCES_TABLE, schema=f"{DB_NAME}")
     countries_table: bool = table_check.has_table(COUNTRIES_TABLE, schema=f"{DB_NAME}")
 
     meta = MetaData()
 
-    if not logs_table:
+    if not public_logs_table:
         try:
             logs = Table(
                 PUBLIC_LOGS_TABLE,
@@ -114,7 +114,7 @@ def tables() -> bool:
             logger.error(str(e))
             return False
 
-    if not my_logs_table:
+    if not soho_logs_table:
         try:
             my_logs = Table(
                 SOHO_LOGS_TABLE,
