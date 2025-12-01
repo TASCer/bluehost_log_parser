@@ -69,9 +69,6 @@ def tables() -> bool:
     sources_table: bool = table_check.has_table(SOURCES_TABLE, schema=f"{DB_NAME}")
     countries_table: bool = table_check.has_table(COUNTRIES_TABLE, schema=f"{DB_NAME}")
 
-    if not sources_table:
-        create_tables.sources_table(engine)
-
     if not countries_table:
         create_tables.countries_table(engine)
         # populate table from tab separated file
@@ -82,6 +79,9 @@ def tables() -> bool:
             check: list[Any] = [r[0] for r in result]
         if check[0] == 0:
             populate_tables.countries()
+
+    if not sources_table:
+        create_tables.sources_table(engine)
 
     if not public_logs_table:
         create_tables.log_tables(engine, PUBLIC_LOGS_TABLE)
