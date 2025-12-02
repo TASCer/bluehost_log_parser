@@ -10,6 +10,7 @@ LOGS_TABLE = "logs"
 SOURCES_TABLE = "sources"
 COUNTRIES_TABLE = "countries"
 
+
 def whois_updates(whois_data: list[str]) -> None:
     """
     Updates lookup table 'sources' entries with full country name and ASN Description from ipwhois
@@ -31,13 +32,16 @@ def whois_updates(whois_data: list[str]) -> None:
         errors: int = 0
 
         for data in whois_data:
-            print("ALPHA2?", data[1])
             try:
-                q_alpha3 = conn.execute(text(f"""SELECT `ALPHA3` from `{my_secrets.local_dbname}`.`{COUNTRIES_TABLE}` WHERE ALPHA2 = '{data[1]}';""")).first()
-                
+                q_alpha3 = conn.execute(
+                    text(
+                        f"""SELECT `ALPHA3` from `{my_secrets.local_dbname}`.`{COUNTRIES_TABLE}` WHERE ALPHA2 = '{data[1]}';"""
+                    )
+                ).first()
+
                 if q_alpha3:
-                    alpha3 = [a for a in q_alpha3][0] 
-                
+                    alpha3 = [a for a in q_alpha3][0]
+
                 conn.execute(
                     text(f"""UPDATE `{my_secrets.local_dbname}`.`{SOURCES_TABLE}`
                         SET
@@ -66,7 +70,9 @@ def asn_alphas(alpha2s: list[str]) -> list[str]:
     """
     logger: Logger = logging.getLogger(__name__)
 
-    logger.info("Getting ASN_ALPHA3 from 'countries table' (used for country name in dashboard scatter map)")
+    logger.info(
+        "Getting ASN_ALPHA3 from 'countries table' (used for country name in dashboard scatter map)"
+    )
 
     try:
         engine: Engine = create_engine(f"mysql+pymysql://{my_secrets.local_dburi}")

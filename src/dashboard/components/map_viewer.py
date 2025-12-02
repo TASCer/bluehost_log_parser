@@ -4,7 +4,6 @@ import logging
 from dash import dcc, html
 from pandas import DataFrame
 from . import ids
-from bluehost_log_parser import update_sources
 from logging import Logger
 
 
@@ -19,11 +18,6 @@ def render(data: DataFrame) -> html.Div:
     :return: html div
     """
     df: DataFrame = data.copy()
-    df_alpha2s = df["ALPHA2"].to_list()
-    # TODO rework, too slow
-    asn_alpha3s = update_sources.asn_alphas(df_alpha2s)
-    df["ALPHA3"] = asn_alpha3s
-    df = df[["ALPHA3", "ACCESSED", "COUNTRY"]]
 
     group_countries: DataFrame = df.groupby(
         ["COUNTRY", "ALPHA3"], as_index=False
@@ -41,7 +35,7 @@ def render(data: DataFrame) -> html.Div:
         projection="natural earth",
         width=1600,
         height=800,
-        title="SOURCE ACTIVITY LOCATIONS",
+        title="TOP 15 SOURCE LOCATIONS",
         fitbounds="locations",
     )
     logger.info("GEO SCATTER MAP CREATED")

@@ -2,12 +2,13 @@ from dash import dcc, html, callback
 from dash.dependencies import Input, Output
 from pandas import DataFrame
 from . import ids
-# from .dropdown_helper import to_dropdown_options
 
 
 def render(data: DataFrame) -> html.Div:
     all_referrers: list[str] = data["REFERRER"].tolist()
-    unique_referrers = sorted(set(all_referrers))
+    unique_referrers: list[str] = sorted(set(all_referrers))
+    default_referrer_idx = unique_referrers.index("-")
+    default_referrer = unique_referrers[default_referrer_idx]
 
     @callback(
         Output(ids.REFERRER_DROPDOWN, "value"),
@@ -28,9 +29,9 @@ def render(data: DataFrame) -> html.Div:
             html.H6("referrer"),
             dcc.Dropdown(
                 id=ids.REFERRER_DROPDOWN,
-                options=unique_referrers[:10],
-                value=None,
-                multi=True,
+                options=unique_referrers,
+                value=default_referrer,
+                multi=False,
             ),
             html.Button(
                 className="dropdown-button",

@@ -113,5 +113,3 @@ def sources_table(engine) -> None:
         logger.error(str(e))
 
     meta.create_all(engine)
-
-

@@ -30,7 +30,7 @@ def schema() -> bool:
     :return: True if exists/created
     """
     logger: Logger = logging.getLogger(__name__)
-    
+
     try:
         engine: Engine = create_engine(f"mysql+pymysql://{DB_URI}")
 
