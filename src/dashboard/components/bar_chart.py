@@ -12,7 +12,7 @@ logger: Logger = logging.getLogger(__name__)
 
 def render(data: DataFrame) -> html.Div:
     df: DataFrame = data.copy()
-    logger.info(f"{len(df)=}")
+    logger.info("CREATING BAR CHART")
 
     @callback(
         Output(ids.BAR_CHART, "children"),
@@ -31,9 +31,6 @@ def render(data: DataFrame) -> html.Div:
         referrers: list[str],
         sites: list[str],
     ) -> html.Div:
-        logger.debug(
-            f"YEARS: {years} MONTHS:{months} RESPONSES:{responses} REFERRERS:{referrers} SITES: {sites}"
-        )
 
         filtered_data = df.query(
             "YEAR in @years and MONTH in @months and RESPONSE in @responses and REFERRER in @referrers and SITE in @sites"
@@ -47,7 +44,6 @@ def render(data: DataFrame) -> html.Div:
             x="RESPONSE",
             color="REFERRER",
         )
-        logger.info("BAR CHART CREATED")
 
         return html.Div(dcc.Graph(figure=fig), id=ids.BAR_CHART)
 

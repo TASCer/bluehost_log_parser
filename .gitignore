@@ -22,5 +22,4 @@ src/bluehost_log_parser/input/zipped_logfiles/*
 /input/*
 
 # ETC
-map_test.py
-src/dashboard/appTEST.py
+

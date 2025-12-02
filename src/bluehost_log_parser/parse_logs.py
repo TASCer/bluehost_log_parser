@@ -1,12 +1,12 @@
-# TODO Refactor regex matches? exisying seems redundant
 import datetime as dt
 import logging
 import re
 
-from logging import Logger
-from pathlib import Path
 from bluehost_log_parser import my_secrets
 from bluehost_log_parser.schema import LogEntry
+from logging import Logger
+from pathlib import Path
+from typing import Any, Pattern, Match
 
 logger: Logger = logging.getLogger(__name__)
 
@@ -14,12 +14,12 @@ now: dt.datetime = dt.datetime.now()
 todays_date: str = now.strftime("%D").replace("/", "-")
 
 # regex for Common Log Format (CLF)
-weblog_pattern = re.compile(
+weblog_with_response: Pattern[str] = re.compile(
     r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) - - \[(.*?)\] "(.*?)" (\d+) (\d+) "(.*?)" "(.*?)" (.*?)\s'
 )
 
 # regex for unmatched above. Missing file size digits ("-").
-weblog_pattern_no_response = re.compile(
+weblog_without_response: Pattern[str] = re.compile(
     r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) - - \[(.*?)\] "(.*?)" (\d+) (-) "(.*?)" "(.*?)" (.*?)\s'
 )
 
@@ -36,43 +36,43 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
     site_sources: set = set()
 
     matches = 0
-    no_response_unmatched = 0
+    no_response_matches = 0
     unmatched = 0
 
     with open(f"{log_file}") as logs:
         for log in logs:
-            response_match = weblog_pattern.match(log)
+            response_match: Match[str] | None = weblog_with_response.match(log)
 
             if (
                 response_match
                 and response_match.group(1) != f"{my_secrets.my_bluehost_ip}"
             ):
                 matches += 1
-                user_agent_data = response_match.group(7)
+                user_agent_data: str | Any = response_match.group(7)
                 request = response_match.group(3)
 
                 try:
-                    user_agent = user_agent_data.split(" ")[0].strip()
-                    client_os = (
+                    user_agent: str | Any = user_agent_data.split(" ")[0].strip()
+                    client_os: str | Any = (
                         user_agent_data.split(" ")[1].replace("(", "").replace(";", "")
                     )
-                    client_version = user_agent_data.split(" ")[2:6]
+                    client_version_split = user_agent_data.split(" ")[2:6]
                     client_version = " ".join(
-                        [c.replace(";", "") for c in client_version]
+                        [c.replace(";", "") for c in client_version_split]
                     )
-                    client_version = "".join(
-                        [c.replace(")", "") for c in client_version]
+                    client_version: str = "".join(
+                        [c.replace(")", "") for c in client_version_split]
                     )
 
-                    client = client_os + client_version
+                    client: str | Any = client_os + client_version
 
                 except IndexError:
                     user_agent = "NA"
                     client = "NA"
 
                 method, request, http_type = request.split()
-                http_type = http_type.replace("')", "")
-                request = request.replace("'[0]", "")
+                http_type: str | Any = http_type.replace("')", "")
+                request: str | Any = request.replace("'[0]", "")
 
                 entry: LogEntry = LogEntry(
                     server_timestamp=response_match.group(2),
@@ -98,13 +98,15 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
                 site_sources.add(entry.SOURCE)
 
             else:
-                no_response_match = weblog_pattern_no_response.match(log)
+                no_response_match: Match[str] | None = weblog_without_response.match(
+                    log
+                )
 
                 if (
                     no_response_match
                     and no_response_match.group(1) != f"{my_secrets.my_bluehost_ip}"
                 ):
-                    no_response_unmatched += 1
+                    no_response_matches += 1
                     user_agent_data = no_response_match.group(7)
                     request = no_response_match.group(3)
                     try:
@@ -114,12 +116,12 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
                             .replace("(", "")
                             .replace(";", "")
                         )
-                        client_version = user_agent_data.split(" ")[2:6]
+                        client_version_split: list[str] | Any = user_agent_data.split(" ")[2:6]
                         client_version = " ".join(
-                            [c.replace(";", "") for c in client_version]
+                            [c.replace(";", "") for c in client_version_split]
                         )
                         client_version = "".join(
-                            [c.replace(")", "") for c in client_version]
+                            [c.replace(")", "") for c in client_version_split]
                         )
 
                         client = client_os + client_version
@@ -167,7 +169,7 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
     logger.info(
         f"\t\t{len(site_public_entries) + len(site_soho_entries)} SITE LOG ENTRIES"
     )
-    logger.info(f"{matches=} / {no_response_unmatched=} / {unmatched=}")
+    logger.info(f"{matches=} / {no_response_matches=} / {unmatched=}")
 
     return site_sources, site_public_entries, site_soho_entries
 

@@ -54,4 +54,7 @@ def load_weblog_data() -> pd.DataFrame:
         create_year_column,
         create_month_column,
     )
+
+    logger.info(f"{len(data)=}")
+
     return preprocessor(data)
