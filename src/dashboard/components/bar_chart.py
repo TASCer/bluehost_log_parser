@@ -31,7 +31,6 @@ def render(data: DataFrame) -> html.Div:
         referrers: list[str],
         sites: list[str],
     ) -> html.Div:
-
         filtered_data = df.query(
             "YEAR in @years and MONTH in @months and RESPONSE in @responses and REFERRER in @referrers and SITE in @sites"
         )

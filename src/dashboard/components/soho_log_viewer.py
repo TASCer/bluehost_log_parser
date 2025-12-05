@@ -7,25 +7,24 @@ from dash import html
 from logging import Logger
 from . import ids
 
-
 logger: Logger = logging.getLogger(__name__)
 
 
 def render(data: DataFrame) -> html.Div:
     df: DataFrame = data.copy()
     del df["ACCESSED"]
-
+    del df["SOURCE"]
     columnDefs = []
-    for i in df.columns:
-        if i == "YEAR" or i == "MONTH" or i == "ALPHA2":
+    for col in df.columns:
+        if col == "YEAR" or col == "MONTH" or col == "ALPHA2":
             continue
-        if i == "DATE":
-            columnDefs.append({"field": i, "filter": "agDateColumnFilter"})
-        elif i == "SIZE" or i == "YEAR":
-            columnDefs.append({"field": i, "filter": "agNumberColumnFilter"})
+        if col == "DATE":
+            columnDefs.append({"field": col, "filter": "agDateColumnFilter"})
+        elif col == "SIZE" or col == "YEAR" or col == "RESPONSE":
+            columnDefs.append({"field": col, "filter": "agNumberColumnFilter"})
 
         else:
-            columnDefs.append({"field": i})
+            columnDefs.append({"field": col})
 
     defaultColDef = {
         "resizable": True,

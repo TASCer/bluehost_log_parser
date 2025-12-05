@@ -14,7 +14,7 @@ from dashboard.data import loader
 
 dash.register_page(__name__)
 
-source: DataFrame = loader.load_weblog_data()
+source: DataFrame = loader.load_public_weblog_data()
 
 layout = html.Div(
     html.Div(

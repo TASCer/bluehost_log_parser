@@ -116,7 +116,9 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
                             .replace("(", "")
                             .replace(";", "")
                         )
-                        client_version_split: list[str] | Any = user_agent_data.split(" ")[2:6]
+                        client_version_split: list[str] | Any = user_agent_data.split(
+                            " "
+                        )[2:6]
                         client_version = " ".join(
                             [c.replace(";", "") for c in client_version_split]
                         )
