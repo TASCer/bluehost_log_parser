@@ -12,7 +12,7 @@ from dashboard.components import (
 from pandas import DataFrame
 from dashboard.data import loader
 
-dash.register_page(__name__)
+dash.register_page(__name__, path="/charts")
 
 source: DataFrame = loader.load_public_weblog_data()
 

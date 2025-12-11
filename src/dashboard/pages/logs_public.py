@@ -1,6 +1,6 @@
 import dash
 from dash import html
-from dashboard.components import public_log_viewer
+from dashboard.components import log_viewer_public
 from dashboard.data import loader
 from pandas import DataFrame
 
@@ -13,7 +13,7 @@ layout = html.Div(
     [
         html.Div(
             children=[
-                public_log_viewer.render(source),
+                log_viewer_public.render(source),
             ],
         ),
     ]
