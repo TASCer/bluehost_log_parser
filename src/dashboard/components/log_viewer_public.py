@@ -57,7 +57,7 @@ def render(data: DataFrame) -> html.Div:
     if df.shape[0] == 0:
         return html.Div("general.no_data", id=ids.PIE_CHART)
 
-    logger.info("Log Viewer AG Grid CREATED")
+    logger.info("PUBLIC log viewer AG Grid created")
 
     return html.Div(
         children=[grid],
