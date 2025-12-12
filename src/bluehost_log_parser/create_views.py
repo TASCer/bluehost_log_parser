@@ -1,5 +1,5 @@
-# TODO add view on my logs for non 200 codes
 import logging
+
 
 from bluehost_log_parser import my_secrets
 from bluehost_log_parser.insert_activity import (
@@ -16,16 +16,18 @@ DB_USER: str = f"{my_secrets.local_dbuser}"
 DB_PW: str = f"{my_secrets.local_dbpassword}"
 DB_URI: str = f"{my_secrets.local_dburi}"
 
+SOHO_LOGS_TABLE: str = "soho_logs"
 SOURCES_TABLE: str = "sources"
 VIEW_COUNTRY_ACTIVITY = "country_activity"
+VIEW_SOHO_NON_200_RESP = "soho_non_200_reponse"
 
 
-def all(engine) -> bool:
+def source_countries(engine) -> bool:
     """
-    Function creates all local database views.
+    Function creates a database view noting the count of countries accessing the websites.
 
-    :param engine: database engine
-    :return: True if all views created
+    :param engine: fatabase engine
+    :return: True if view created
     """
     with engine.connect() as conn, conn.begin():
         try:
@@ -52,6 +54,53 @@ def all(engine) -> bool:
         except exc.SQLAlchemyError as e:
             logger.critical(str(e))
             return False
+
+
+def soho_non_200_responses(engine):
+    """
+    Function creates a database view noting the count of html status codes not equal to 200.
+
+    :param engine: fatabase engine
+    :return: True if view created
+    """
+    with engine.connect() as conn, conn.begin():
+        try:
+            with engine.connect() as conn, conn.begin():
+                conn.execute(
+                    text(f"""
+
+                    CREATE OR REPLACE
+                    DEFINER = 'todd'@'%'
+                    VIEW {VIEW_SOHO_NON_200_RESP}
+                    AS
+                    SELECT
+                        *
+                    FROM
+                        `bluehost-weblogs`.`{SOHO_LOGS_TABLE}`
+                    WHERE RESPONSE !='200';""")
+                )
+
+            return True
+
+        except exc.SQLAlchemyError as e:
+            logger.critical(str(e))
+            return False
+
+
+def all(engine) -> bool:
+    """
+    Function controls the creation of all local database views.
+
+    :param engine: database engine
+    :return: True if all views created
+    """
+    source_countries_created = source_countries(engine=engine)
+    soho_logs_not_200_created = soho_non_200_responses(engine=engine)
+
+    if soho_logs_not_200_created and source_countries_created:
+        return True
+    else:
+        return False
 
 
 if __name__ == "__main__":
