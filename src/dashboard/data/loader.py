@@ -1,5 +1,3 @@
-# TODO rework database activity for use in dropdowns?
-
 import logging
 import pandas as pd
 
