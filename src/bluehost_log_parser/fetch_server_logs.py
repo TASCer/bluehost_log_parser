@@ -1,11 +1,9 @@
-import datetime as dt
 import logging
 import os
 import platform
 
 from bluehost_log_parser.utils import mailer, ssh_agent_check
 from bluehost_log_parser import my_secrets
-from datetime import date
 from logging import Logger
 from pathlib import Path
 

@@ -1,7 +1,6 @@
 import argparse
 import logging
 
-from datetime import datetime, date
 from bluehost_log_parser import db_checks
 from bluehost_log_parser import fetch_whois_data
 
@@ -80,7 +79,9 @@ def main(month: int | None, year: int | None) -> None:
     logger.info("*** STARTING BLUEHOST LOG PARSER ***")
 
     if month and year:
-        month_name_abbr: str = datetime_helper.get_monthname_short(arg_year=year, arg_month=month)
+        month_name_abbr: str = datetime_helper.get_monthname_short(
+            arg_year=year, arg_month=month
+        )
         year_2_str: str = str(year)
 
     else:
@@ -112,15 +113,16 @@ def main(month: int | None, year: int | None) -> None:
         insert_activity.update_log_tables(public_processed_logs, my_processed_logs)
 
         logger.info("***** COMPLETED WEB LOG PROCESSING *****")
-        mailer.send_mail(
-            subject="COMPLETED", text="Processing completed without incident"
-        )
+        # mailer.send_mail(
+        #     subject="COMPLETED", text="Processing completed without incident"
+        # )
 
     else:
         mailer.send_mail(
             subject="ERROR: During Processing",
             text="Error downloading from Bluehost, check log",
-            attachment_path=Path.cwd().parent.parent / f"{datetime_helper.get_logger_date()}.log",
+            attachment_path=Path.cwd().parent.parent
+            / f"{datetime_helper.get_logger_date()}.log",
         )
 
 
@@ -153,5 +155,7 @@ if __name__ == "__main__":
         main(**vars(args))
 
     else:
-        print(f"Database has an issue. Check log: '{datetime_helper.get_logger_date()}.log' in project root")
+        print(
+            f"Database has an issue. Check log: '{datetime_helper.get_logger_date()}.log' in project root"
+        )
         logger.error("Database has an issue")

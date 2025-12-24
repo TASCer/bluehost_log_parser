@@ -58,7 +58,7 @@ def render(data: DataFrame) -> html.Div:
         return html.Div("general.no_data", id=ids.PIE_CHART)
 
     logger.info("SOHO log viewer AG Grid created")
-    
+
     return html.Div(
         children=[grid],
         className="table",
