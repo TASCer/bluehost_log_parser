@@ -64,8 +64,7 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
                         [c.replace(")", "") for c in client_version_split]
                     )
 
-                    client: str | Any = client_os + client_version
-
+                    client: str | Any = client_os + client_version.replace("'", "")
                 except IndexError:
                     user_agent = "NA"
                     client = "NA"
@@ -126,7 +125,7 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
                             [c.replace(")", "") for c in client_version_split]
                         )
 
-                        client = client_os + client_version
+                        client = client_os + client_version.replace("'", "")
 
                     except IndexError:
                         user_agent = "NA"
