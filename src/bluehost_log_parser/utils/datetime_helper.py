@@ -34,8 +34,3 @@ def get_monthname_short(arg_year: int, arg_month: int) -> str:
     month_name_abbr: str = date_obj.strftime("%b")
 
     return month_name_abbr
-
-
-print(get_logger_date())
-print(get_now())
-print(get_monthname_short(2025, 10))

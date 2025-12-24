@@ -17,9 +17,6 @@ version = "1.6.0"
 source = { editable = "." }
 dependencies = [
     { name = "country-converter" },
-    { name = "dash" },
-    { name = "dash-ag-grid" },
-    { name = "dash-bootstrap-components" },
     { name = "ipwhois" },
     { name = "pymysql" },
     { name = "python-dateutil" },
@@ -44,12 +41,9 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "country-converter", specifier = ">=1.3" },
-    { name = "dash", specifier = ">=3.0.4" },
-    { name = "dash", marker = "extra == 'analysis'", specifier = ">=3.0.2" },
-    { name = "dash-ag-grid", specifier = ">=31.3.1" },
+    { name = "dash", marker = "extra == 'analysis'", specifier = ">=3.0.4" },
     { name = "dash-ag-grid", marker = "extra == 'analysis'", specifier = ">=31.3.1" },
-    { name = "dash-bootstrap-components", specifier = ">=2.0.3" },
-    { name = "dash-bootstrap-components", marker = "extra == 'analysis'", specifier = ">=2.0.0" },
+    { name = "dash-bootstrap-components", marker = "extra == 'analysis'", specifier = ">=2.0.3" },
     { name = "ipwhois", specifier = ">=1.3.0" },
     { name = "pymysql", specifier = ">=1.1.1" },
     { name = "python-dateutil", specifier = ">=2.9.0.post0" },
