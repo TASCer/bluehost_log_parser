@@ -1,5 +1,4 @@
 import argparse
-import datetime as dt
 import logging
 
 from datetime import datetime, date
@@ -9,7 +8,7 @@ from bluehost_log_parser import fetch_whois_data
 from bluehost_log_parser import fetch_server_logs
 from bluehost_log_parser import insert_activity
 from bluehost_log_parser import insert_unique_sources
-from bluehost_log_parser.utils import mailer
+from bluehost_log_parser.utils import mailer, datetime_helper
 from bluehost_log_parser import parse_logs
 from bluehost_log_parser import unzip_fetched_logs
 from bluehost_log_parser import update_sources
@@ -19,13 +18,11 @@ from pathlib import Path
 PROJECT_ROOT: Path = Path.cwd()
 LOGGER_ROOT: Path = Path.cwd().parent.parent
 
-now: date = dt.date.today()
-todays_date: str = now.strftime("%D").replace("/", "-")
 
 root_logger: Logger = logging.getLogger()
 root_logger.setLevel(logging.INFO)
 
-fh = logging.FileHandler(f"{LOGGER_ROOT}/{todays_date}.log")
+fh = logging.FileHandler(f"{LOGGER_ROOT}/{datetime_helper.get_logger_date()}.log")
 fh.setLevel(logging.DEBUG)
 
 formatter: Formatter = logging.Formatter(
@@ -83,14 +80,12 @@ def main(month: int | None, year: int | None) -> None:
     logger.info("*** STARTING BLUEHOST LOG PARSER ***")
 
     if month and year:
-        arg_date: str = f"{year}-{month}-01"
-        date_obj: datetime = dt.datetime.strptime(arg_date, "%Y-%m-%d")
-        month_name_abbr: str = date_obj.strftime("%b")
+        month_name_abbr: str = datetime_helper.get_monthname_short(arg_year=year, arg_month=month)
         year_2_str: str = str(year)
 
     else:
-        month_name_abbr: str = now.strftime("%b")
-        year_2_str: str = str(now.year)
+        month_name_abbr: str = datetime_helper.get_now().strftime("%b")
+        year_2_str: str = str(datetime_helper.get_now().year)
 
     logs_fetched: bool = fetch_server_logs.secure_copy(
         REMOTE_LOGFILE_BASE_PATHS, LOCAL_ZIPPED_PATH, month_name_abbr, year_2_str
@@ -125,7 +120,7 @@ def main(month: int | None, year: int | None) -> None:
         mailer.send_mail(
             subject="ERROR: During Processing",
             text="Error downloading from Bluehost, check log",
-            attachment_path=Path.cwd().parent.parent / f"{todays_date}.log",
+            attachment_path=Path.cwd().parent.parent / f"{datetime_helper.get_logger_date()}.log",
         )
 
 
@@ -143,7 +138,7 @@ if __name__ == "__main__":
             "-y",
             "--year",
             type=int,
-            choices=[y for y in range(2019, now.year + 1)],
+            choices=[y for y in range(2019, datetime_helper.get_now().year + 1)],
             help="Enter full year i.e: 2022",
         )
         args = parser.parse_args()
@@ -158,5 +153,5 @@ if __name__ == "__main__":
         main(**vars(args))
 
     else:
-        print(f"Database has an issue. Check log: '{todays_date}.log' in project root")
+        print(f"Database has an issue. Check log: '{datetime_helper.get_logger_date()}.log' in project root")
         logger.error("Database has an issue")

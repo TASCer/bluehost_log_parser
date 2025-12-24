@@ -11,8 +11,6 @@ from pathlib import Path
 
 logger: Logger = logging.getLogger(__name__)
 
-now: date = dt.date.today()
-
 
 # TODO remove old files or specify via date. Check if June & July get parsed
 def secure_copy(
