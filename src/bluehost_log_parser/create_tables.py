@@ -23,10 +23,10 @@ meta = MetaData()
 
 def log_tables(engine: Engine, log_table_name) -> None:
     """
-    Function creates database tables consisting of webserver logs.
+    Function creates database tables consisting of webserver log entries.
 
     :param engine: database engine
-    :param log_table_name: log table name
+    :param log_table_name: database table name
     :return: None
     """
     try:

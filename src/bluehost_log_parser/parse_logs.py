@@ -18,7 +18,7 @@ weblog_with_response: Pattern[str] = re.compile(
     r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) - - \[(.*?)\] "(.*?)" (\d+) (\d+) "(.*?)" "(.*?)" (.*?)\s'
 )
 
-# regex for unmatched above. Missing file size digits ("-").
+# regex for unmatched above. Missing response size ("-").
 weblog_without_response: Pattern[str] = re.compile(
     r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) - - \[(.*?)\] "(.*?)" (\d+) (-) "(.*?)" "(.*?)" (.*?)\s'
 )
