@@ -17,7 +17,6 @@ from pathlib import Path
 PROJECT_ROOT: Path = Path.cwd()
 LOGGER_ROOT: Path = Path.cwd().parent.parent
 
-
 root_logger: Logger = logging.getLogger()
 root_logger.setLevel(logging.INFO)
 
@@ -46,7 +45,6 @@ Path(LOCAL_UNZIPPED_PATH).mkdir(parents=True, exist_ok=True)
 REMOTE_LOGFILE_BASE_PATHS: list = [
     REMOTE_TASCS_BASE_PATH,
     REMOTE_HOA_BASE_PATH,
-    REMOTE_ROADSPIES_BASE_PATH,
 ]
 
 
