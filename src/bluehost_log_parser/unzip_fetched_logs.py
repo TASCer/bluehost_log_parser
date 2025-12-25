@@ -34,24 +34,22 @@ def process(
         for name in files:
             (root / name).unlink()
 
-    local_files: list = []
+    local_files: list[Path] = []
 
     for zipped_file in zipped_files.iterdir():
+        local_file_name: str = zipped_file.with_suffix("").name
+        unzipped_file_path: Path = unzipped_path / local_file_name
         try:
-            local_file_name: str | None = zipped_file.with_suffix("").name
-            unzipped_file_path = unzipped_path / local_file_name
             with gzip.open(f"{zipped_file}", "rb") as zipped_file:
                 with open(
                     unzipped_file_path,
                     "wb",
                 ) as unzipped_file:
                     unzipped_file.write(zipped_file.read())
+            local_files.append(unzipped_file_path)
 
         except (BaseException, FileNotFoundError) as e:
             logger.critical(f"{e}")
-            local_file_name: None = None
-
-        local_files.append(unzipped_file_path)
 
     logger.info(">>> COMPLETED: UNZIPPING / SAVING DOWNLOADED WEBLOGS >>>")
 
