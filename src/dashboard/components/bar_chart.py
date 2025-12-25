@@ -28,7 +28,7 @@ def render(data: DataFrame) -> html.Div:
         years: list[str],
         months: list[str],
         responses: list[str],
-        referrers: list[str],
+        referrers: None,
         sites: list[str],
     ) -> html.Div:
         filtered_data = df.query(
@@ -41,7 +41,7 @@ def render(data: DataFrame) -> html.Div:
         fig = px.histogram(
             filtered_data,
             x="RESPONSE",
-            color="REFERRER",
+            color="SITE",
         )
 
         return html.Div(dcc.Graph(figure=fig), id=ids.BAR_CHART)
