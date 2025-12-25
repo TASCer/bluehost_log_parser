@@ -10,7 +10,6 @@ from pathlib import Path
 logger: Logger = logging.getLogger(__name__)
 
 
-# TODO remove old files or specify via date. Check if June & July get parsed
 def secure_copy(
     remote_log_paths: list[str],
     local_zipped_path: Path,
