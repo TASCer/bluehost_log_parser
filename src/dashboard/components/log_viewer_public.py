@@ -1,6 +1,7 @@
 # https://github.com/Coding-with-Adam/Dash-by-Plotly/blob/master/Ag-Grid/introduction/ag-grid-intro2.py
 import dash_ag_grid as dag
 import logging
+import pandas as pd
 
 from pandas import DataFrame
 from dash import html
@@ -12,6 +13,7 @@ logger: Logger = logging.getLogger(__name__)
 
 def render(data: DataFrame) -> html.Div:
     df: DataFrame = data.copy()
+    df["RESPONSE"] = pd.to_numeric(df["RESPONSE"])
     del df["ACCESSED"]
 
     columnDefs = []
