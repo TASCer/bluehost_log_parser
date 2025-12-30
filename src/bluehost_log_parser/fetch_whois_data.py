@@ -39,8 +39,11 @@ def get_country(source_ips: list) -> list[str]:
             http_errors += 1
             if "&" in str(http_err):
                 http: str = str(http_err).split("&")[0]
-                error: str = http.split("error code")[1].replace(".", "")
-
+                try:
+                    error: str = http.split("error code")[1].replace(".", "")
+                except IndexError:
+                    http = str(http_err)
+                    print(http)
             else:
                 http: str = str(http_err).split()[0]
                 error: str = http[-1]
