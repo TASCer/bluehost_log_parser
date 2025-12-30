@@ -67,7 +67,7 @@ def database_check() -> bool:
         return False
 
 
-def main(month: int | None, year: int | None) -> None:
+def main(month: int | None = None, year: int | None = None) -> None:
     """
     Function controls the application.
 
@@ -143,15 +143,18 @@ if __name__ == "__main__":
         )
         args = parser.parse_args()
 
-        if all(vars(args).values()):
+        if not all(vars(args).values()):
+            main()
+
+        elif all(vars(args).values()):
             main(**vars(args))
 
-        elif any(vars(args).values()):
+        else:
             print(f"Need both -m month AND -y year. Args passed: {vars(args)}")
             logger.error(f"Need both -m month AND -y year. Args passed: {vars(args)}")
 
-        main(**vars(args))
 
+  
     else:
         print(
             f"Database has an issue. Check log: '{datetime_helper.get_logger_date()}.log' in project root"
