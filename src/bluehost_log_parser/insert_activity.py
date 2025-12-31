@@ -28,7 +28,7 @@ def parse_timestamp(ts: str) -> datetime:
     return ts_parsed
 
 
-def my_log_updates(db_engine, soho_logs):
+def soho_log_updates(db_engine, soho_logs):
     """
     Function inserts latest LogEntrys into the my_logs table.
 
@@ -58,7 +58,7 @@ def public_log_updates(db_engine, public_logs):
     Function inserts latest LogEntrys into the logs table.
 
     :param db_engine: database engine
-    :param soho_logs: list of LogEntrys coming from PUBLIC clients
+    :param public_logs: list of LogEntrys coming from PUBLIC clients
     """
     with db_engine.connect() as conn, conn.begin():
         for log in public_logs:
@@ -70,6 +70,7 @@ def public_log_updates(db_engine, public_logs):
                         f"""INSERT IGNORE INTO {PUBLIC_LOGS_TABLE} VALUES('{ts_parsed}', '{log.SOURCE}', '{log.CLIENT}', '{log.AGENT}', '{log.METHOD}', '{log.REQUEST}', '{log.HTTP}', '{log.RESPONSE}', '{log.SIZE}', '{log.REFERRER}', '{log.SITE}');"""
                     )
                 )
+                
             except (
                 exc.SQLAlchemyError,
                 exc.ProgrammingError,
@@ -83,14 +84,14 @@ def public_log_updates(db_engine, public_logs):
     )
 
 
-def update_log_tables(log_entries: list, my_log_entries: list) -> None:
+def update_log_tables(public_log_entries: list, soho_log_entries: list) -> None:
     """
     Function updates database tables with latest parsed logs.
 
     :param log_entries: all logs not from my SOHO
     :param my_log_entries: all logs from SOHO
     """
-    logger: Logger = logging.getLogger(__name__)
+    
     try:
         engine: Engine = create_engine(f"mysql+pymysql://{my_secrets.local_dburi}")
 
@@ -98,5 +99,5 @@ def update_log_tables(log_entries: list, my_log_entries: list) -> None:
         logger.critical(str(e))
         exit()
 
-    public_log_updates(engine, log_entries)
-    my_log_updates(engine, my_log_entries)
+    public_log_updates(engine, public_log_entries)
+    soho_log_updates(engine, soho_log_entries)
