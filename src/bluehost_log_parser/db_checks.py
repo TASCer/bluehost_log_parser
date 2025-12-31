@@ -36,7 +36,7 @@ def schema() -> bool:
 
         if not database_exists(engine.url):
             create_database(engine.url)
-            logger.info(f"Database {DB_NAME} did not exist and has been created.")
+            logger.info(f"Database '{DB_NAME}' did not exist and has been created.")
 
     except (exc.SQLAlchemyError, exc.OperationalError) as e:
         logger.error(e)

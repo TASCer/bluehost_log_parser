@@ -41,7 +41,7 @@ def secure_copy(
                 )
 
                 if copy_command == 0:
-                    logger.info(f"\t{remote_zipped_filename.split('/')[1]}")
+                    logger.info(f"\t'{remote_zipped_filename.split('/')[1]}'")
                 else:
                     logger.critical(
                         "scp issue: BAD CREDS or ssh-agent not running/loaded with key"

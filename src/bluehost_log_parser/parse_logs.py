@@ -202,7 +202,7 @@ def start_processing(
 
     for p in log_paths:
         if month_name in p.name and year in p.name:
-            logger.info(f"Parsing {p.name} logs")
+            logger.info(f"Parsing '{p.name}' logs")
             sources, public_logs, soho_logs = process_log(p)
             all_sources.extend(sources)
             all_public_log_entries.extend(public_logs)
@@ -213,6 +213,6 @@ def start_processing(
             f"\tLOG ENTRIES OVER 120 characers (all-sites) = {all_long_files}"
         )
 
-    logger.info("PARSING COMPLETED")
+    logger.info(f"PARSING COMPLETED: {len(all_public_log_entries) + len(all_soho_log_entries)} entries parsed.")
 
     return all_sources, all_public_log_entries, all_soho_log_entries
