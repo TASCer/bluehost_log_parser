@@ -15,7 +15,8 @@ def render(data: DataFrame) -> html.Div:
     df: DataFrame = data.copy()
     df["RESPONSE"] = pd.to_numeric(df["RESPONSE"])
     del df["ACCESSED"]
-
+    del df["ALPHA3"]
+    
     columnDefs = []
     for col in df.columns:
         if col == "YEAR" or col == "MONTH" or col == "ALPHA2":
