@@ -153,8 +153,6 @@ if __name__ == "__main__":
             print(f"Need both -m month AND -y year. Args passed: {vars(args)}")
             logger.error(f"Need both -m month AND -y year. Args passed: {vars(args)}")
 
-
-  
     else:
         print(
             f"Database has an issue. Check log: '{datetime_helper.get_logger_date()}.log' in project root"

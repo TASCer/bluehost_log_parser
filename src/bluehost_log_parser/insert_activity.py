@@ -70,7 +70,7 @@ def public_log_updates(db_engine, public_logs):
                         f"""INSERT IGNORE INTO {PUBLIC_LOGS_TABLE} VALUES('{ts_parsed}', '{log.SOURCE}', '{log.CLIENT}', '{log.AGENT}', '{log.METHOD}', '{log.REQUEST}', '{log.HTTP}', '{log.RESPONSE}', '{log.SIZE}', '{log.REFERRER}', '{log.SITE}');"""
                     )
                 )
-                
+
             except (
                 exc.SQLAlchemyError,
                 exc.ProgrammingError,
@@ -91,7 +91,7 @@ def update_log_tables(public_log_entries: list, soho_log_entries: list) -> None:
     :param log_entries: all logs not from my SOHO
     :param my_log_entries: all logs from SOHO
     """
-    
+
     try:
         engine: Engine = create_engine(f"mysql+pymysql://{my_secrets.local_dburi}")
 

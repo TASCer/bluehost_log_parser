@@ -213,6 +213,8 @@ def start_processing(
             f"\tLOG ENTRIES OVER 120 characers (all-sites) = {all_long_files}"
         )
 
-    logger.info(f"PARSING COMPLETED: {len(all_public_log_entries) + len(all_soho_log_entries)} entries parsed.")
+    logger.info(
+        f"PARSING COMPLETED: {len(all_public_log_entries) + len(all_soho_log_entries)} entries parsed."
+    )
 
     return all_sources, all_public_log_entries, all_soho_log_entries
