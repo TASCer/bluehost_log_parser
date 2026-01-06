@@ -1,3 +1,5 @@
+# TODO add link to analysis dash site. Need to move this to Docker and run dashboard continously and log update daily.
+
 import argparse
 import logging
 
