@@ -1,12 +1,12 @@
 from dash import dcc, html, callback
 from dash.dependencies import Input, Output
-from pandas import DataFrame
+from pandas import DataFrame, Series
 from . import ids
 
 
 def render(source: DataFrame) -> html.Div:
     df: DataFrame = source.copy()
-    all_years: list[str] = df["YEAR"]
+    all_years: Series = df["YEAR"]
     unique_years: list[str] = sorted(set(all_years), key=int)
 
     @callback(
