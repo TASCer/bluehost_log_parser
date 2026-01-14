@@ -43,8 +43,6 @@ def render(data: DataFrame) -> html.Div:
         rowData=df.to_dict("records"),
         defaultColDef=defaultColDef,
         columnSize="responsiveSizeToFit",
-        
-
         dashGridOptions={
             "rowSelection": "multiple",
             "suppressRowClickSelection": False,
