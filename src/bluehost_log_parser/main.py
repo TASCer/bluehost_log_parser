@@ -113,9 +113,9 @@ def main(month: int | None = None, year: int | None = None) -> None:
         insert_activity.update_log_tables(public_processed_logs, my_processed_logs)
 
         logger.info("***** COMPLETED WEB LOG PROCESSING *****")
-        # mailer.send_mail(
-        #     subject="COMPLETED", text="Processing completed without incident"
-        # )
+        mailer.send_mail(
+            subject="COMPLETED", text="Processing completed without incident"
+        )
 
     else:
         mailer.send_mail(
