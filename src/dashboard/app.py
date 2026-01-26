@@ -4,7 +4,7 @@ import datetime as dt
 import logging
 
 from bluehost_log_parser.main import LOGGER_ROOT
-from bluehost_log_parser import db_checks
+from bluehost_log_parser.database import db_checks
 from dash import Dash, dcc, html
 from logging import Logger, Formatter
 
