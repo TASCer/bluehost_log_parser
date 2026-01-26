@@ -5,11 +5,11 @@ import logging
 from datetime import datetime
 from logging import Logger
 from pathlib import Path
-
+from bluehost_log_parser.utils.datetime_helper import get_monthname_short
 logger: Logger = logging.getLogger(__name__)
 
 now: datetime = dt.datetime.now()
-
+print(now.month, now.year, type(now.month), type(now.year))
 unzipped_paths: set = set()
 
 
@@ -31,13 +31,22 @@ def process(
     logger.info("<<< STARTED: UNZIPPING / SAVING DOWNLOADED WEBLOGS <<<")
 
     for root, _, files in unzipped_path.walk(top_down=False):
+        current_year = now.year
+        current_month = now.month
+        current_month_abbr = get_monthname_short(arg_month=current_month, arg_year=current_year)
         for name in files:
-            (root / name).unlink()
+            if current_month_abbr and str(current_year) in name:
+                (root / name).unlink()
 
     local_files: list[Path] = []
 
     for zipped_file in zipped_files.iterdir():
-        local_file_name: str = zipped_file.with_suffix("").name
+        if zipped_file.name.startswith("cag"):
+            new_name = "tascs.net"
+            local_file_name: str = zipped_file.with_suffix("").name.replace('cag.bis.mybluehost.me', "tascs.net")
+        else:
+            local_file_name: str = zipped_file.with_suffix("").name
+   
         unzipped_file_path: Path = unzipped_path / local_file_name
         try:
             with gzip.open(f"{zipped_file}", "rb") as zipped_file:

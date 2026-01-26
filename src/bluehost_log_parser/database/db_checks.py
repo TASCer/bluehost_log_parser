@@ -1,10 +1,20 @@
 import logging
 import sqlalchemy as sa
 
-from bluehost_log_parser import create_tables
-from bluehost_log_parser.insert_activity import SOHO_LOGS_TABLE, PUBLIC_LOGS_TABLE
-from bluehost_log_parser.create_tables import SOURCES_TABLE, COUNTRIES_TABLE
-from bluehost_log_parser import my_secrets, populate_tables, create_views
+from bluehost_log_parser import my_secrets
+from bluehost_log_parser.database.insert_activity import (
+    SOHO_LOGS_TABLE,
+    PUBLIC_LOGS_TABLE,
+)
+from bluehost_log_parser.database.setup.create_tables import (
+    SOURCES_TABLE,
+    COUNTRIES_TABLE,
+)
+from bluehost_log_parser.database.setup import (
+    populate_tables,
+    create_tables,
+    create_views,
+)
 from logging import Logger
 from sqlalchemy import (
     create_engine,
@@ -71,7 +81,6 @@ def tables() -> bool:
 
     if not countries_table:
         create_tables.countries_table(engine)
-        # populate table from tab separated file
         with engine.begin() as conn:
             result: CursorResult[Any] = conn.execute(
                 text("SELECT EXISTS (SELECT 1 FROM countries);")

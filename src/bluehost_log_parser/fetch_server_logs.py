@@ -55,22 +55,23 @@ def secure_copy(
                     text="check ssh agent process and key",
                 )
                 exit()
+    logger.info("COMPLETED secure download of remote website logfiles:")
 
-        # if not platform.system() == "Linux":
-        # import subprocess
+    # if not platform.system() == "Linux":
+    # import subprocess
 
-        #     try:
-        # copy_command = f"pscp -batch {my_secrets.user}@{my_secrets.my_bluehost_ip}:{remote_zipped_filename} {local_zipped_path}"
-        # response = subprocess.check_output(executable=copy_command)
-        # result: str = response.decode(encoding="utf-8")
-        # logger.info(result.strip())
+    #     try:
+    # copy_command = f"pscp -batch {my_secrets.user}@{my_secrets.my_bluehost_ip}:{remote_zipped_filename} {local_zipped_path}"
+    # response = subprocess.check_output(executable=copy_command)
+    # result: str = response.decode(encoding="utf-8")
+    # logger.info(result.strip())
 
-        # except subprocess.CalledProcessError as other_err:
-        #     logger.error(other_err)
+    # except subprocess.CalledProcessError as other_err:
+    #     logger.error(other_err)
 
-        # except FileNotFoundError as file_e:
-        #     logger.critical(f"File not found - {file_e}")
+    # except FileNotFoundError as file_e:
+    #     logger.critical(f"File not found - {file_e}")
 
-        #     continue
+    #     continue
 
     return True

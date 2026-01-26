@@ -2,7 +2,7 @@ import logging
 
 
 from bluehost_log_parser import my_secrets
-from bluehost_log_parser.insert_activity import (
+from bluehost_log_parser.database.insert_activity import (
     PUBLIC_LOGS_TABLE,
 )  # see TODO , SOHO_LOGS_TABLE
 from logging import Logger

@@ -3,16 +3,16 @@
 import argparse
 import logging
 
-from bluehost_log_parser import db_checks
+from bluehost_log_parser.database import db_checks
 from bluehost_log_parser import fetch_whois_data
 
 from bluehost_log_parser import fetch_server_logs
-from bluehost_log_parser import insert_activity
-from bluehost_log_parser import insert_unique_sources
+from bluehost_log_parser.database import insert_activity
+from bluehost_log_parser.database import insert_unique_sources
 from bluehost_log_parser.utils import mailer, datetime_helper
 from bluehost_log_parser import parse_logs
 from bluehost_log_parser import unzip_fetched_logs
-from bluehost_log_parser import update_sources
+from bluehost_log_parser.database import update_sources
 from logging import Logger, Formatter
 from pathlib import Path
 
@@ -61,7 +61,7 @@ def database_check() -> bool:
     have_tables: bool = db_checks.tables()
 
     if have_database and have_tables:
-        logger.info("\t\t+ONLINE+")
+        logger.info("\t\t*ONLINE - Starting*")
         return True
 
     else:
@@ -76,8 +76,6 @@ def main(month: int | None = None, year: int | None = None) -> None:
     :param month: optional month number to process another month's log
     :param year: optional year number to process another month's log
     """
-    logger.info("*** STARTING BLUEHOST LOG PARSER ***")
-
     if month and year:
         month_name_abbr: str = datetime_helper.get_monthname_short(
             arg_year=year, arg_month=month
@@ -103,27 +101,27 @@ def main(month: int | None = None, year: int | None = None) -> None:
 
         unique_sources: set = set(source_ips)
         no_country_name: list[str] = insert_unique_sources.inserts(unique_sources)
-        if no_country_name:
-            results: list[str] = fetch_whois_data.get_country(no_country_name)
-            update_sources.whois_updates(results)
+        # if no_country_name:
+        #     results: list[str] = fetch_whois_data.get_country(no_country_name)
+        #     update_sources.whois_updates(results)
 
-        else:
-            logger.info("Whois Information Not Needed.")
+        # else:
+        #     logger.info("Whois Information Not Needed.")
 
         insert_activity.update_log_tables(public_processed_logs, my_processed_logs)
 
         logger.info("***** COMPLETED WEB LOG PROCESSING *****")
-        mailer.send_mail(
-            subject="COMPLETED", text="Processing completed without incident"
-        )
+    #     mailer.send_mail(
+    #         subject="COMPLETED", text="Processing completed without incident"
+    #     )
 
-    else:
-        mailer.send_mail(
-            subject="ERROR: During Processing",
-            text="Error downloading from Bluehost, check log",
-            attachment_path=Path.cwd().parent.parent
-            / f"{datetime_helper.get_logger_date()}.log",
-        )
+    # else:
+    #     mailer.send_mail(
+    #         subject="ERROR: During Processing",
+    #         text="Error downloading from Bluehost, check log",
+    #         attachment_path=Path.cwd().parent.parent
+    #         / f"{datetime_helper.get_logger_date()}.log",
+    #     )
 
 
 if __name__ == "__main__":

@@ -7,7 +7,9 @@ from logging import Logger
 
 logger: Logger = logging.getLogger(__name__)
 
-COUNTRY_SEED_DATA: Path = Path.cwd().parent.parent / "misc" / "countries.txt"
+COUNTRY_SEED_DATA: Path = (
+    Path.cwd() / "database" / "setup" / "seed_data" / "countries.txt"
+)
 
 
 def countries() -> None:
