@@ -1,6 +1,7 @@
 import logging
 
 from bluehost_log_parser import my_secrets
+from bluehost_log_parser.utils.mailer import send_mail
 from datetime import datetime
 from dateutil.parser import parse
 from logging import Logger
@@ -60,6 +61,8 @@ def public_log_updates(db_engine, public_logs):
     :param db_engine: database engine
     :param public_logs: list of LogEntrys coming from PUBLIC clients
     """
+    suspect_requests = 0
+
     with db_engine.connect() as conn, conn.begin():
         for log in public_logs:
             ts_parsed: datetime = parse_timestamp(log.server_timestamp)
@@ -77,11 +80,14 @@ def public_log_updates(db_engine, public_logs):
                 exc.DataError,
                 exc.InvalidRequestError,
             ) as e:
-                logger.error(e)
+                suspect_requests +=1
+                logger.error(f"{log.SOURCE}-{ts_parsed}-{e.code}")
 
     logger.info(
         f"{len(public_logs)} log entries inserted into table: '{PUBLIC_LOGS_TABLE}'"
     )
+    # if suspect_requests > 0:
+    #     send_mail(f"suspect web requests = {str(suspect_requests)}", "check log" )
 
 
 def update_log_tables(public_log_entries: list, soho_log_entries: list) -> None:
