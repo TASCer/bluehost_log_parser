@@ -133,6 +133,8 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
     unmatched = 0
 
     with open(f"{log_file}") as logs:
+        site_matched = []
+        site_unmatched = []
         for log in logs:
             matched_response: Match[str] | None = weblog_with_response.match(log)
             unmatched_response: Match[str] | None = weblog_without_response.match(log)
@@ -155,14 +157,7 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
                     logger.warning(f"still no re match: {log}")
                     unmatched += 1
 
-    logger.info(
-        f"\t\t{len(site_public_entries)} 'PUBLIC' logs with {len(set(site_sources))} unique source ip"
-    )
-    logger.info(f"\t\t{len(site_soho_entries)} 'SOHO' logs")
-    logger.info(
-        f"\t\t{len(site_public_entries) + len(site_soho_entries)} SITE LOG ENTRIES"
-    )
-    logger.info(f"\t\t{matches=} / {unmatched_responsees=} / {unmatched=}")
+        logger.info(f"\t\t{matches=} {unmatched_responsees=} {unmatched=}")
 
     return site_sources, site_public_entries, site_soho_entries
 
@@ -183,6 +178,7 @@ def start_processing(
     all_soho_log_entries: list = []
     all_sources: list = []
     all_long_files = 0
+
     if year_2_str and month_name_abbr:
         month_name: str = month_name_abbr
         year: str = year_2_str
@@ -191,14 +187,25 @@ def start_processing(
         month_name: str = now.strftime("%b")
         year: str = str(now.year)
 
-    for p in log_paths:
-        if month_name in p.name and year in p.name:
-            logger.info(f"Parsing '{p.name}' logs")
-            sources, public_logs, soho_logs = process_log(p)
+    for site in log_paths:
+        if month_name in site.name and year in site.name:
+            logger.info(f"Parsing '{site.name}' logs")
+            sources, public_logs, soho_logs = process_log(site)
             all_sources.extend(sources)
             all_public_log_entries.extend(public_logs)
             all_soho_log_entries.extend(soho_logs)
-
+            
+            logger.info(
+                f"\t\t{len(public_logs)} 'PUBLIC' logs with {len(sources)} unique source ip"
+            )
+            logger.info(f"\t\t{len(soho_logs)} 'SOHO' logs")
+            logger.info(
+                f"\t\t{len(site_public_entries) + len(site_soho_entries)} SITE LOG ENTRIES"
+            )
+        site_sources.clear()
+        site_public_entries.clear()
+        site_soho_entries.clear()
+        
     if all_long_files > 0:
         logger.warning(
             f"\tLOG ENTRIES OVER 120 characers (all-sites) = {all_long_files}"
