@@ -3,6 +3,7 @@ from pathlib import Path
 
 SAMPLE_LOG = Path(__file__).parent / "misc" / "sample_unzipped_logfile"
 
+
 @pytest.fixture(scope="session")
 def test_fetch_logs() -> list:
     print(SAMPLE_LOG.parts)
