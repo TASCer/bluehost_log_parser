@@ -65,6 +65,7 @@ def public_log_updates(db_engine, public_logs):
 
     with db_engine.connect() as conn, conn.begin():
         for log in public_logs:
+            public_count: int = len(public_logs)
             ts_parsed: datetime = parse_timestamp(log.server_timestamp)
 
             try:
@@ -81,13 +82,14 @@ def public_log_updates(db_engine, public_logs):
                 exc.InvalidRequestError,
             ) as e:
                 suspect_requests +=1
+                public_count -= 1
                 logger.error(f"{log.SOURCE}-{ts_parsed}-{e.code}")
 
     logger.info(
-        f"{len(public_logs)} log entries inserted into table: '{PUBLIC_LOGS_TABLE}'"
+        f"{public_count} log entries inserted into table: '{PUBLIC_LOGS_TABLE}'"
     )
-    # if suspect_requests > 0:
-    #     send_mail(f"suspect web requests = {str(suspect_requests)}", "check log" )
+    if suspect_requests > 0:
+        send_mail(f"suspect web requests = {str(suspect_requests)}", "check log" )
 
 
 def update_log_tables(public_log_entries: list, soho_log_entries: list) -> None:
