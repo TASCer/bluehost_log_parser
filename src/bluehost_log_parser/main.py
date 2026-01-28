@@ -101,27 +101,27 @@ def main(month: int | None = None, year: int | None = None) -> None:
 
         unique_sources: set = set(source_ips)
         no_country_name: list[str] = insert_unique_sources.inserts(unique_sources)
-        # if no_country_name:
-        #     results: list[str] = fetch_whois_data.get_country(no_country_name)
-        #     update_sources.whois_updates(results)
+        if no_country_name:
+            results: list[str] = fetch_whois_data.get_country(no_country_name)
+            update_sources.whois_updates(results)
 
-        # else:
-        #     logger.info("Whois Information Not Needed.")
+        else:
+            logger.info("Whois Information Not Needed.")
 
         insert_activity.update_log_tables(public_processed_logs, my_processed_logs)
 
         logger.info("***** COMPLETED WEB LOG PROCESSING *****")
-    #     mailer.send_mail(
-    #         subject="COMPLETED", text="Processing completed without incident"
-    #     )
+        mailer.send_mail(
+            subject="COMPLETED", text="Processing completed without incident"
+        )
 
-    # else:
-    #     mailer.send_mail(
-    #         subject="ERROR: During Processing",
-    #         text="Error downloading from Bluehost, check log",
-    #         attachment_path=Path.cwd().parent.parent
-    #         / f"{datetime_helper.get_logger_date()}.log",
-    #     )
+    else:
+        mailer.send_mail(
+            subject="ERROR: During Processing",
+            text="Error downloading from Bluehost, check log",
+            attachment_path=Path.cwd().parent.parent
+            / f"{datetime_helper.get_logger_date()}.log",
+        )
 
 
 if __name__ == "__main__":

@@ -30,7 +30,7 @@ site_sources: set = set()
 
 def parse_matched(matched_response):
     user_agent_data: str | Any = matched_response.group(7)
-    request = matched_response.group(3)
+    request: str | Any = matched_response.group(3)
 
     try:
         user_agent: str | Any = user_agent_data.split(" ")[0].strip()
@@ -77,14 +77,16 @@ def parse_matched(matched_response):
     site_sources.add(entry.SOURCE)
 
 
-def parse_unmatched(unmatched_response):
+def parse_unmatched(unmatched_response) -> None:
     user_agent_data = unmatched_response.group(7)
     request = unmatched_response.group(3)
     try:
         user_agent = user_agent_data.split(" ")[0].strip()
         client_os = user_agent_data.split(" ")[1].replace("(", "").replace(";", "")
         client_version_split: list[str] | Any = user_agent_data.split(" ")[2:6]
-        client_version = " ".join([c.replace(";", "") for c in client_version_split])
+        client_version: str = " ".join(
+            [c.replace(";", "") for c in client_version_split]
+        )
         client_version = "".join([c.replace(")", "") for c in client_version_split])
 
         client = client_os + client_version
@@ -133,8 +135,6 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
     unmatched = 0
 
     with open(f"{log_file}") as logs:
-        site_matched = []
-        site_unmatched = []
         for log in logs:
             matched_response: Match[str] | None = weblog_with_response.match(log)
             unmatched_response: Match[str] | None = weblog_without_response.match(log)
@@ -194,7 +194,7 @@ def start_processing(
             all_sources.extend(sources)
             all_public_log_entries.extend(public_logs)
             all_soho_log_entries.extend(soho_logs)
-            
+
             logger.info(
                 f"\t\t{len(public_logs)} 'PUBLIC' logs with {len(sources)} unique source ip"
             )
@@ -205,14 +205,14 @@ def start_processing(
         site_sources.clear()
         site_public_entries.clear()
         site_soho_entries.clear()
-        
+
     if all_long_files > 0:
         logger.warning(
             f"\tLOG ENTRIES OVER 120 characers (all-sites) = {all_long_files}"
         )
 
     logger.info(
-        f"PARSING COMPLETED: {len(all_public_log_entries) + len(all_soho_log_entries)} entries parsed."
+        f"PARSING COMPLETED: {len(all_public_log_entries) + len(all_soho_log_entries)} entries parsed"
     )
 
     return all_sources, all_public_log_entries, all_soho_log_entries
