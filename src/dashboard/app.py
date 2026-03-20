@@ -1,16 +1,19 @@
+# TODO add cache https://github.com/AnnMarieW/dash-multi-page-app-demos/blob/main/multi_page_store/app.py
 import dash
 import dash_bootstrap_components as dbc
 import datetime as dt
 import logging
 
+from datetime import date
 from bluehost_log_parser.main import LOGGER_ROOT
 from bluehost_log_parser.database import db_checks
 from dash import Dash, dcc, html
+from flask_caching import Cache
 from logging import Logger, Formatter
 
 
-now = dt.date.today()
-todays_date: str = now.strftime("%D").replace("/", "-")
+# now: date = dt.date.today()
+todays_date: str =  dt.date.today().strftime("%D").replace("/", "-")
 
 logger: Logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -36,9 +39,13 @@ app = Dash(
     use_pages=True,
 )
 
+# cache = Cache(app.server, config={"CACHE_TYPE": "filesystem", "CACHE_DIR": "./data/flask_cache"})
+
 
 app.layout = html.Div(
     [
+        dcc.Store(id="store", data=[]),
+        html.H1("Multi Page App Demo: Sharing data between pages"),
         html.Div(
             [
                 html.Div(
