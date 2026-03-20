@@ -114,14 +114,15 @@ def get_country(source_ips: list) -> list[str]:
         whois_results.append([ip, asn_alpha2, asn_description, country_name])
 
     stop_time: datetime = dt.datetime.now(timezone("UTC"))
-    elapsed_time: int = int((stop_time - start_time).total_seconds())
+    time_delta: int = int((stop_time - start_time).total_seconds())
+    elapsed_minutes, elapsed_seconds = divmod(time_delta, 60)
 
     logger.info(
-        f"\t\tqueried: {len(source_ips)} source country names and descriptions in {elapsed_time} seconds."
+        f"\t\tfetched: {len(source_ips)} source information {elapsed_minutes=}:{elapsed_seconds=}."
     )
 
-    if elapsed_time >= 60:
-        minutes: int = elapsed_time // 60
+    if elapsed_seconds >= 60:
+        minutes: int = elapsed_seconds // 60
         whois_rate: float = len(source_ips) / minutes
         logger.info(f"\t ~{whois_rate= } lookups per minute")
 
