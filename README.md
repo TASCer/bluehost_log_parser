@@ -44,7 +44,7 @@ OPTIONAL DEV DEPENDENCIES:
 
 * 'sample_unzipped_logfile'  with anonymized data
 * 'logo.png' for README logo
-* A template of '.env' config file
+* A template of '.env' config file (sample.env)
 
 #### misc folder contains
 
