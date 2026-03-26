@@ -44,8 +44,8 @@ app = Dash(
 
 app.layout = html.Div(
     [
-        dcc.Store(id="store", data={}),
-        html.H1("Multi Page App Demo: Sharing data between pages"),
+        # dcc.Store(id="store", data={}),
+        html.H1("WEBLOG Multi Page Viewer App Demo"),
         html.Div(
             [
                 html.Div(

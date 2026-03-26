@@ -1,3 +1,4 @@
+from collections import Counter 
 from dash import dcc, html, callback
 from dash.dependencies import Input, Output
 from pandas import DataFrame
@@ -6,6 +7,8 @@ from . import ids
 
 def render(data: DataFrame) -> html.Div:
     all_referrers: list[str] = data["REFERRER"].tolist()
+    popular_referrers = Counter(all_referrers).most_common(25)
+    print(popular_referrers)
     unique_referrers: list[str] = sorted(set(all_referrers))
     default_referrer_idx = unique_referrers.index("-")
     default_referrer = unique_referrers[default_referrer_idx]
@@ -30,8 +33,8 @@ def render(data: DataFrame) -> html.Div:
             dcc.Dropdown(
                 id=ids.REFERRER_DROPDOWN,
                 options=unique_referrers,
-                value=default_referrer,
-                multi=False,
+                value=[p for p in popular_referrers[0]],
+                multi=True,
             ),
             html.Button(
                 className="dropdown-button",
