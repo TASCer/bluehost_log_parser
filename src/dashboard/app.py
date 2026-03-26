@@ -4,7 +4,6 @@ import dash_bootstrap_components as dbc
 import datetime as dt
 import logging
 
-from datetime import date
 from bluehost_log_parser.main import LOGGER_ROOT
 from bluehost_log_parser.database import db_checks
 from dash import Dash, dcc, html
@@ -12,8 +11,7 @@ from flask_caching import Cache
 from logging import Logger, Formatter
 
 
-# now: date = dt.date.today()
-todays_date: str =  dt.date.today().strftime("%D").replace("/", "-")
+todays_date: str = dt.date.today().strftime("%D").replace("/", "-")
 
 logger: Logger = logging.getLogger()
 logger.setLevel(logging.INFO)
