@@ -1,28 +1,25 @@
-import datetime as dt
+import json
 import logging
-from bluehost_log_parser import my_secrets
+import os
 import smtplib
 import ssl
 
-from datetime import datetime
+from dotenv import load_dotenv
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from logging import Logger
 from pathlib import Path
-
 from ssl import Purpose
 
-now: datetime = dt.datetime.now()
-todays_date: str = now.strftime("%D").replace("/", "-")
+load_dotenv()
 
-email_reciever: list[str] = my_secrets.email_to
-
-email_sender: str = my_secrets.postfix_mail_from
-mail_server = my_secrets.postfix_mailhost
-email_user = my_secrets.postfix_user
-email_password = my_secrets.postfix_password
+email_reciever: list[str] = json.loads(os.environ["RECIPIENTS"])
+email_sender: str = os.environ["EMAIL_FROM"]
+mail_server: str = os.environ["EMAIL_HOST"]
+email_user: str = os.environ["EMAIL_USER"]
+email_password: str = os.environ["EMAIL_PASSWORD"]
 
 
 def send_mail(subject: str, text: str, attachment_path: Path | None = None) -> None:
@@ -108,8 +105,8 @@ def send_mail(subject: str, text: str, attachment_path: Path | None = None) -> N
 
 if __name__ == "__main__":
     send_mail(
-        "test",
-        "test",
+        "test sub",
+        "test text",
         attachment_path=Path.cwd().parent.parent.parent / "_old_logs" / "11-21-25.log",
     )
 

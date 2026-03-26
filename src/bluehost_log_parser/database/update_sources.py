@@ -1,10 +1,13 @@
+import os
 import logging
 
-from bluehost_log_parser import my_secrets
+from dotenv import load_dotenv
 from logging import Logger
 from pymysql.err import DataError
 from sqlalchemy.engine import Engine
 from sqlalchemy import exc, create_engine, text
+
+load_dotenv()
 
 LOGS_TABLE = "logs"
 SOURCES_TABLE = "sources"
@@ -18,7 +21,7 @@ def whois_updates(whois_data: list[str]) -> None:
     logger: Logger = logging.getLogger(__name__)
 
     try:
-        engine: Engine = create_engine(f"mysql+pymysql://{my_secrets.local_dburi}")
+        engine: Engine = create_engine(f"mysql+pymysql://{os.environ['DB_URI']}")
 
     except exc.SQLAlchemyError as e:
         logger.critical(str(e))
@@ -35,7 +38,7 @@ def whois_updates(whois_data: list[str]) -> None:
             try:
                 q_alpha3 = conn.execute(
                     text(
-                        f"""SELECT `ALPHA3` from `{my_secrets.local_dbname}`.`{COUNTRIES_TABLE}` WHERE ALPHA2 = '{data[1]}';"""
+                        f"""SELECT `ALPHA3` from `{os.environ["DB_NAME"]}`.`{COUNTRIES_TABLE}` WHERE ALPHA2 = '{data[1]}';"""
                     )
                 ).first()
 
@@ -43,7 +46,7 @@ def whois_updates(whois_data: list[str]) -> None:
                     alpha3 = [a for a in q_alpha3][0]
 
                 conn.execute(
-                    text(f"""UPDATE `{my_secrets.local_dbname}`.`{SOURCES_TABLE}`
+                    text(f"""UPDATE `{os.environ["DB_NAME"]}`.`{SOURCES_TABLE}`
                         SET
                             `COUNTRY` = '{data[3]}',
                             `ALPHA2` = '{data[1]}',
@@ -75,7 +78,7 @@ def asn_alphas(alpha2s: list[str]) -> list[str]:
     )
 
     try:
-        engine: Engine = create_engine(f"mysql+pymysql://{my_secrets.local_dburi}")
+        engine: Engine = create_engine(f"mysql+pymysql://{os.environ['DB_URI']}")
 
     except exc.SQLAlchemyError as e:
         logger.critical(str(e))

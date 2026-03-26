@@ -1,20 +1,23 @@
+import os
 import logging
 
 
-from bluehost_log_parser import my_secrets
 from bluehost_log_parser.database.insert_activity import (
     PUBLIC_LOGS_TABLE,
 )  # see TODO , SOHO_LOGS_TABLE
+from dotenv import load_dotenv
 from logging import Logger
 from sqlalchemy import exc, create_engine, text, Engine
 
+load_dotenv()
+
 logger: Logger = logging.getLogger(__name__)
 
-DB_HOSTNAME: str = f"{my_secrets.local_dbhost}"
-DB_NAME: str = f"{my_secrets.local_dbname}"
-DB_USER: str = f"{my_secrets.local_dbuser}"
-DB_PW: str = f"{my_secrets.local_dbpassword}"
-DB_URI: str = f"{my_secrets.local_dburi}"
+DB_HOSTNAME: str = f"{os.environ['DB_HOST']}"
+DB_NAME: str = f"{os.environ['DB_NAME']}"
+DB_USER: str = f"{os.environ['DB_USER']}"
+DB_PW: str = f"{os.environ['DB_PASSWORD']}"
+DB_URI: str = f"{os.environ['DB_URI']}"
 
 SOHO_LOGS_TABLE: str = "soho_logs"
 SOURCES_TABLE: str = "sources"

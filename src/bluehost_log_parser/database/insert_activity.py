@@ -1,15 +1,19 @@
+import os
 import logging
 
-from bluehost_log_parser import my_secrets
 from bluehost_log_parser.utils.mailer import send_mail
 from datetime import datetime
 from dateutil.parser import parse
+from dotenv import load_dotenv
 from logging import Logger
 from sqlalchemy.engine import Engine
 from sqlalchemy import exc, create_engine, text
 
+load_dotenv()
+
 PUBLIC_LOGS_TABLE = "public_logs"
 SOHO_LOGS_TABLE = "soho_logs"
+
 
 logger: Logger = logging.getLogger(__name__)
 
@@ -101,7 +105,7 @@ def update_log_tables(public_log_entries: list, soho_log_entries: list) -> None:
     """
 
     try:
-        engine: Engine = create_engine(f"mysql+pymysql://{my_secrets.local_dburi}")
+        engine: Engine = create_engine(f"mysql+pymysql://{os.environ['DB_URI']}")
 
     except exc.SQLAlchemyError as e:
         logger.critical(str(e))

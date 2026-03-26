@@ -1,7 +1,7 @@
+import os
 import logging
 import sqlalchemy as sa
 
-from bluehost_log_parser import my_secrets
 from bluehost_log_parser.database.insert_activity import (
     SOHO_LOGS_TABLE,
     PUBLIC_LOGS_TABLE,
@@ -15,6 +15,7 @@ from bluehost_log_parser.database.setup import (
     create_tables,
     create_views,
 )
+from dotenv import load_dotenv
 from logging import Logger
 from sqlalchemy import (
     create_engine,
@@ -26,11 +27,13 @@ from sqlalchemy import (
 from sqlalchemy_utils import database_exists, create_database
 from typing import Any
 
-DB_HOSTNAME: str = f"{my_secrets.local_dbhost}"
-DB_NAME: str = f"{my_secrets.local_dbname}"
-DB_USER: str = f"{my_secrets.local_dbuser}"
-DB_PW: str = f"{my_secrets.local_dbpassword}"
-DB_URI: str = f"{my_secrets.local_dburi}"
+load_dotenv()
+
+DB_HOSTNAME: str = f"{os.environ['DB_HOST']}"
+DB_NAME: str = f"{os.environ['DB_NAME']}"
+DB_USER: str = f"{os.environ['DB_USER']}"
+DB_PW: str = f"{os.environ['DB_PASSWORD']}"
+DB_URI: str = f"{os.environ['DB_URI']}"
 
 
 def schema() -> bool:

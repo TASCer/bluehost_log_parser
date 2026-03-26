@@ -1,17 +1,21 @@
 import datetime as dt
+import os
 import logging
 import re
 
-from bluehost_log_parser import my_secrets
 from bluehost_log_parser.schema import LogEntry
+from dotenv import load_dotenv
 from logging import Logger
 from pathlib import Path
 from typing import Any, Pattern, Match
 
 logger: Logger = logging.getLogger(__name__)
 
+load_dotenv()
+
 now: dt.datetime = dt.datetime.now()
 todays_date: str = now.strftime("%D").replace("/", "-")
+
 
 # regex for Common Log Format (CLF)
 weblog_with_response: Pattern[str] = re.compile(
@@ -28,7 +32,7 @@ site_soho_entries: list = []
 site_sources: set = set()
 
 
-def parse_matched(matched_response):
+def parse_matched(matched_response) -> None:
     user_agent_data: str | Any = matched_response.group(7)
     request: str | Any = matched_response.group(3)
 
@@ -68,10 +72,10 @@ def parse_matched(matched_response):
     )
     site_sources.add(entry.SOURCE)
 
-    if entry.SOURCE == my_secrets.my_home_ip:
+    if entry.SOURCE == os.environ["HOME_ISP_IP"]:
         site_soho_entries.append(entry)
 
-    elif entry.SOURCE != my_secrets.my_home_ip:
+    elif entry.SOURCE != os.environ["HOME_ISP_IP"]:
         site_public_entries.append(entry)
 
     site_sources.add(entry.SOURCE)
@@ -114,10 +118,10 @@ def parse_unmatched(unmatched_response) -> None:
     )
     site_sources.add(entry.SOURCE)
 
-    if entry.SOURCE == my_secrets.my_home_ip:
+    if entry.SOURCE == os.environ["HOME_ISP_IP"]:
         site_soho_entries.append(entry)
 
-    elif entry.SOURCE != my_secrets.my_home_ip:
+    elif entry.SOURCE != os.environ["HOME_ISP_IP"]:
         site_public_entries.append(entry)
 
     site_sources.add(entry.SOURCE)
@@ -140,20 +144,20 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
             unmatched_response: Match[str] | None = weblog_without_response.match(log)
             if (
                 matched_response
-                and matched_response.group(1) != f"{my_secrets.my_bluehost_ip}"
+                and matched_response.group(1) != f"{os.environ['BLUEHOST_SERVER_IP']}"
             ):
                 matches += 1
                 parse_matched(matched_response)
 
             if (
                 unmatched_response
-                and unmatched_response.group(1) != f"{my_secrets.my_bluehost_ip}"
+                and unmatched_response.group(1) != f"{os.environ['BLUEHOST_SERVER_IP']}"
             ):
                 unmatched_responsees += 1
                 parse_unmatched(unmatched_response)
 
             else:
-                if f"{my_secrets.my_bluehost_ip}" not in log:
+                if f"{os.environ['BLUEHOST_SERVER_IP']}" not in log:
                     logger.warning(f"still no re match: {log}")
                     unmatched += 1
 

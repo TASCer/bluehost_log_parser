@@ -1,9 +1,12 @@
+import os
 import logging
 
+from dotenv import load_dotenv
 from pathlib import Path
-from bluehost_log_parser.my_secrets import local_dburi
 from sqlalchemy import create_engine, exc, text, Engine
 from logging import Logger
+
+load_dotenv()
 
 logger: Logger = logging.getLogger(__name__)
 
@@ -17,7 +20,7 @@ def countries() -> None:
     Function populates the 'countries' database table.
     """
     try:
-        engine: Engine = create_engine(f"mysql+pymysql://{local_dburi}")
+        engine: Engine = create_engine(f"mysql+pymysql://{os.environ['DB_URI']}")
 
     except (exc.SQLAlchemyError, exc.OperationalError) as e:
         logger.critical(str(e))
