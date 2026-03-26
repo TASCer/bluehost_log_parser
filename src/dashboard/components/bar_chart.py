@@ -43,14 +43,12 @@ def render(data: DataFrame) -> html.Div:
             x="RESPONSE",
             color="SITE",
         )
-# ADD REFERRAL CHART
-        fig = px.histogram(
-            filtered_data,
-            x="REFERRAL",
-            color="SITE",
-        )
-
-
+        # ADD REFERRAL CHART
+        # fig = px.histogram(
+        #     filtered_data,
+        #     x="REFERRAL",
+        #     color="SITE",
+        # )
 
         return html.Div(dcc.Graph(figure=fig), id=ids.BAR_CHART)
 

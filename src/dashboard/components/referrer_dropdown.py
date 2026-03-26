@@ -1,4 +1,4 @@
-from collections import Counter 
+from collections import Counter
 from dash import dcc, html, callback
 from dash.dependencies import Input, Output
 from pandas import DataFrame
