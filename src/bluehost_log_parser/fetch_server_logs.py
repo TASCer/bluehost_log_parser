@@ -46,6 +46,7 @@ def secure_copy(
                     logger.critical(
                         "scp issue: BAD CREDS or ssh-agent not running/loaded with key"
                     )
+                    mailer.send_mail("SCP FAILED", "BAD CREDS or ssh-agent not running/loaded with key")
                     exit()
 
             except (OSError, FileNotFoundError) as err:
