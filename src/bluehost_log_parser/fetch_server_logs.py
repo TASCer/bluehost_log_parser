@@ -3,11 +3,14 @@ import os
 import platform
 
 from bluehost_log_parser.utils import mailer, ssh_agent_check
-from bluehost_log_parser import my_secrets
+from dotenv import load_dotenv
+
 from logging import Logger
 from pathlib import Path
 
 logger: Logger = logging.getLogger(__name__)
+
+load_dotenv()
 
 
 def secure_copy(
@@ -37,7 +40,7 @@ def secure_copy(
         if not platform.system() == "Windows":
             try:
                 copy_command: int = os.system(
-                    f"scp {my_secrets.bluehost_user}@{my_secrets.my_bluehost_ip}:{remote_zipped_filename} {local_zipped_path}"
+                    f"scp {os.environ['BLUEHOST_USER']}@{os.environ['BLUEHOST_SERVER_IP']}:{remote_zipped_filename} {local_zipped_path}"
                 )
 
                 if copy_command == 0:
@@ -46,7 +49,10 @@ def secure_copy(
                     logger.critical(
                         "scp issue: BAD CREDS or ssh-agent not running/loaded with key"
                     )
-                    mailer.send_mail("SCP FAILED", "BAD CREDS or ssh-agent not running/loaded with key")
+                    mailer.send_mail(
+                        "SCP FAILED",
+                        "BAD CREDS or ssh-agent not running/loaded with key",
+                    )
                     exit()
 
             except (OSError, FileNotFoundError) as err:

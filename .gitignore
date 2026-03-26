@@ -10,7 +10,7 @@ wheels/
 .venv
 
 # Secrets
-/src/bluehost_log_parser/my_secrets.py
+.env
 
 # Logs
 /_old_logs/*.log
