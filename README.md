@@ -37,14 +37,14 @@ OPTIONAL DEV DEPENDENCIES:
 
 #### src folder contains
 
-* Python files needed to retrieve, process, and store web server logs to a database for analysis
-  * test_parse_file.py file if you wish to install pytest and run tests
+* bluehost_log_parser: Python files needed to retrieve, process, and store web server logs to a database
+* dashboard: Python files needed to analyze data stored in a database
 
 #### assets folder contains
 
 * 'sample_unzipped_logfile'  with anonymized data
 * 'logo.png' for README logo
-* A template of 'my_secrets.py' secrets config file
+* A template of '.env' config file
 
 #### misc folder contains
 
@@ -53,8 +53,8 @@ OPTIONAL DEV DEPENDENCIES:
 
 #### PRE_LAUNCH TODO's
 
-* [ ] TASC 1 - CREATE in /src your own 'my_secrets.py' file from the 'sample_my_secret.py' found in /misc
-* [ ] TASC 2 - ENSURE your keychain/ssh-agent is running for access to remote log files
+* [ ] TASC 1 - COPY 'sample.env' from 'assets' folder to project root, rename '.env' and edit values to fit your needs
+* [ ] TASC 2 - ENSURE your keychain/ssh-agent is running for access to remote log files securely
 
 #### PARSE TODO's
 
