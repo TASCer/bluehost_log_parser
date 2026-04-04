@@ -7,7 +7,7 @@ import logging
 from bluehost_log_parser.main import LOGGER_ROOT
 from bluehost_log_parser.database import db_checks
 from dash import Dash, dcc, html
-from flask_caching import Cache
+# from flask_caching import Cache
 from logging import Logger, Formatter
 
 
