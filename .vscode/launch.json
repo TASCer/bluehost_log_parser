@@ -8,7 +8,7 @@
 
         {
             "name": "Py: main",
-            "type": "python",
+            "type": "debugpy",
             "cwd": "${workspaceFolder}/src/bluehost_log_parser/",
             "request": "launch",
             "program": "main.py",
@@ -18,7 +18,7 @@
 
         {
             "name": "Py: cur file",
-            "type": "python",
+            "type": "debugpy",
             "cwd": "${workspaceFolder}/src/bluehost_log_parser/",
             "request": "launch",
             "program": "${file}",
@@ -29,7 +29,7 @@
 
         {
             "name": "Py: adhoc",
-            "type": "python",
+            "type": "debugpy",
             "cwd": "${workspaceFolder}/src/bluehost_log_parser/",
             "request": "launch",
             "program": "main.py",
