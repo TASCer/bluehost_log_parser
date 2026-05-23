@@ -47,7 +47,7 @@ def compose(*functions: Preprocessor) -> Preprocessor:
 def load_public_weblog_data() -> pd.DataFrame:
     with engine.connect() as conn, conn.begin():
         public_data: DataFrame = pd.read_sql(
-            sql="""SELECT l.*, s.COUNTRY, s.ALPHA2 , s.ALPHA3 FROM `bluehost-weblogs`.public_logs l join sources s on l.SOURCE = s.SOURCE;""",
+            sql="""SELECT l.*, s.COUNTRY, s.ALPHA2 , s.ALPHA3 FROM `bluehost-weblogs`.public_logs l join sources s on l.SOURCE = s.SOURCE LIMIT 1000;""",
             con=conn,
         )
     preprocessor = compose(
