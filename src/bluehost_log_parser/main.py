@@ -1,6 +1,7 @@
 # TODO add link to analysis dash site. Need to move this to Docker and run dashboard continously and log update daily.
 # TODO update packages: https://github.com/TASCer/bluehost_log_parser/security/dependabot
 import argparse
+import os
 import logging
 
 from bluehost_log_parser.database import db_checks
@@ -14,7 +15,11 @@ from bluehost_log_parser import parse_logs
 from bluehost_log_parser import unzip_fetched_logs
 from bluehost_log_parser.database import update_sources
 from logging import Logger, Formatter
+from dotenv import load_dotenv
 from pathlib import Path
+
+
+load_dotenv()
 
 PROJECT_ROOT: Path = Path.cwd()
 LOGGER_ROOT: Path = Path.cwd().parent.parent
@@ -35,9 +40,9 @@ root_logger.addHandler(fh)
 logger: Logger = logging.getLogger(__name__)
 
 # NOTE: REMOTE BLUEHOST SERVER'S BASE LOG PATHS. **DOES NOT INCLUDE** "month-year.gz"
-REMOTE_TASCS_BASE_PATH: str = "logs/cag.bis.mybluehost.me-ssl_log-"
-REMOTE_HOA_BASE_PATH: str = "logs/hoa.tascs.net-ssl_log-"
-REMOTE_ROADSPIES_BASE_PATH: str = "logs/roadspies.cag.bis.mybluehost.me-ssl_log-"
+REMOTE_TASCS_BASE_PATH: str = os.environ["BLUEHOST_TASCS_LOGS"]
+REMOTE_HOA_BASE_PATH: str = os.environ["BLUEHOST_HOA_LOGS"]
+# REMOTE_ROADSPIES_BASE_PATH: str = "logs/roadspies.cag.bis.mybluehost.me-ssl_log-"
 
 LOCAL_ZIPPED_PATH: Path = PROJECT_ROOT / "input" / "zipped_logfiles"
 Path(LOCAL_ZIPPED_PATH).mkdir(parents=True, exist_ok=True)
