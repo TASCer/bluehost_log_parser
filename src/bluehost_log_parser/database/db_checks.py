@@ -35,10 +35,6 @@ DB_USER: str = f"{os.environ['DB_USER']}"
 DB_PW: str = f"{os.environ['DB_PASSWORD']}"
 DB_URI: str = f"{os.environ['DB_URI']}"
 
-print(DB_URI)
-print(os.environ["DB_HOST"])
-print(os.environ["DB_USER"])
-
 
 def schema() -> bool:
     """
