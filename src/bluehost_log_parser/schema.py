@@ -30,9 +30,15 @@ class LogEntry(BaseModel):
                 value = value[:-2]
         return value
 
-    @field_validator("CLIENT")
+    @field_validator("CLIENT", "REQUEST")
     def remove_apostrophes(cls, value: str) -> str:
         return value.replace("'", "")
+
+    @field_validator("REQUEST")
+    def escape_colon(cls, value: str) -> str:
+        if value.startswith("/:"):
+            value = value.replace("/:", "")
+            return value
 
         return value
 
