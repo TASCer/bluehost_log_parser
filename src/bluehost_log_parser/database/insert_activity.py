@@ -72,6 +72,8 @@ def public_log_updates(db_engine, public_logs):
             public_count: int = len(public_logs)
             ts_parsed: datetime = parse_timestamp(log.server_timestamp)
 
+            # if
+
             try:
                 conn.execute(
                     text(
@@ -87,7 +89,7 @@ def public_log_updates(db_engine, public_logs):
             ) as e:
                 suspect_requests += 1
                 public_count -= 1
-                logger.error(f"{log.SOURCE}-{ts_parsed}-{e.code}")
+                logger.error(f"FROM: {log.SOURCE} @ {ts_parsed} CODE-{e.code} {e}")
 
     logger.info(
         f"{public_count} log entries inserted into table: '{PUBLIC_LOGS_TABLE}'"
