@@ -17,7 +17,7 @@ logger: Logger = logging.getLogger(__name__)
 now: date = dt.date.today()
 
 
-def get_country(source_ips: list) -> list[str]:
+def get_data(source_ips: list) -> list[str]:
     """
     Function retrieves ASN country and descriptor data from Whois.
 
