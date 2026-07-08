@@ -5,7 +5,7 @@ import os
 import logging
 
 from bluehost_log_parser.database import db_checks
-from bluehost_log_parser import fetch_whois_data
+from bluehost_log_parser import fetch_source_whois
 
 from bluehost_log_parser import fetch_server_logs
 from bluehost_log_parser.database import insert_activity
@@ -42,7 +42,6 @@ logger: Logger = logging.getLogger(__name__)
 # NOTE: REMOTE BLUEHOST SERVER'S BASE LOG PATHS. **DOES NOT INCLUDE** "month-year.gz"
 REMOTE_TASCS_BASE_PATH: str = os.environ["BLUEHOST_TASCS_LOGS"]
 REMOTE_HOA_BASE_PATH: str = os.environ["BLUEHOST_HOA_LOGS"]
-# REMOTE_ROADSPIES_BASE_PATH: str = "logs/roadspies.cag.bis.mybluehost.me-ssl_log-"
 
 LOCAL_ZIPPED_PATH: Path = PROJECT_ROOT / "input" / "zipped_logfiles"
 Path(LOCAL_ZIPPED_PATH).mkdir(parents=True, exist_ok=True)
@@ -107,7 +106,7 @@ def main(month: int | None = None, year: int | None = None) -> None:
         unique_sources: set = set(source_ips)
         no_country_name: list[str] = insert_unique_sources.inserts(unique_sources)
         if no_country_name:
-            results: list[str] = fetch_whois_data.get_country(no_country_name)
+            results: list[str] = fetch_source_whois.get_data(no_country_name)
             update_sources.whois_updates(results)
 
         else:
