@@ -16,7 +16,7 @@ logger: Logger = logging.getLogger(__name__)
 DB_HOSTNAME: str = f"{os.environ['DB_HOST']}"
 DB_NAME: str = f"{os.environ['DB_NAME']}"
 DB_USER: str = f"{os.environ['DB_USER']}"
-DB_PW: str = f"{os.environ['DB_PASSWORD']}"
+DB_PW: str = f"{os.environ['DB_USER_PASS']}"
 DB_URI: str = f"{os.environ['DB_URI']}"
 
 SOHO_LOGS_TABLE: str = "soho_logs"
@@ -43,13 +43,13 @@ def source_countries(engine) -> bool:
                     VIEW {VIEW_COUNTRY_ACTIVITY}
                     AS
                     SELECT
-                        COUNT(`bluehost-weblogs`.`{PUBLIC_LOGS_TABLE}`.`SOURCE`) AS `COUNT`,
-                        `bluehost-weblogs`.`{SOURCES_TABLE}`.`COUNTRY` AS `COUNTRY`
+                        COUNT(`bluehost_weblogs`.`{PUBLIC_LOGS_TABLE}`.`SOURCE`) AS `COUNT`,
+                        `bluehost_weblogs`.`{SOURCES_TABLE}`.`COUNTRY` AS `COUNTRY`
                     FROM
-                        (`bluehost-weblogs`.`{PUBLIC_LOGS_TABLE}`
-                        JOIN `bluehost-weblogs`.`{SOURCES_TABLE}` ON (`bluehost-weblogs`.`{PUBLIC_LOGS_TABLE}`.`SOURCE` = `bluehost-weblogs`.`{SOURCES_TABLE}`.`SOURCE`))
-                    GROUP BY `bluehost-weblogs`.`{SOURCES_TABLE}`.`COUNTRY`
-                    ORDER BY COUNT(`bluehost-weblogs`.`{PUBLIC_LOGS_TABLE}`.`SOURCE`) DESC;""")
+                        (`bluehost_weblogs`.`{PUBLIC_LOGS_TABLE}`
+                        JOIN `bluehost_weblogs`.`{SOURCES_TABLE}` ON (`bluehost_weblogs`.`{PUBLIC_LOGS_TABLE}`.`SOURCE` = `bluehost_weblogs`.`{SOURCES_TABLE}`.`SOURCE`))
+                    GROUP BY `bluehost_weblogs`.`{SOURCES_TABLE}`.`COUNTRY`
+                    ORDER BY COUNT(`bluehost_weblogs`.`{PUBLIC_LOGS_TABLE}`.`SOURCE`) DESC;""")
                 )
 
             return True
@@ -79,7 +79,7 @@ def soho_non_200_responses(engine):
                     SELECT
                         *
                     FROM
-                        `bluehost-weblogs`.`{SOHO_LOGS_TABLE}`
+                        `bluehost_weblogs`.`{SOHO_LOGS_TABLE}`
                     WHERE RESPONSE !='200';""")
                 )
 

@@ -32,7 +32,7 @@ load_dotenv()
 DB_HOSTNAME: str = f"{os.environ['DB_HOST']}"
 DB_NAME: str = f"{os.environ['DB_NAME']}"
 DB_USER: str = f"{os.environ['DB_USER']}"
-DB_PW: str = f"{os.environ['DB_PASSWORD']}"
+DB_PW: str = f"{os.environ['DB_USER_PASS']}"
 DB_URI: str = f"{os.environ['DB_URI']}"
 
 
