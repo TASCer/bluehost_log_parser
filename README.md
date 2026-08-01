@@ -2,13 +2,13 @@
 
 # Bluehost Apache Weblog Parser version: 1.6.0
 
-#### Created as a replacement of cPanel's "View Latest Activity" and Google Analytics
+## Created as a replacement of cPanel's "View Latest Activity" and Google Analytics
 
 ---
 
 1. Securely (passphrased private cert) download compressed Apache weblogs from hosting provider
     * Windows uses: Putty Pageant 0.80
-    * Linux uses: ssh-agent 
+    * Linux uses: ssh-agent
       * for cron jobs it uses [keychain](https://linux.die.net/man/1/keychain))
 1. Decompress and save server log files locally
 1. PARSE log files
@@ -22,7 +22,7 @@ sources table
      *If IPWhois error during source ip lookup, exception message is entered as country name
      * If country ALPHA2 code not found, log source
 
-###### Source IP to Country Name provided by IPWhois utility get_countries
+### Source IP to Country Name provided by IPWhois utility get_countries
 
 ---
 OPTIONAL DEPENDENCIES:
