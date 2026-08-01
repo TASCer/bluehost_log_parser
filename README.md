@@ -44,7 +44,7 @@ OPTIONAL DEV DEPENDENCIES:
 
 * 'sample_unzipped_logfile'  with anonymized data
 * 'logo.png' for README logo
-* A template of '.env' config file (sample.env)
+* A template of the '.env' file (sample_env) config file
 
 #### misc folder contains
 
@@ -53,10 +53,10 @@ OPTIONAL DEV DEPENDENCIES:
 
 #### PRE_LAUNCH TODO's
 
-* [ ] TASC 1 - COPY 'sample.env' from 'assets' folder to project root, rename '.env' and edit values to fit your needs
-* [ ] TASC 2 - ENSURE your keychain/ssh-agent is running for access to remote log files securely
+* [ ] TASC 1 - Open and save misc/sample.env as '.env' and edit values to fit your needs
+* [ ] TASC 2 - ENSURE your keychain/ssh-agent is running and your key is loaded for access to remote log files securely
 
-#### PARSE TODO's
+#### LAUNCH TODO's
 
 * [ ] TASC 1 - run 'uv run main.py' from src/bluehost_log_parser/
 
