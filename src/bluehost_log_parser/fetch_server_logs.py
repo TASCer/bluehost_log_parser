@@ -29,10 +29,11 @@ def secure_copy(
 
     :return: True if all log files copied locally
     """
+    logger.info("STARTED secure download of remote website logfiles:")
+
     if not ssh_agent_check.is_ssh_agent_running_env():
         return False
 
-    logger.info("STARTED secure download of remote website logfiles:")
 
     for path in remote_log_paths:
         remote_zipped_filename: str = path + month_name + "-" + year + ".gz"
