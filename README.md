@@ -9,7 +9,7 @@
 1. Securely (passphrased private cert) download compressed Apache weblogs from hosting provider
     * Windows uses: Putty Pageant 0.80
     * Linux uses: ssh-agent
-      * for cron jobs it uses [keychain](https://linux.die.net/man/1/keychain))
+      * for cron jobs it uses [keychain](https://linux.die.net/man/1/keychain)
 1. Decompress and save server log files locally
 1. PARSE log files
 1. LOAD unique sources from parsed logs into sources table
