@@ -39,7 +39,7 @@ def source_countries(engine) -> bool:
                     text(f"""
 
                     CREATE OR REPLACE
-                    DEFINER = 'todd'@'%'
+                    
                     VIEW {VIEW_COUNTRY_ACTIVITY}
                     AS
                     SELECT
@@ -73,7 +73,7 @@ def soho_non_200_responses(engine):
                     text(f"""
 
                     CREATE OR REPLACE
-                    DEFINER = 'todd'@'%'
+
                     VIEW {VIEW_SOHO_NON_200_RESP}
                     AS
                     SELECT
