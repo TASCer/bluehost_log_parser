@@ -44,12 +44,13 @@ OPTIONAL DEV DEPENDENCIES:
 
 * 'sample_unzipped_logfile'  with anonymized data
 * 'logo.png' for README logo
-* A template of the '.env' file (sample_env) config file
 
 #### misc folder contains
 
 * Batch file for running a Scheduled Task in Windows
 * Shell script for running a cron job in Linux
+* A template of the '.env' file (sample_env) config file
+
 
 #### PRE_LAUNCH TODO's
 
