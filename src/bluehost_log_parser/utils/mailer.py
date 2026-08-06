@@ -15,11 +15,11 @@ from ssl import Purpose
 
 load_dotenv()
 
-email_reciever: list[str] = json.loads(os.environ["RECIPIENTS"])
+# email_reciever: list[str] = json.loads(os.environ["RECIPIENTS"])
 email_sender: str = os.environ["EMAIL_FROM"]
 mail_server: str = os.environ["EMAIL_HOST"]
 email_user: str = os.environ["EMAIL_USER"]
-email_password: str = os.environ["EMAIL_PASSWORD"]
+email_user_password: str = os.environ["EMAIL_USER_PASSWORD"]
 
 
 def send_mail(subject: str, text: str, attachment_path: Path | None = None) -> None:
@@ -35,7 +35,7 @@ def send_mail(subject: str, text: str, attachment_path: Path | None = None) -> N
     msg: MIMEMultipart = MIMEMultipart("alternative")
     msg["Subject"] = f"{subject}"
     msg["From"] = email_sender
-    msg["To"] = email_reciever[0]
+    msg["To"] = "todd@tascs.corp"
 
     if attachment_path:
         html_attachments: str = """\
@@ -92,7 +92,7 @@ def send_mail(subject: str, text: str, attachment_path: Path | None = None) -> N
             server.ehlo()
             server.starttls()
             try:
-                server.login(email_user, email_password)
+                server.login(email_user, email_user_password)
             except smtplib.SMTPAuthenticationError as login_err:
                 logger.error(f"{login_err}")
 
