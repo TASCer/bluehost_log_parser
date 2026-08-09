@@ -1,10 +1,10 @@
-import os
 import logging
+import os
+from logging import Logger
+from pathlib import Path
 
 from dotenv import load_dotenv
-from pathlib import Path
-from sqlalchemy import create_engine, exc, text, Engine
-from logging import Logger
+from sqlalchemy import Engine, create_engine, exc, text
 
 load_dotenv()
 

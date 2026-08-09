@@ -1,13 +1,13 @@
-import os
 import logging
+import os
+from logging import Logger
 
+from dotenv import load_dotenv
+from sqlalchemy import Engine, create_engine, exc, text
 
 from bluehost_log_parser.database.insert_activity import (
     PUBLIC_LOGS_TABLE,
 )  # see TODO , SOHO_LOGS_TABLE
-from dotenv import load_dotenv
-from logging import Logger
-from sqlalchemy import exc, create_engine, text, Engine
 
 load_dotenv()
 

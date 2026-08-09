@@ -1,6 +1,7 @@
-from dash import dcc, html, callback
+from dash import callback, dcc, html
 from dash.dependencies import Input, Output
 from pandas import DataFrame
+
 from . import ids
 
 

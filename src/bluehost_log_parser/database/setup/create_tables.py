@@ -1,15 +1,15 @@
 import logging
-
 from logging import Logger
+
 from sqlalchemy import (
-    exc,
-    types,
-    Engine,
     Column,
-    Table,
-    MetaData,
+    Engine,
     ForeignKey,
     Index,
+    MetaData,
+    Table,
+    exc,
+    types,
 )
 
 logger: Logger = logging.getLogger(__name__)

@@ -1,10 +1,11 @@
-import plotly.express as px
 import logging
-
-from dash import dcc, html, callback
-from dash.dependencies import Input, Output
 from logging import Logger
+
+import plotly.express as px
+from dash import callback, dcc, html
+from dash.dependencies import Input, Output
 from pandas import DataFrame
+
 from . import ids
 
 logger: Logger = logging.getLogger(__name__)

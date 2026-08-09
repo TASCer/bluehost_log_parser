@@ -1,13 +1,14 @@
-import os
 import logging
-
-from bluehost_log_parser.utils.mailer import send_mail
+import os
 from datetime import datetime
+from logging import Logger
+
 from dateutil.parser import parse
 from dotenv import load_dotenv
-from logging import Logger
+from sqlalchemy import create_engine, exc, text
 from sqlalchemy.engine import Engine
-from sqlalchemy import exc, create_engine, text
+
+from bluehost_log_parser.utils.mailer import send_mail
 
 load_dotenv()
 

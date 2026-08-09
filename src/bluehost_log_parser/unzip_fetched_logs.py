@@ -1,10 +1,10 @@
 import datetime as dt
 import gzip
 import logging
-
 from datetime import datetime
 from logging import Logger
 from pathlib import Path
+
 from bluehost_log_parser.utils.datetime_helper import get_monthname_short
 
 logger: Logger = logging.getLogger(__name__)

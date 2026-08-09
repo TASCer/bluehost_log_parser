@@ -1,13 +1,14 @@
 import datetime as dt
-import os
 import logging
+import os
 import re
-
-from bluehost_log_parser.schema import LogEntry
-from dotenv import load_dotenv
 from logging import Logger
 from pathlib import Path
-from typing import Any, Pattern, Match
+from typing import Any, Match, Pattern
+
+from dotenv import load_dotenv
+
+from bluehost_log_parser.schema import LogEntry
 
 logger: Logger = logging.getLogger(__name__)
 

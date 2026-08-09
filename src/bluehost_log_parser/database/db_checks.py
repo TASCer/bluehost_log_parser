@@ -1,31 +1,32 @@
-import os
 import logging
-import sqlalchemy as sa
-
-from bluehost_log_parser.database.insert_activity import (
-    SOHO_LOGS_TABLE,
-    PUBLIC_LOGS_TABLE,
-)
-from bluehost_log_parser.database.setup.create_tables import (
-    SOURCES_TABLE,
-    COUNTRIES_TABLE,
-)
-from bluehost_log_parser.database.setup import (
-    populate_tables,
-    create_tables,
-    create_views,
-)
-from dotenv import load_dotenv
+import os
 from logging import Logger
+from typing import Any
+
+import sqlalchemy as sa
+from dotenv import load_dotenv
 from sqlalchemy import (
-    create_engine,
     CursorResult,
-    exc,
     Engine,
+    create_engine,
+    exc,
     text,
 )
-from sqlalchemy_utils import database_exists, create_database
-from typing import Any
+from sqlalchemy_utils import create_database, database_exists
+
+from bluehost_log_parser.database.insert_activity import (
+    PUBLIC_LOGS_TABLE,
+    SOHO_LOGS_TABLE,
+)
+from bluehost_log_parser.database.setup import (
+    create_tables,
+    create_views,
+    populate_tables,
+)
+from bluehost_log_parser.database.setup.create_tables import (
+    COUNTRIES_TABLE,
+    SOURCES_TABLE,
+)
 
 load_dotenv()
 

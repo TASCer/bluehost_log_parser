@@ -1,11 +1,11 @@
-import os
 import logging
+import os
+from logging import Logger
 
 from dotenv import load_dotenv
-from logging import Logger
 from pymysql.err import DataError
+from sqlalchemy import create_engine, exc, text
 from sqlalchemy.engine import Engine
-from sqlalchemy import exc, create_engine, text
 
 load_dotenv()
 

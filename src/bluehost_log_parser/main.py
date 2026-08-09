@@ -1,23 +1,26 @@
 # TODO add link to analysis dash site. Need to move this to Docker and run dashboard continously and log update daily.
 # TODO update packages: https://github.com/TASCer/bluehost_log_parser/security/dependabot
 import argparse
-import os
 import logging
-
-from bluehost_log_parser.database import db_checks
-from bluehost_log_parser import fetch_source_whois
-
-from bluehost_log_parser import fetch_server_logs
-from bluehost_log_parser.database import insert_activity
-from bluehost_log_parser.database import insert_unique_sources
-from bluehost_log_parser.utils import mailer, datetime_helper
-from bluehost_log_parser import parse_logs
-from bluehost_log_parser import unzip_fetched_logs
-from bluehost_log_parser.database import update_sources
-from logging import Logger, Formatter
-from dotenv import load_dotenv
+import os
+from logging import Formatter, Logger
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+from bluehost_log_parser import (
+    fetch_server_logs,
+    fetch_source_whois,
+    parse_logs,
+    unzip_fetched_logs,
+)
+from bluehost_log_parser.database import (
+    db_checks,
+    insert_activity,
+    insert_unique_sources,
+    update_sources,
+)
+from bluehost_log_parser.utils import datetime_helper, mailer
 
 load_dotenv()
 
@@ -115,17 +118,17 @@ def main(month: int | None = None, year: int | None = None) -> None:
         insert_activity.update_log_tables(public_processed_logs, my_processed_logs)
 
         logger.info("***** COMPLETED WEB LOG PROCESSING *****")
-    #     mailer.send_mail(
-    #         subject="COMPLETED", text="Processing completed without incident"
-    #     )
+        mailer.send_mail(
+            subject="COMPLETED", text="Processing completed without incident"
+        )
 
-    # else:
-    #     mailer.send_mail(
-    #         subject="ERROR: During Processing",
-    #         text="Error downloading from Bluehost, check log",
-    #         attachment_path=Path.cwd().parent.parent
-    #         / f"{datetime_helper.get_logger_date()}.log",
-    #     )
+    else:
+        mailer.send_mail(
+            subject="ERROR: During Processing",
+            text="Error downloading from Bluehost, check log",
+            attachment_path=Path.cwd().parent.parent
+            / f"{datetime_helper.get_logger_date()}.log",
+        )
 
 
 if __name__ == "__main__":

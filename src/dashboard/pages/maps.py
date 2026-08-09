@@ -1,7 +1,8 @@
 import dash
 from dash import html
-from dashboard.components import map_viewer
 from pandas import DataFrame
+
+from dashboard.components import map_viewer
 from dashboard.data import loader
 
 dash.register_page(__name__)

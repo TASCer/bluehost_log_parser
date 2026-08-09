@@ -1,15 +1,16 @@
 import dash
 from dash import html
+from pandas import DataFrame
+
 from dashboard.components import (
     bar_chart,
     month_dropdown,
     pie_chart,
     referrer_dropdown,
     response_dropdown,
-    year_dropdown,
     site_dropdown,
+    year_dropdown,
 )
-from pandas import DataFrame
 from dashboard.data import loader
 
 dash.register_page(__name__, path="/charts")

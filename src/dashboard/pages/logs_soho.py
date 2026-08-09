@@ -1,8 +1,9 @@
 import dash
 from dash import html
+from pandas import DataFrame
+
 from dashboard.components import log_viewer_soho
 from dashboard.data import loader
-from pandas import DataFrame
 
 dash.register_page(__name__, path="/soho")
 

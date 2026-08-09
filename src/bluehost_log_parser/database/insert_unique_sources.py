@@ -1,12 +1,11 @@
-import os
 import logging
-
+import os
+from logging import Logger
+from typing import Any
 
 from dotenv import load_dotenv
-from logging import Logger
+from sqlalchemy import CursorResult, create_engine, exc, text
 from sqlalchemy.engine import Engine
-from sqlalchemy import exc, create_engine, text, CursorResult
-from typing import Any
 
 load_dotenv()
 

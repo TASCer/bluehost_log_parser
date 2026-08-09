@@ -1,12 +1,12 @@
 import logging
 import os
 import platform
-
-from bluehost_log_parser.utils import mailer, ssh_agent_check
-from dotenv import load_dotenv
-
 from logging import Logger
 from pathlib import Path
+
+from dotenv import load_dotenv
+
+from bluehost_log_parser.utils import mailer, ssh_agent_check
 
 logger: Logger = logging.getLogger(__name__)
 
@@ -34,7 +34,6 @@ def secure_copy(
     if not ssh_agent_check.is_ssh_agent_running_env():
         return False
 
-
     for path in remote_log_paths:
         remote_zipped_filename: str = path + month_name + "-" + year + ".gz"
 
@@ -50,11 +49,11 @@ def secure_copy(
                     logger.critical(
                         "scp issue: BAD CREDS or ssh-agent not running/loaded with key"
                     )
-                    mailer.send_mail(
-                        "SCP FAILED",
-                        "BAD CREDS or ssh-agent not running/loaded with key",
-                    )
-                    exit()
+                    # mailer.send_mail(
+                    #     "SCP FAILED",
+                    #     "BAD CREDS or ssh-agent not running/loaded with key",
+                    # )
+                    # exit()
 
             except (OSError, FileNotFoundError) as err:
                 logger.critical(f"see: {err} for more information")

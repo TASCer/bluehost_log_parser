@@ -1,10 +1,11 @@
 # https://github.com/Coding-with-Adam/Dash-by-Plotly/blob/master/Ag-Grid/introduction/ag-grid-intro2.py
-import dash_ag_grid as dag
 import logging
-
-from pandas import DataFrame
-from dash import html
 from logging import Logger
+
+import dash_ag_grid as dag
+from dash import html
+from pandas import DataFrame
+
 from . import ids
 
 logger: Logger = logging.getLogger(__name__)
