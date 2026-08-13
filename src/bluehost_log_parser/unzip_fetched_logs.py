@@ -52,15 +52,17 @@ def process(
 
         unzipped_file_path: Path = unzipped_path / local_file_name
         try:
-            with gzip.open(f"{zipped_file}", "rb") as zipped_file:
-                with open(
+            with (
+                gzip.open(f"{zipped_file}", "rb") as zipped_file,
+                open(
                     unzipped_file_path,
                     "wb",
-                ) as unzipped_file:
-                    unzipped_file.write(zipped_file.read())
+                ) as unzipped_file,
+            ):
+                unzipped_file.write(zipped_file.read())
             local_files.append(unzipped_file_path)
 
-        except (BaseException, FileNotFoundError) as e:
+        except (FileNotFoundError) as e:
             logger.critical(f"{e}")
 
     logger.info(">>> COMPLETED: UNZIPPING / SAVING DOWNLOADED WEBLOGS >>>")
