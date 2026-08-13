@@ -117,15 +117,13 @@ def get_data(source_ips: list) -> list[str]:
     stop_time: datetime = dt.datetime.now(timezone)
     time_delta: int = int((stop_time - start_time).total_seconds())
     elapsed_minutes, elapsed_seconds = divmod(time_delta, 60)
-    print(elapsed_minutes, elapsed_seconds)
 
     logger.info(
         f"\t\tfetched: {len(source_ips)} source information {elapsed_minutes=}:{elapsed_seconds=}."
     )
 
-    if elapsed_seconds >= 60:
-        minutes: int = elapsed_seconds // 60
-        whois_rate: float = len(source_ips) / minutes
+    if elapsed_minutes >= 5:
+        whois_rate: float = len(source_ips) / elapsed_minutes
         logger.info(f"\t ~{whois_rate= } lookups per minute")
 
     return whois_results
