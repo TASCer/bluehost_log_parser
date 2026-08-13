@@ -1,6 +1,7 @@
 import logging
 import os
 import platform
+import subprocess
 from logging import Logger
 from pathlib import Path
 
@@ -37,7 +38,7 @@ def secure_copy(
     for path in remote_log_paths:
         remote_zipped_filename: str = path + month_name + "-" + year + ".gz"
 
-        if not platform.system() == "Windows":
+        if platform.system() != "Windows":
             try:
                 copy_command: int = os.system(
                     f"scp {os.environ['BLUEHOST_USER']}@{os.environ['BLUEHOST_SERVER_IP']}:{remote_zipped_filename} {local_zipped_path}"
@@ -49,11 +50,11 @@ def secure_copy(
                     logger.critical(
                         "scp issue: BAD CREDS or ssh-agent not running/loaded with key"
                     )
-                    # mailer.send_mail(
-                    #     "SCP FAILED",
-                    #     "BAD CREDS or ssh-agent not running/loaded with key",
-                    # )
-                    # exit()
+                    mailer.send_mail(
+                        "SCP FAILED",
+                        "BAD CREDS or ssh-agent not running/loaded with key",
+                    )
+                    exit()
 
             except (OSError, FileNotFoundError) as err:
                 logger.critical(f"see: {err} for more information")
