@@ -37,14 +37,16 @@ def secure_copy(
 
     for path in remote_log_paths:
         remote_zipped_filename: str = path + month_name + "-" + year + ".gz"
+        source = f"{os.environ['BLUEHOST_USER']}@{os.environ['BLUEHOST_SERVER_IP']}:{remote_zipped_filename}"
+        destination = f"{local_zipped_path}"
 
         if platform.system() != "Windows":
-            try:
-                copy_command: int = os.system(
-                    f"scp {os.environ['BLUEHOST_USER']}@{os.environ['BLUEHOST_SERVER_IP']}:{remote_zipped_filename} {local_zipped_path}"
-                )
+            command = ["scp", source, destination]
 
-                if copy_command == 0:
+            try:
+                result = subprocess.run(command, check=True, capture_output=True)
+
+                if result:
                     logger.info(f"\t'{remote_zipped_filename.split('/')[2]}' copied")
                 else:
                     logger.critical(
@@ -62,24 +64,36 @@ def secure_copy(
                     subject="**WEBLOG SCP FAILURE",
                     text="check ssh agent process and key",
                 )
-                exit()
-    logger.info("COMPLETED secure download of remote website logfiles:")
 
-    # if not platform.system() == "Linux":
-    # import subprocess
+            logger.info("COMPLETED secure download of remote website logfiles:")
 
-    #     try:
-    # copy_command = f"pscp -batch {my_secrets.user}@{my_secrets.my_bluehost_ip}:{remote_zipped_filename} {local_zipped_path}"
-    # response = subprocess.check_output(executable=copy_command)
-    # result: str = response.decode(encoding="utf-8")
-    # logger.info(result.strip())
 
-    # except subprocess.CalledProcessError as other_err:
-    #     logger.error(other_err)
+# NEEDS TESTING
+        if platform.system() != "Linux":
+            command = ["pscp", source, destination]
 
-    # except FileNotFoundError as file_e:
-    #     logger.critical(f"File not found - {file_e}")
+            try:
+                result = subprocess.run(command, check=True, capture_output=True)
 
-    #     continue
+                if result:
+                    logger.info(f"\t'{remote_zipped_filename.split('/')[2]}' copied")
+                else:
+                    logger.critical(
+                        "scp issue: BAD CREDS or ssh-agent not running/loaded with key"
+                    )
+                    mailer.send_mail(
+                        "SCP FAILED",
+                        "BAD CREDS or ssh-agent not running/loaded with key",
+                    )
+                    exit()
+
+            except (OSError, FileNotFoundError) as err:
+                logger.critical(f"see: {err} for more information")
+                mailer.send_mail(
+                    subject="**WEBLOG SCP FAILURE",
+                    text="check ssh agent process and key",
+                )
+
+            logger.info("COMPLETED secure download of remote website logfiles:")
 
     return True
