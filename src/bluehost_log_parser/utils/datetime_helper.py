@@ -30,7 +30,7 @@ def get_monthname_short(arg_year: int, arg_month: int) -> str:
     :return: short month name used for downkoading log files
     """
     arg_date: str = f"{arg_year}-{arg_month}-01"
-    date_obj: datetime = dt.datetime.strptime(arg_date, "%Y-%m-%d")
+    date_obj: datetime = dt.datetime.strptime(arg_date, "%Y-%m-%d").astimezone()
     month_name_abbr: str = date_obj.strftime("%b")
 
     return month_name_abbr
