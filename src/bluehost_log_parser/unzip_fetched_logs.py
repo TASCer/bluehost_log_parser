@@ -9,7 +9,7 @@ from bluehost_log_parser.utils.datetime_helper import get_monthname_short
 
 logger: Logger = logging.getLogger(__name__)
 
-now: datetime = dt.datetime.now()
+now: datetime = dt.datetime.now().astimezone()
 unzipped_paths: set = set()
 
 
