@@ -2,18 +2,22 @@ import json
 import logging
 import os
 import smtplib
-import ssl
 
-from dotenv import load_dotenv
+# import socket
+import ssl
 from email import encoders
 from email.mime.base import MIMEBase
-from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from logging import Logger
 from pathlib import Path
+from re import M
 from ssl import Purpose
 
+from dotenv import load_dotenv
+
 load_dotenv()
+
 
 # email_reciever: list[str] = json.loads(os.environ["RECIPIENTS"])
 email_sender: str = os.environ["EMAIL_FROM"]
@@ -75,20 +79,19 @@ def send_mail(subject: str, text: str, attachment_path: Path | None = None) -> N
             """
         part_basic: MIMEText = MIMEText(html_basic, "html")
         msg.attach(part_basic)
+
     # NORMAL PORT 25 METHOD WORKING
     # with smtplib.SMTP(mail_server, 25) as server:
     #     try:
-    #         server.sendmail(email_sender, email_reciever, msg.as_string())
+    #         server.sendmail(email_sender, "todd@tascs.test", msg.as_string())
     #         logger.info("emil sent")
-    #     except smtplib.SMTPException as e:
-    #         logger.exception(f"email not sent {str(e)}")
+    #     except smtplib.SMTPException:
+    #         logger.exception("email not sent:")
 
     # PORT 587 w/auth sasl_method = PLAIN phpmailer has it LOG IN
 
     try:
-        with smtplib.SMTP(
-            mail_server, 587, local_hostname="tascslt.tascs.local"
-        ) as server:
+        with smtplib.SMTP(mail_server, 587) as server:
             server.ehlo()
             server.starttls()
             try:
@@ -96,18 +99,18 @@ def send_mail(subject: str, text: str, attachment_path: Path | None = None) -> N
             except smtplib.SMTPAuthenticationError as login_err:
                 logger.error(f"{login_err}")
 
-            server.sendmail(email_sender, email_reciever, msg.as_string())
+            server.sendmail(email_sender, "todd@tascs.test", msg.as_string())
             logger.info("email sent")
 
-    except smtplib.SMTPException as err:
-        logger.exception(f"{str(err)}")
+    except smtplib.SMTPException:
+        logger.exception("check email server")
 
 
 if __name__ == "__main__":
     send_mail(
         "test sub",
         "test text",
-        attachment_path=Path.cwd().parent.parent.parent / "_old_logs" / "11-21-25.log",
+        attachment_path=None,  # Path.cwd().parent.parent.parent / "_old_logs" / "11-21-25.log",
     )
 
 
