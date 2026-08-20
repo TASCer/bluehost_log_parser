@@ -4,7 +4,8 @@ import os
 import re
 from logging import Logger
 from pathlib import Path
-from typing import Any, Match, Pattern
+from re import Match, Pattern
+from typing import Any
 
 from dotenv import load_dotenv
 
@@ -14,7 +15,7 @@ logger: Logger = logging.getLogger(__name__)
 
 load_dotenv()
 
-now: dt.datetime = dt.datetime.now()
+now: dt.datetime = dt.datetime.now().astimezone()
 todays_date: str = now.strftime("%D").replace("/", "-")
 
 

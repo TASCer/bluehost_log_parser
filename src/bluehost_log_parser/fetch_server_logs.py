@@ -2,6 +2,7 @@ import logging
 import os
 import platform
 import subprocess
+import sys
 from logging import Logger
 from pathlib import Path
 
@@ -67,8 +68,7 @@ def secure_copy(
 
             logger.info("COMPLETED secure download of remote website logfiles:")
 
-
-# NEEDS TESTING
+        # NEEDS TESTING
         if platform.system() != "Linux":
             command = ["pscp", source, destination]
 
@@ -85,7 +85,7 @@ def secure_copy(
                         "SCP FAILED",
                         "BAD CREDS or ssh-agent not running/loaded with key",
                     )
-                    exit()
+                    sys.exit()
 
             except (OSError, FileNotFoundError) as err:
                 logger.critical(f"see: {err} for more information")
