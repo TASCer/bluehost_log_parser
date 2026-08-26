@@ -1,8 +1,9 @@
 import logging
 import os
+import sys
+from collections.abc import Callable
 from functools import reduce
 from logging import Logger
-from typing import Callable
 
 import pandas as pd
 from dotenv import load_dotenv
@@ -18,7 +19,7 @@ try:
 
 except exc.SQLAlchemyError as e:
     logger.critical(str(e))
-    exit()
+    sys.exit()
 
 Preprocessor = Callable[[pd.DataFrame], pd.DataFrame]
 
@@ -47,7 +48,7 @@ def compose(*functions: Preprocessor) -> Preprocessor:
 def load_public_weblog_data() -> pd.DataFrame:
     with engine.connect() as conn, conn.begin():
         public_data: DataFrame = pd.read_sql(
-            sql="""SELECT l.*, s.COUNTRY, s.ALPHA2 , s.ALPHA3 FROM `bluehost_weblogs`.public_logs l join sources s on l.SOURCE = s.SOURCE WHERE l.ACCESSED LIKE "2026-07-%%";""",
+            sql="""SELECT l.*, s.COUNTRY, s.ALPHA2 , s.ALPHA3 FROM `bluehost_weblogs`.public_logs l join sources s on l.SOURCE = s.SOURCE WHERE l.ACCESSED LIKE "2026-08-%%";""",
             con=conn,
         )
     preprocessor = compose(
