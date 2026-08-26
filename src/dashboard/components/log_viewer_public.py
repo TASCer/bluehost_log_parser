@@ -3,9 +3,8 @@ import logging
 from logging import Logger
 
 import dash_ag_grid as dag
-import pandas as pd
 from dash import html
-from pandas import DataFrame
+from pandas import DataFrame, to_numeric
 
 from . import ids
 
@@ -14,7 +13,7 @@ logger: Logger = logging.getLogger(__name__)
 
 def render(data: DataFrame) -> html.Div:
     df: DataFrame = data.copy()
-    df["RESPONSE"] = pd.to_numeric(df["RESPONSE"])
+    df["RESPONSE"] = to_numeric(df["RESPONSE"])
     del df["ACCESSED"]
     del df["ALPHA3"]
 
