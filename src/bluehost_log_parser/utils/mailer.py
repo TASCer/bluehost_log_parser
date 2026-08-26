@@ -110,7 +110,10 @@ if __name__ == "__main__":
     send_mail(
         "test sub",
         "test text",
-        attachment_path=Path.cwd().parent.parent /"python_projects" / "bluehost_log_parser" / "08-21-26.log"
+        attachment_path=Path.cwd().parent.parent
+        / "python_projects"
+        / "bluehost_log_parser"
+        / "08-21-26.log",
     )
 # SSL MODULE TESTING [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:997)  1123 on RPI4
 # print(ssl.OPENSSL_VERSION)
