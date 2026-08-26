@@ -19,7 +19,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-# email_reciever: list[str] = json.loads(os.environ["RECIPIENTS"])
+email_reciever: list[str] = json.loads(os.environ["RECIPIENTS"])
 email_sender: str = os.environ["EMAIL_FROM"]
 mail_server: str = os.environ["EMAIL_HOST"]
 email_user: str = os.environ["EMAIL_USER"]
@@ -39,7 +39,7 @@ def send_mail(subject: str, text: str, attachment_path: Path | None = None) -> N
     msg: MIMEMultipart = MIMEMultipart("alternative")
     msg["Subject"] = f"{subject}"
     msg["From"] = email_sender
-    msg["To"] = "todd@tascs.corp"
+    msg["To"] = email_reciever[2]
 
     if attachment_path:
         html_attachments: str = """\
@@ -81,39 +81,37 @@ def send_mail(subject: str, text: str, attachment_path: Path | None = None) -> N
         msg.attach(part_basic)
 
     # NORMAL PORT 25 METHOD WORKING
-    # with smtplib.SMTP(mail_server, 25) as server:
-    #     try:
-    #         server.sendmail(email_sender, "todd@tascs.test", msg.as_string())
-    #         logger.info("emil sent")
-    #     except smtplib.SMTPException:
-    #         logger.exception("email not sent:")
+    with smtplib.SMTP(mail_server, 25) as server:
+        try:
+            server.sendmail(email_sender, email_reciever, msg.as_string())
+            logger.info("emil sent")
+        except smtplib.SMTPException:
+            logger.exception("email not sent:")
 
     # PORT 587 w/auth sasl_method = PLAIN phpmailer has it LOG IN
 
-    try:
-        with smtplib.SMTP(mail_server, 587) as server:
-            server.ehlo()
-            server.starttls()
-            try:
-                server.login(email_user, email_user_password)
-            except smtplib.SMTPAuthenticationError as login_err:
-                logger.error(f"{login_err}")
+    # try:
+    #     with smtplib.SMTP(mail_server, 587) as server:
+    #         server.ehlo()
+    #         server.starttls()
+    #         try:
+    #             server.login(email_user, email_user_password)
+    #         except smtplib.SMTPAuthenticationError as login_err:
+    #             logger.error(f"{login_err}")
 
-            server.sendmail(email_sender, "todd@tascs.test", msg.as_string())
-            logger.info("email sent")
+    #         server.sendmail(email_sender, email_reciever, msg.as_string())
+    #         logger.info("email sent")
 
-    except smtplib.SMTPException:
-        logger.exception("check email server")
+    # except smtplib.SMTPException:
+    #     logger.exception("check email server")
 
 
 if __name__ == "__main__":
     send_mail(
         "test sub",
         "test text",
-        attachment_path=None,  # Path.cwd().parent.parent.parent / "_old_logs" / "11-21-25.log",
+        attachment_path=Path.cwd().parent.parent /"python_projects" / "bluehost_log_parser" / "08-21-26.log"
     )
-
-
 # SSL MODULE TESTING [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:997)  1123 on RPI4
 # print(ssl.OPENSSL_VERSION)
 # context = ssl.create_default_context(purpose=Purpose.SERVER_AUTH)
