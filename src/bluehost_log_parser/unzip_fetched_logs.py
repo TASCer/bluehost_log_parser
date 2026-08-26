@@ -1,6 +1,7 @@
 import datetime as dt
 import gzip
 import logging
+import sys
 from datetime import datetime
 from logging import Logger
 from pathlib import Path
@@ -62,8 +63,9 @@ def process(
                 unzipped_file.write(zipped_file.read())
             local_files.append(unzipped_file_path)
 
-        except (FileNotFoundError) as e:
+        except FileNotFoundError as e:
             logger.critical(f"{e}")
+            sys.exit()
 
     logger.info(">>> COMPLETED: UNZIPPING / SAVING DOWNLOADED WEBLOGS >>>")
 
