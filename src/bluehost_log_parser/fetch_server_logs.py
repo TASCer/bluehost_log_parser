@@ -57,7 +57,7 @@ def secure_copy(
                         "SCP FAILED",
                         "BAD CREDS or ssh-agent not running/loaded with key",
                     )
-                    exit()
+                    sys.exit()
 
             except (OSError, FileNotFoundError) as err:
                 logger.critical(f"see: {err} for more information")

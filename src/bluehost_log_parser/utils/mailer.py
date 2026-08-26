@@ -11,7 +11,6 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from logging import Logger
 from pathlib import Path
-from re import M
 from ssl import Purpose
 
 from dotenv import load_dotenv

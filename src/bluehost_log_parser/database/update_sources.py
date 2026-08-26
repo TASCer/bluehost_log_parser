@@ -1,5 +1,6 @@
 import logging
 import os
+import sys
 from logging import Logger
 
 from dotenv import load_dotenv
@@ -25,7 +26,7 @@ def whois_updates(whois_data: list[str]) -> None:
 
     except exc.SQLAlchemyError as e:
         logger.critical(str(e))
-        exit()
+        sys.exit()
 
     with engine.connect() as conn, conn.begin():
         logger.info(
@@ -82,7 +83,7 @@ def asn_alphas(alpha2s: list[str]) -> list[str]:
 
     except exc.SQLAlchemyError as e:
         logger.critical(str(e))
-        exit()
+        sys.exit()
 
     asn_alpha3s = []
 
@@ -102,7 +103,7 @@ def asn_alphas(alpha2s: list[str]) -> list[str]:
             "check if table 'countries' is/was populated via 'populate_tables.py'"
         )
 
-        exit()
+        sys.exit()
 
     return asn_alpha3s
 
