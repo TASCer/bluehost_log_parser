@@ -48,9 +48,9 @@ def compose(*functions: Preprocessor) -> Preprocessor:
 def load_public_weblog_data() -> pd.DataFrame:
     with engine.connect() as conn, conn.begin():
         public_data: DataFrame = pd.read_sql(
-            sql="""SELECT l.*, s.COUNTRY, s.ALPHA2 , s.ALPHA3 FROM `bluehost_weblogs`.public_logs l join sources s on l.SOURCE = s.SOURCE WHERE l.ACCESSED LIKE "2026-08-%%";""",
+            sql="""SELECT l.*, s.COUNTRY, s.ALPHA2 , s.ALPHA3 FROM `bluehost_weblogs`.public_logs l join sources s on l.SOURCE = s.SOURCE WHERE l.ACCESSED LIKE "2026-%%";""",
             con=conn,
-        )
+        )  # WHERE l.ACCESSED LIKE "2026-08-%%"
     preprocessor = compose(
         split_timestamp,
         create_year_column,
@@ -65,7 +65,7 @@ def load_public_weblog_data() -> pd.DataFrame:
 def load_soho_weblog_data() -> pd.DataFrame:
     with engine.connect() as conn, conn.begin():
         soho_data: DataFrame = pd.read_sql(
-            sql="""SELECT l.* FROM `bluehost_weblogs`.soho_logs l join sources s on l.SOURCE = s.SOURCE;""",
+            sql="""SELECT l.* FROM `bluehost_weblogs`.soho_logs l join sources s on l.SOURCE = s.SOURCE WHERE l.ACCESSED LIKE "2026-%%";""",
             con=conn,
         )
     preprocessor = compose(
