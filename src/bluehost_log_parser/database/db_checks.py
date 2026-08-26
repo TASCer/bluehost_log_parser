@@ -102,11 +102,7 @@ def tables() -> bool:
     if not soho_logs_table:
         create_tables.log_tables(engine, SOHO_LOGS_TABLE)
 
-    if create_views.all(engine):
-        return True
-
-    else:
-        return False
+    return bool(create_views.all(engine))
 
 
 if __name__ == "__main__":
