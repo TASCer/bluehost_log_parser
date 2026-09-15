@@ -38,34 +38,36 @@ def secure_copy(
 
     for path in remote_log_paths:
         remote_zipped_filename: str = path + month_name + "-" + year + ".gz"
-        source = f"{os.environ['BLUEHOST_USER']}@{os.environ['BLUEHOST_SERVER_IP']}:{remote_zipped_filename}"
-        destination = f"{local_zipped_path}"
+        source: str = f"{os.environ['BLUEHOST_USER']}@{os.environ['BLUEHOST_SERVER_IP']}:{remote_zipped_filename}"
+        destination: str = f"{local_zipped_path}"
 
         if platform.system() != "Windows":
-            command = ["scp", source, destination]
+            command = ["scp", "-P2222", source, destination]
 
             try:
                 result = subprocess.run(command, check=True, capture_output=True)
-
+                print("STDOUT:", result.stdout)
+                print("STDERR:", result.stderr)
                 if result:
                     logger.info(f"\t'{remote_zipped_filename.split('/')[2]}' copied")
                 else:
                     logger.critical(
                         "scp issue: BAD CREDS or ssh-agent not running/loaded with key"
                     )
-                    mailer.send_mail(
-                        "SCP FAILED",
-                        "BAD CREDS or ssh-agent not running/loaded with key",
-                    )
+                    # mailer.send_mail(
+                    #     "SCP FAILED",
+                    #     "BAD CREDS or ssh-agent not running/loaded with key",
+                    # )
                     sys.exit()
 
-            except (OSError, FileNotFoundError) as err:
+            except (OSError, FileNotFoundError, subprocess.CalledProcessError) as err:
                 logger.critical(f"see: {err} for more information")
-                mailer.send_mail(
-                    subject="**WEBLOG SCP FAILURE",
-                    text="check ssh agent process and key",
-                )
-
+                # mailer.send_mail(
+                #     subject="**WEBLOG SCP FAILURE",
+                #     text="check ssh agent process and key",
+                # )
+                sys.exit()
+                
             logger.info("COMPLETED secure download of remote website logfiles:")
 
         # NEEDS TESTING
