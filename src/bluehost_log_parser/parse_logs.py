@@ -1,10 +1,11 @@
 import datetime as dt
 import logging
 import os
+
+
 import re
 from logging import Logger
 from pathlib import Path
-from re import Match, Pattern
 from typing import Any
 
 from dotenv import load_dotenv
@@ -20,12 +21,12 @@ todays_date: str = now.strftime("%D").replace("/", "-")
 
 
 # regex for Common Log Format (CLF)
-weblog_with_response: Pattern[str] = re.compile(
+weblog_with_response: re.Pattern[str] = re.compile(
     r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) - - \[(.*?)\] "(.*?)" (\d+) (\d+) "(.*?)" "(.*?)" (.*?)\s'
 )
 
 # regex for unmatched above. Missing response size ("-")
-weblog_without_response: Pattern[str] = re.compile(
+weblog_without_response: re.Pattern[str] = re.compile(
     r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) - - \[(.*?)\] "(.*?)" (\d+) (-) "(.*?)" "(.*?)" (.*?)\s'
 )
 
@@ -140,27 +141,26 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
     unmatched_responsees = 0
     unmatched = 0
 
-    with open(f"{log_file}") as logs:
-        for log in logs:
-            matched_response: Match[str] | None = weblog_with_response.match(log)
-            unmatched_response: Match[str] | None = weblog_without_response.match(log)
+    with open(f"{log_file}") as log_entries:
+        for entry in log_entries:
+            matched_response: re.Match[str] | None = weblog_with_response.match(entry)
+            unmatched_response: re.Match[str] | None = weblog_without_response.match(
+                entry
+            )
             if (
                 matched_response
                 and matched_response.group(1) != f"{os.environ['BLUEHOST_SERVER_IP']}"
             ):
                 matches += 1
                 parse_matched(matched_response)
-
             if (
                 unmatched_response
                 and unmatched_response.group(1) != f"{os.environ['BLUEHOST_SERVER_IP']}"
             ):
                 unmatched_responsees += 1
                 parse_unmatched(unmatched_response)
-
             else:
-                if f"{os.environ['BLUEHOST_SERVER_IP']}" not in log:
-                    logger.warning(f"still no re match: {log}")
+                if f"{os.environ['BLUEHOST_SERVER_IP']}" not in entry:
                     unmatched += 1
 
         logger.info(f"\t\t{matches=} {unmatched_responsees=} {unmatched=}")
