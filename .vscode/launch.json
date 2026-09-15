@@ -33,7 +33,7 @@
             "cwd": "${workspaceFolder}/src/bluehost_log_parser/",
             "request": "launch",
             "program": "main.py",
-            "args": ["-m", "2", "-y", "2025"],
+            // "args": ["-m", "2", "-y", "2025"],
             "console": "integratedTerminal",
             "justMyCode": true
         },
@@ -41,7 +41,7 @@
 
         {
             "name": "Py: dash",
-            "type": "python",
+            "type": "debugpy",
             "cwd": "${workspaceFolder}/src/dashboard/",
             "request": "launch",
             "program": "app.py",
