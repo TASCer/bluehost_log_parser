@@ -83,7 +83,7 @@ def send_mail(subject: str, text: str, attachment_path: Path | None = None) -> N
     with smtplib.SMTP(mail_server, 25) as server:
         try:
             server.sendmail(email_sender, email_reciever, msg.as_string())
-            logger.info("emil sent")
+            logger.info("email sent")
         except smtplib.SMTPException:
             logger.exception("email not sent:")
 
