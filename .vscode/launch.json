@@ -33,7 +33,7 @@
             "cwd": "${workspaceFolder}/src/bluehost_log_parser/",
             "request": "launch",
             "program": "main.py",
-            // "args": ["-m", "2", "-y", "2025"],
+            "args": ["-m", "9", "-y", "2026"],
             "console": "integratedTerminal",
             "justMyCode": true
         },

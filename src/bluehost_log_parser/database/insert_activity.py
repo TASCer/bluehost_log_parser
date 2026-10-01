@@ -96,7 +96,7 @@ def public_log_updates(db_engine, public_logs):
         f"{public_count} log entries inserted into table: '{PUBLIC_LOGS_TABLE}'"
     )
     if suspect_requests > 0:
-        send_mail(f"suspect web requests = {str(suspect_requests)}", "check log")
+        send_mail(f"suspect web requests = {suspect_requests!s}", "check log")
 
 
 def update_log_tables(public_log_entries: list, soho_log_entries: list) -> None:

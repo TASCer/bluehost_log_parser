@@ -4,15 +4,15 @@ import os
 import smtplib
 
 # import socket
-import ssl
+# import ssl
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from logging import Logger
 from pathlib import Path
-from ssl import Purpose
 
+# from ssl import Purpose
 from dotenv import load_dotenv
 
 load_dotenv()

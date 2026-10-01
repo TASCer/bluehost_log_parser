@@ -78,7 +78,7 @@ def get_data(source_ips: list) -> list[str]:
             ipwhois.ASNOriginLookupError,
             ipwhois.ASNRegistryError,
             ipwhois.HostLookupError,
-            ipwhois.HTTPLookupError,
+            
         ) as e:
             error: str = str(e).split("http:")[0]
             print(f"Non httplookup error: {error} {ip}")

@@ -81,7 +81,7 @@ def main(month: int | None = None, year: int | None = None) -> None:
     Function controls the application.
 
     :param month: optional month number to process another month's log
-    :param year: optional year number to process another month's log
+    :param year: optional year number to process another year's log
     """
     if month and year:
         month_name_abbr: str = datetime_helper.get_monthname_short(
