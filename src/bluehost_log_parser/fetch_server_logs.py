@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 
 from bluehost_log_parser.utils import mailer, ssh_agent_check
 
-logger: Logger = logging.getLogger(__name__)
+logger: Logger = logging.getLogger(name=__name__)
 
 load_dotenv()
 
@@ -22,10 +22,10 @@ def secure_copy(
     year: str,
 ) -> bool:
     """
-    Function copies webserver host log files locally.
+    Function securely copies remote webserver host log files locally.
 
-    :param remote_log_paths: list of Paths
-    :param local_zipped_path: location to unzip log file
+    :param remote_log_paths: list of str base logfile location on remote server
+    :param local_zipped_path: location to unzip log file locally
     :param month_name: short month name
     :param year: year as str
 
@@ -45,30 +45,17 @@ def secure_copy(
             command = ["scp", "-P2222", source, destination]
 
             try:
-                result = subprocess.run(command, check=True, capture_output=True)
-                print("STDOUT:", result.stdout)
-                print("STDERR:", result.stderr)
-                if result:
-                    logger.info(f"\t'{remote_zipped_filename.split('/')[2]}' copied")
-                else:
-                    logger.critical(
-                        "scp issue: BAD CREDS or ssh-agent not running/loaded with key"
-                    )
-                    # mailer.send_mail(
-                    #     "SCP FAILED",
-                    #     "BAD CREDS or ssh-agent not running/loaded with key",
-                    # )
-                    sys.exit()
+                result = subprocess.run(
+                    command, check=True, capture_output=False, timeout=50
+                )
+
+                if result.returncode == 0:
+                    logger.info(f"\t'{remote_zipped_filename.split('/')[2]}' downloaded")
 
             except (OSError, FileNotFoundError, subprocess.CalledProcessError) as err:
                 logger.critical(f"see: {err} for more information")
-                # mailer.send_mail(
-                #     subject="**WEBLOG SCP FAILURE",
-                #     text="check ssh agent process and key",
-                # )
-                sys.exit()
-                
-            logger.info("COMPLETED secure download of remote website logfiles:")
+                print(f"see: {err} for more information")
+                return False
 
         # NEEDS TESTING
         if platform.system() != "Linux":
