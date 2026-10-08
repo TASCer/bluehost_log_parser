@@ -141,9 +141,11 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
 
     with open(f"{log_file}") as log_entries:
         for entry in log_entries:
-            matched_response: re.Match[str] | None = weblog_with_response.match(entry)
+            matched_response: re.Match[str] | None = weblog_with_response.match(
+                string=entry
+            )
             unmatched_response: re.Match[str] | None = weblog_without_response.match(
-                entry
+                string=entry
             )
             if (
                 matched_response

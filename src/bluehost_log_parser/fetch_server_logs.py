@@ -50,7 +50,9 @@ def secure_copy(
                 )
 
                 if result.returncode == 0:
-                    logger.info(f"\t'{remote_zipped_filename.split('/')[2]}' downloaded")
+                    logger.info(
+                        msg=f"\t'{remote_zipped_filename.split('/')[2]}' downloaded"
+                    )
 
             except (OSError, FileNotFoundError, subprocess.CalledProcessError) as err:
                 logger.critical(f"see: {err} for more information")
