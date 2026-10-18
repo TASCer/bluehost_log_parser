@@ -7,7 +7,7 @@ def get_logger_date() -> str:
     Function formats and returns today's date for logger name.
 
     """
-    date_today: date = dt.date.today()
+    date_today: date = dt.datetime.now().astimezone()
     todays_date: str = date_today.strftime("%D").replace("/", "-")
 
     return todays_date
@@ -18,15 +18,15 @@ def get_now() -> date:
     Function creates and returns a date object for today.
 
     """
-    return dt.date.today()
+    return dt.datetime.now().astimezone()
 
 
 def get_monthname_short(arg_year: int, arg_month: int) -> str:
     """
     Function provides a 3-letter abbreviated month name.
 
-    :param year: year int from argparse
-    :param month: month int from argparse
+    :param year: year argument
+    :param month: month argument
     :return: short month name used for downkoading log files
     """
     arg_date: str = f"{arg_year}-{arg_month}-01"
