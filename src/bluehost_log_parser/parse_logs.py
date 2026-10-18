@@ -128,6 +128,10 @@ def parse_unmatched(unmatched_response) -> None:
     site_sources.add(entry.SOURCE)
 
 
+def parse_matched_ipv6(matched_ipv6_response) -> None:
+    print(matched_ipv6_response)
+
+
 def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry]]:
     """
     Function processes the log file for each web site.
@@ -149,6 +153,7 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
                 string=entry
             )
             matched_ipv6_response = weblog_with_ipv6_source.match(string=entry)
+
             if (
                 matched_response
                 and matched_response.group(1) != f"{os.environ['BLUEHOST_SERVER_IP']}"
@@ -163,7 +168,8 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
                 parse_unmatched(unmatched_response)
             if matched_ipv6_response:
                 matched_ipv6_responses += 1
-                logger.info("IPV6, WIP")
+                parse_matched_ipv6(matched_ipv6_response)
+                # logger.info("IPV6, WIP")
 
             else:
                 if (

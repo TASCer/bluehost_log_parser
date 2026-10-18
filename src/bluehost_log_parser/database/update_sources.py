@@ -2,11 +2,13 @@ import logging
 import os
 import sys
 from logging import Logger
+from typing import Any
 
 from dotenv import load_dotenv
 from pymysql.err import DataError
 from sqlalchemy import create_engine, exc, text
 from sqlalchemy.engine import Engine
+from sqlalchemy.engine.row import Row
 
 load_dotenv()
 
@@ -37,17 +39,17 @@ def whois_updates(whois_data: list[str]) -> None:
 
         for data in whois_data:
             try:
-                q_alpha3 = conn.execute(
-                    text(
+                q_alpha3: Row[Any] | None = conn.execute(
+                    statement=text(
                         f"""SELECT `ALPHA3` from `{os.environ["DB_NAME"]}`.`{COUNTRIES_TABLE}` WHERE ALPHA2 = '{data[1]}';"""
                     )
                 ).first()
 
                 if q_alpha3:
-                    alpha3 = [a for a in q_alpha3][0]
+                    alpha3 = next(iter(q_alpha3))
 
                 conn.execute(
-                    text(f"""UPDATE `{os.environ["DB_NAME"]}`.`{SOURCES_TABLE}`
+                    statement=text(f"""UPDATE `{os.environ["DB_NAME"]}`.`{SOURCES_TABLE}`
                         SET
                             `COUNTRY` = '{data[3]}',
                             `ALPHA2` = '{data[1]}',
@@ -85,13 +87,15 @@ def asn_alphas(alpha2s: list[str]) -> list[str]:
         logger.critical(str(e))
         sys.exit()
 
-    asn_alpha3s = []
+    asn_alpha3s: list[Any | str] = []
 
     try:
         with engine.connect() as conn, conn.begin():
             for a in alpha2s:
-                q_alpha3 = conn.execute(
-                    text(f"SELECT ALPHA3 from countries where ALPHA2 = '{a}';")
+                q_alpha3: Row[Any] | None = conn.execute(
+                    statement=text(
+                        f"SELECT ALPHA3 from countries where ALPHA2 = '{a}';"
+                    )
                 ).first()
 
                 if q_alpha3:
