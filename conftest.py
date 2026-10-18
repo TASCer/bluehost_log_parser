@@ -1,5 +1,6 @@
-import pytest
 from pathlib import Path
+
+import pytest
 
 SAMPLE_LOG = Path(__file__).parent / "assets" / "sample_unzipped_logfile"
 

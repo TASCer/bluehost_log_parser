@@ -12,6 +12,8 @@
       * for cron jobs it uses [keychain](https://linux.die.net/man/1/keychain)
 1. Decompress and save server log files locally
 1. PARSE log files
+    * uses regex for [Common Log Format (CLF)](en.wikipedia.org/wiki/Common_Log_Format)
+    * logs IPv6 sourced entries
 1. LOAD unique sources from parsed logs into sources table
     * New entries into lookup table will have a NULL COUNTRY and DESCRIPTION value
 1. LOAD parsed logs into database logs table
@@ -50,7 +52,6 @@ OPTIONAL DEV DEPENDENCIES:
 * Batch file for running a Scheduled Task in Windows
 * Shell script for running a cron job in Linux
 * A template of the '.env' file (sample_env) config file
-
 
 #### PRE_LAUNCH TODO's
 
