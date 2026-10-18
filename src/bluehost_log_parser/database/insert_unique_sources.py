@@ -1,5 +1,6 @@
 import logging
 import os
+import sys
 from logging import Logger
 from typing import Any
 
@@ -27,7 +28,7 @@ def inserts(unique_ips: set[str]) -> list[str]:
 
     except exc.SQLAlchemyError as e:
         logger.critical(str(e))
-        exit()
+        sys.exit()
 
     with engine.connect() as conn, conn.begin():
         for ip in unique_ips:

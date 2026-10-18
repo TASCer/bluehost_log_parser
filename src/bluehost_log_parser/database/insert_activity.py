@@ -1,5 +1,6 @@
 import logging
 import os
+import sys
 from datetime import datetime
 from logging import Logger
 
@@ -112,7 +113,7 @@ def update_log_tables(public_log_entries: list, soho_log_entries: list) -> None:
 
     except exc.SQLAlchemyError as e:
         logger.critical(str(e))
-        exit()
+        sys.exit()
 
     public_log_updates(engine, public_log_entries)
     soho_log_updates(engine, soho_log_entries)
