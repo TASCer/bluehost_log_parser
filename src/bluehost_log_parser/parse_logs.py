@@ -18,15 +18,15 @@ now: dt.datetime = dt.datetime.now().astimezone()
 todays_date: str = now.strftime("%D").replace("/", "-")
 
 
-# regex for Common Log Format (CLF)
 weblog_with_response: re.Pattern[str] = re.compile(
     r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) - - \[(.*?)\] "(.*?)" (\d+) (\d+) "(.*?)" "(.*?)" (.*?)\s'
 )
 
-# regex for unmatched above. Missing response size ("-")
+# No response size. (\d+) replaced with (-)
 weblog_without_response: re.Pattern[str] = re.compile(
     r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) - - \[(.*?)\] "(.*?)" (\d+) (-) "(.*?)" "(.*?)" (.*?)\s'
 )
+weblog_with_ipv6_source = re.compile(r".([a-f0-9:]+:+)+[a-f0-9]+")
 
 site_public_entries: list = []
 site_soho_entries: list = []
@@ -135,9 +135,10 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
     :param log_file: Path of logfile
     :return: tuple of unique ips and LogEntrys from PUBLIC and SOHO
     """
-    matches = 0
+    matched_responses = 0
     unmatched_responsees = 0
-    unmatched = 0
+    unmatched_no_respnses = 0
+    matched_ipv6_responses = 0
 
     with open(f"{log_file}") as log_entries:
         for entry in log_entries:
@@ -147,11 +148,12 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
             unmatched_response: re.Match[str] | None = weblog_without_response.match(
                 string=entry
             )
+            matched_ipv6_response = weblog_with_ipv6_source.match(string=entry)
             if (
                 matched_response
                 and matched_response.group(1) != f"{os.environ['BLUEHOST_SERVER_IP']}"
             ):
-                matches += 1
+                matched_responses += 1
                 parse_matched(matched_response)
             if (
                 unmatched_response
@@ -159,11 +161,23 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
             ):
                 unmatched_responsees += 1
                 parse_unmatched(unmatched_response)
-            else:
-                if f"{os.environ['BLUEHOST_SERVER_IP']}" not in entry:
-                    unmatched += 1
+            if matched_ipv6_response:
+                matched_ipv6_responses += 1
+                logger.info("IPV6, WIP")
 
-        logger.info(f"\t\t{matches=} {unmatched_responsees=} {unmatched=}")
+            else:
+                if (
+                    not matched_response
+                    and not unmatched_response
+                    and not matched_ipv6_responses
+                    and f"{os.environ['BLUEHOST_SERVER_IP']}" not in entry
+                ):
+                    logger.warning(f"NO MATCH OR RESPONSE: {entry}")
+                    unmatched_no_respnses += 1
+
+        logger.info(
+            f"\t\t{matched_responses=} {unmatched_responsees=} {unmatched_no_respnses=} {matched_ipv6_responses=}"
+        )
 
     return site_sources, site_public_entries, site_soho_entries
 
