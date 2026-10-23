@@ -26,7 +26,9 @@ weblog_with_response: re.Pattern[str] = re.compile(
 weblog_without_response: re.Pattern[str] = re.compile(
     r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) - - \[(.*?)\] "(.*?)" (\d+) (-) "(.*?)" "(.*?)" (.*?)\s'
 )
-weblog_with_ipv6_source = re.compile(r".([a-f0-9:]+:+)+[a-f0-9]+")
+weblog_with_ipv6_source: re.Pattern[str] = re.compile(
+    r'.([a-f0-9:]+:+)+[a-f0-9].. - - \[(.*?)\] "(.*?)" (\d+) (\d+) "(.*?)" "(.*?)" (.*?)\s'
+)
 
 site_public_entries: list = []
 site_soho_entries: list = []
@@ -129,7 +131,25 @@ def parse_unmatched(unmatched_response) -> None:
 
 
 def parse_matched_ipv6(matched_ipv6_response) -> None:
-    print(matched_ipv6_response)
+
+    try:
+        entry: LogEntry = LogEntry(
+            server_timestamp=matched_ipv6_response.group(2),
+            SOURCE=matched_ipv6_response.group(1),
+            METHOD="method",
+            REQUEST="request",
+            HTTP="http_type",
+            REFERRER=matched_ipv6_response.group(6),
+            RESPONSE=matched_ipv6_response.group(4),
+            SIZE=matched_ipv6_response.group(5),
+            AGENT="user_agent",
+            CLIENT="client",
+            SITE=matched_ipv6_response.group(8),
+        )
+        print("IPv6", entry.SOURCE, entry.REFERRER, entry.RESPONSE)
+
+    except ValueError:
+        print("err")
 
 
 def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry]]:
@@ -140,7 +160,7 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
     :return: tuple of unique ips and LogEntrys from PUBLIC and SOHO
     """
     matched_responses = 0
-    unmatched_responsees = 0
+    unmatched_responses = 0
     unmatched_no_respnses = 0
     matched_ipv6_responses = 0
 
@@ -164,12 +184,11 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
                 unmatched_response
                 and unmatched_response.group(1) != f"{os.environ['BLUEHOST_SERVER_IP']}"
             ):
-                unmatched_responsees += 1
+                unmatched_responses += 1
                 parse_unmatched(unmatched_response)
             if matched_ipv6_response:
                 matched_ipv6_responses += 1
                 parse_matched_ipv6(matched_ipv6_response)
-                # logger.info("IPV6, WIP")
 
             else:
                 if (
@@ -182,7 +201,7 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
                     unmatched_no_respnses += 1
 
         logger.info(
-            f"\t\t{matched_responses=} {unmatched_responsees=} {unmatched_no_respnses=} {matched_ipv6_responses=}"
+            f"\t\t{matched_responses=} \n {unmatched_responses=} \n {unmatched_no_respnses=} \n {matched_ipv6_responses=}"
         )
 
     return site_sources, site_public_entries, site_soho_entries
