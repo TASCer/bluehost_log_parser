@@ -59,7 +59,7 @@ def source_countries(engine) -> bool:
             return False
 
 
-def soho_non_200_responses(engine):
+def soho_non_200_responses(engine) -> bool:
     """
     Function creates a database view noting the count of html status codes not equal to 200.
 
@@ -100,10 +100,7 @@ def all(engine) -> bool:
     source_countries_created = source_countries(engine=engine)
     soho_logs_not_200_created = soho_non_200_responses(engine=engine)
 
-    if soho_logs_not_200_created and source_countries_created:
-        return True
-    else:
-        return False
+    return not (not soho_logs_not_200_created and not source_countries_created)
 
 
 if __name__ == "__main__":
