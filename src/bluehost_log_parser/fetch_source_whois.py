@@ -33,7 +33,7 @@ def get_data(source_ips: list) -> list[str]:
 
     for ip in source_ips:
         try:
-            obj: IPWhois = ipwhois.IPWhois(ip, timeout=10)
+            obj: IPWhois = ipwhois.IPWhois(address=ip, timeout=10)
             result: dict = obj.lookup_rdap()
 
         except ipwhois.HTTPLookupError as http_err:
@@ -43,8 +43,7 @@ def get_data(source_ips: list) -> list[str]:
                 try:
                     error: str = http.split("error code")[1].replace(".", "")
                 except IndexError:
-                    http = str(http_err)
-                    print(http)
+                    error = "unknown lookup error"
             else:
                 http: str = str(http_err).split()[0]
                 error: str = http[-1]
