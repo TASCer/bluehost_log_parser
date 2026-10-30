@@ -199,11 +199,11 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
                 ):
                     logger.warning(f"NO MATCH OR RESPONSE: {entry}")
                     unmatched_no_respnses += 1
-
-        logger.info(
-            f"\t\t{matched_responses=} \n {unmatched_responses=} \n {unmatched_no_respnses=} \n {matched_ipv6_responses=}"
-        )
-
+        logger.info(f"\t{matched_responses=}")
+        logger.info(f"\t{unmatched_responses=}")
+        logger.info(f"\t{unmatched_no_respnses=}")
+        logger.info(f"\t{matched_ipv6_responses=}")
+        
     return site_sources, site_public_entries, site_soho_entries
 
 
