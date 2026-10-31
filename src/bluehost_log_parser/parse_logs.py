@@ -146,7 +146,13 @@ def parse_matched_ipv6(matched_ipv6_response) -> None:
             CLIENT="client",
             SITE=matched_ipv6_response.group(8),
         )
-        print("IPv6", entry.SOURCE, entry.REFERRER, entry.RESPONSE)
+        print(
+            entry.server_timestamp,
+            entry.SOURCE,
+            entry.REFERRER,
+            entry.RESPONSE,
+            entry.SIZE,
+        )
 
     except ValueError:
         print("err")
@@ -203,7 +209,7 @@ def process_log(log_file: Path) -> tuple[set[str], list[LogEntry], list[LogEntry
         logger.info(f"\t{unmatched_responses=}")
         logger.info(f"\t{unmatched_no_respnses=}")
         logger.info(f"\t{matched_ipv6_responses=}")
-        
+
     return site_sources, site_public_entries, site_soho_entries
 
 
