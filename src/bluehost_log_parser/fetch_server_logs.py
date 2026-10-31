@@ -54,9 +54,15 @@ def secure_copy(
                         msg=f"\t'{remote_zipped_filename.split('/')[2]}' downloaded"
                     )
 
-            except (OSError, FileNotFoundError, subprocess.CalledProcessError) as err:
-                logger.critical(f"see: {err} for more information")
-                print(f"see: {err} for more information")
+            except subprocess.TimeoutExpired:
+                logger.critical("check if keychain agent(s) are loaded")
+                print("check if keychain agent(s) are loaded")
+
+                return False
+
+            except (OSError, FileNotFoundError, subprocess.CalledProcessError):
+                logger.critical("check command(s) and/or if files exist')}")
+                print("check command(s) and/or if files exist")
                 return False
 
         # NEEDS TESTING
