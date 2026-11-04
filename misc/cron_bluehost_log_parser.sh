@@ -1,7 +1,15 @@
 #!/bin/bash
 
-# https://linux.die.net/man/1/keychain
+# Title:        bluehost_log_parser.sh
+# Description:  runs script with no args
+# Author:       TASC LLC
+# Date:         2026-11-02
+# Version:      1.0
+# Usage:        ./cron_bluehost_log_parser.sh 
+# Helper:       https://linux.die.net/man/1/keychain
 
+
+# Load keychain variables
 [ -z "$HOSTNAME" ] && HOSTNAME=`uname -n`
 . $HOME/.keychain/$HOSTNAME-sh 2>/dev/null
 
