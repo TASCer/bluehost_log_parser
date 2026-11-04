@@ -44,12 +44,12 @@ app = Dash(
 app.layout = html.Div(
     [
         # dcc.Store(id="store", data={}),
-        html.H1("WEBLOG Multi Page Viewer App Demo"),
+        html.H1("PROD REMOTE WEBLOG VIEWER"),
         html.Div(
-            [
+            children=[
                 html.Div(
-                    dcc.Link(
-                        f"{page['name']} - {page['path']}",
+                    children=dcc.Link(
+                        children=f"{page['name']} - {page['path']}",
                         href=page["relative_path"],
                     )
                 )

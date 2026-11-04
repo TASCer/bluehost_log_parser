@@ -16,7 +16,7 @@ unzipped_paths: set = set()
 
 def process(
     zipped_files: Path,
-    unzipped_path: Path,
+    unzipped_files: Path,
     month_name: str,
     year: str,
 ) -> list[Path]:
@@ -31,7 +31,7 @@ def process(
     """
     logger.info("<<< STARTED: UNZIPPING / SAVING DOWNLOADED WEBLOGS <<<")
 
-    for root, _, files in unzipped_path.walk(top_down=False):
+    for root, _, files in unzipped_files.walk(top_down=False):
         current_year = now.year
         current_month = now.month
         current_month_abbr = get_monthname_short(
@@ -51,7 +51,7 @@ def process(
         else:
             local_file_name: str = zipped_file.with_suffix("").name
 
-        unzipped_file_path: Path = unzipped_path / local_file_name
+        unzipped_file_path: Path = unzipped_files / local_file_name
         try:
             with (
                 gzip.open(f"{zipped_file}", "rb") as zipped_file,
