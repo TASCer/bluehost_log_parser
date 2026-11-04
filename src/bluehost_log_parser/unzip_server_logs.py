@@ -2,7 +2,6 @@ import datetime as dt
 import gzip
 import logging
 import sys
-from datetime import datetime
 from logging import Logger
 from pathlib import Path
 
@@ -10,8 +9,18 @@ from bluehost_log_parser.utils.datetime_helper import get_monthname_short
 
 logger: Logger = logging.getLogger(__name__)
 
-now: datetime = dt.datetime.now().astimezone()
+now: dt.datetime = dt.datetime.now().astimezone()
 unzipped_paths: set = set()
+
+
+def refresh_unzipped_file(dir: Path, file: str):
+    """
+    Function removes current months log file(s) before proccessing. Alleviates numbered file name issues
+
+    :param dir: _
+    :param file: _description_
+    """
+    (dir / file).unlink()
 
 
 def process(
@@ -21,13 +30,12 @@ def process(
     year: str,
 ) -> list[Path]:
     """
-    Takes in a set of str paths for locally copied zipped bluehost website log files
-    Unzips file and saves to file
-    If historical args
+    Function unzips file and saves to file
+
     param: paths
     arg: month
     arg: year
-    returns: set
+    returns: list of Paths
     """
     logger.info("<<< STARTED: UNZIPPING / SAVING DOWNLOADED WEBLOGS <<<")
 
@@ -39,7 +47,7 @@ def process(
         )
         for name in files:
             if current_month_abbr and str(current_year) in name:
-                (root / name).unlink()
+                refresh_unzipped_file(root, file=name)
 
     local_files: list[Path] = []
 

@@ -1,5 +1,3 @@
-# TODO try using IPvAnyAddress
-# from typing import Any
 from pydantic import BaseModel, field_validator  # , IPvAnyAddress
 from pydantic_extra_types.country import CountryAlpha2, CountryAlpha3
 
@@ -54,17 +52,3 @@ class SourceEntry(BaseModel):
     ALPHA2: CountryAlpha2
     ALPHA3: CountryAlpha3
     DESCRIPTION: str
-
-    # @field_validator('SOURCE', mode='before')
-    # @classmethod
-    # def extract_ip_from_string(cls, value: Any) -> str:
-    #     """
-    #     Validator to extract the IP address from the 'raw_input' field
-    #     using a regex capture group.
-    #     """
-    #     if isinstance(value, IPvAnyAddress):
-    #         return str(value)
-
-    #     # raw_string = info.data.get('raw_input')
-    #     else:
-    #         raise ValueError("raw_input field is missing")

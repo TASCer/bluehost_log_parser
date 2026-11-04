@@ -12,7 +12,7 @@ from bluehost_log_parser import (
     fetch_server_logs,
     fetch_source_whois,
     parse_logs,
-    unzip_fetched_logs,
+    unzip_server_logs,
 )
 from bluehost_log_parser.database import (
     db_checks,
@@ -98,7 +98,7 @@ def main(month: int | None = None, year: int | None = None) -> None:
     )
 
     if logs_fetched:
-        unzipped_log_files: list[Path] = unzip_fetched_logs.process(
+        unzipped_log_files: list[Path] = unzip_server_logs.process(
             LOCAL_ZIPPED_PATH, LOCAL_UNZIPPED_PATH, month_name_abbr, year_2_str
         )
 
