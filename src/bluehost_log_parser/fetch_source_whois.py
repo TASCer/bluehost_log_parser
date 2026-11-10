@@ -2,14 +2,10 @@ import datetime as dt
 import logging
 from datetime import date, datetime
 from logging import Logger
-from zoneinfo import ZoneInfo
 
 import country_converter as coco
 import ipwhois
 from ipwhois import IPWhois
-
-timezone = ZoneInfo("UTC")
-
 
 SOURCES_TABLE = "sources"
 
@@ -29,7 +25,7 @@ def get_data(source_ips: list) -> list[str]:
 
     http_errors = 0
     whois_results: list = []
-    start_time: datetime = dt.datetime.now(timezone)
+    start_time: datetime = dt.datetime.now().astimezone()
 
     for ip in source_ips:
         try:
@@ -112,7 +108,7 @@ def get_data(source_ips: list) -> list[str]:
 
         whois_results.append([ip, asn_alpha2, asn_description, country_name])
 
-    stop_time: datetime = dt.datetime.now(timezone)
+    stop_time: datetime = dt.datetime.now().astimezone()
     time_delta: int = int((stop_time - start_time).total_seconds())
     elapsed_minutes, elapsed_seconds = divmod(time_delta, 60)
 
