@@ -1,28 +1,18 @@
 import logging
-import os
 from logging import Logger
 
-from dotenv import load_dotenv
 from sqlalchemy import Engine, create_engine, exc, text
 
-from bluehost_log_parser.database.insert_activity import (
+from bluehost_log_parser.database.config import (
+    DB_URI,
     PUBLIC_LOGS_TABLE,
-)  # see TODO , SOHO_LOGS_TABLE
-
-load_dotenv()
+    SOHO_LOGS_TABLE,
+    SOURCES_TABLE,
+    VIEW_COUNTRY_ACTIVITY,
+    VIEW_SOHO_NON_200_RESP,
+)
 
 logger: Logger = logging.getLogger(__name__)
-
-DB_HOSTNAME: str = f"{os.environ['DB_HOST']}"
-DB_NAME: str = f"{os.environ['DB_NAME']}"
-DB_USER: str = f"{os.environ['DB_USER']}"
-DB_PW: str = f"{os.environ['DB_USER_PASS']}"
-DB_URI: str = f"{os.environ['DB_URI']}"
-
-SOHO_LOGS_TABLE: str = "soho_logs"
-SOURCES_TABLE: str = "sources"
-VIEW_COUNTRY_ACTIVITY = "country_activity"
-VIEW_SOHO_NON_200_RESP = "soho_non_200_reponse"
 
 
 def source_countries(engine) -> bool:

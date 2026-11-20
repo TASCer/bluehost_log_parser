@@ -1,10 +1,8 @@
 import logging
-import os
 from logging import Logger
 from typing import Any
 
 import sqlalchemy as sa
-from dotenv import load_dotenv
 from sqlalchemy import (
     CursorResult,
     Engine,
@@ -14,6 +12,12 @@ from sqlalchemy import (
 )
 from sqlalchemy_utils import create_database, database_exists
 
+from bluehost_log_parser.database.config import (
+    COUNTRIES_TABLE,
+    DB_NAME,
+    DB_URI,
+    SOURCES_TABLE,
+)
 from bluehost_log_parser.database.insert_activity import (
     PUBLIC_LOGS_TABLE,
     SOHO_LOGS_TABLE,
@@ -23,18 +27,6 @@ from bluehost_log_parser.database.setup import (
     create_views,
     populate_tables,
 )
-from bluehost_log_parser.database.setup.create_tables import (
-    COUNTRIES_TABLE,
-    SOURCES_TABLE,
-)
-
-load_dotenv()
-
-DB_HOSTNAME: str = f"{os.environ['DB_HOST']}"
-DB_NAME: str = f"{os.environ['DB_NAME']}"
-DB_USER: str = f"{os.environ['DB_USER']}"
-DB_PW: str = f"{os.environ['DB_USER_PASS']}"
-DB_URI: str = f"{os.environ['DB_URI']}"
 
 
 def schema() -> bool:

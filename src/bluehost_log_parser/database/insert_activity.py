@@ -1,5 +1,4 @@
 import logging
-import os
 import sys
 from datetime import datetime
 from logging import Logger
@@ -9,13 +8,13 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine, exc, text
 from sqlalchemy.engine import Engine
 
+from bluehost_log_parser.database.config import DB_URI
 from bluehost_log_parser.utils.mailer import send_mail
 
 load_dotenv()
 
 PUBLIC_LOGS_TABLE = "public_logs"
 SOHO_LOGS_TABLE = "soho_logs"
-
 
 logger: Logger = logging.getLogger(__name__)
 
@@ -109,7 +108,7 @@ def update_log_tables(public_log_entries: list, soho_log_entries: list) -> None:
     """
 
     try:
-        engine: Engine = create_engine(f"mysql+pymysql://{os.environ['DB_URI']}")
+        engine: Engine = create_engine(f"mysql+pymysql://{DB_URI}")
 
     except exc.SQLAlchemyError as e:
         logger.critical(str(e))

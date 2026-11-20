@@ -1,20 +1,19 @@
 import logging
-import os
 import sys
 from logging import Logger
 from typing import Any
 
-from dotenv import load_dotenv
 from pymysql.err import DataError
 from sqlalchemy import create_engine, exc, text
 from sqlalchemy.engine import Engine
 from sqlalchemy.engine.row import Row
 
-load_dotenv()
-
-LOGS_TABLE = "logs"
-SOURCES_TABLE = "sources"
-COUNTRIES_TABLE = "countries"
+from bluehost_log_parser.database.config import (
+    COUNTRIES_TABLE,
+    DB_NAME,
+    DB_URI,
+    SOURCES_TABLE,
+)
 
 
 def whois_updates(whois_data: list[str]) -> None:
@@ -24,7 +23,7 @@ def whois_updates(whois_data: list[str]) -> None:
     logger: Logger = logging.getLogger(__name__)
 
     try:
-        engine: Engine = create_engine(f"mysql+pymysql://{os.environ['DB_URI']}")
+        engine: Engine = create_engine(f"mysql+pymysql://{DB_URI}")
 
     except exc.SQLAlchemyError as e:
         logger.critical(str(e))
@@ -41,7 +40,7 @@ def whois_updates(whois_data: list[str]) -> None:
             try:
                 q_alpha3: Row[Any] | None = conn.execute(
                     statement=text(
-                        f"""SELECT `ALPHA3` from `{os.environ["DB_NAME"]}`.`{COUNTRIES_TABLE}` WHERE ALPHA2 = '{data[1]}';"""
+                        f"""SELECT `ALPHA3` from `{DB_NAME}`.`{COUNTRIES_TABLE}` WHERE ALPHA2 = '{data[1]}';"""
                     )
                 ).first()
 
@@ -49,7 +48,7 @@ def whois_updates(whois_data: list[str]) -> None:
                     alpha3 = next(iter(q_alpha3))
 
                 conn.execute(
-                    statement=text(f"""UPDATE `{os.environ["DB_NAME"]}`.`{SOURCES_TABLE}`
+                    statement=text(f"""UPDATE `{DB_NAME}`.`{SOURCES_TABLE}`
                         SET
                             `COUNTRY` = '{data[3]}',
                             `ALPHA2` = '{data[1]}',
@@ -81,7 +80,7 @@ def asn_alphas(alpha2s: list[str]) -> list[str]:
     )
 
     try:
-        engine: Engine = create_engine(f"mysql+pymysql://{os.environ['DB_URI']}")
+        engine: Engine = create_engine(f"mysql+pymysql://{DB_URI}")
 
     except exc.SQLAlchemyError as e:
         logger.critical(str(e))

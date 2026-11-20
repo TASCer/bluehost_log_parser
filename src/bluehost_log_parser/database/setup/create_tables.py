@@ -12,11 +12,12 @@ from sqlalchemy import (
     types,
 )
 
-logger: Logger = logging.getLogger(__name__)
+from bluehost_log_parser.database.config import (
+    COUNTRIES_TABLE,
+    SOURCES_TABLE,
+)
 
-COUNTRIES_TABLE: str = "countries"
-SOURCES_TABLE: str = "sources"
-VIEW_COUNTRY_ACTIVITY = "country_activity"
+logger: Logger = logging.getLogger(__name__)
 
 meta = MetaData()
 

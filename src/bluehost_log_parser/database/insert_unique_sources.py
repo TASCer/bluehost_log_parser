@@ -1,16 +1,12 @@
 import logging
-import os
 import sys
 from logging import Logger
 from typing import Any
 
-from dotenv import load_dotenv
 from sqlalchemy import CursorResult, create_engine, exc, text
 from sqlalchemy.engine import Engine
 
-load_dotenv()
-
-SOURCES_TABLE = "sources"
+from bluehost_log_parser.database.config import DB_URI, SOURCES_TABLE
 
 
 def inserts(unique_ips: set[str]) -> list[str]:
@@ -24,7 +20,7 @@ def inserts(unique_ips: set[str]) -> list[str]:
     logger: Logger = logging.getLogger(__name__)
 
     try:
-        engine: Engine = create_engine(f"mysql+pymysql://{os.environ['DB_URI']}")
+        engine: Engine = create_engine(f"mysql+pymysql://{DB_URI}")
 
     except exc.SQLAlchemyError as e:
         logger.critical(str(e))
