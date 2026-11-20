@@ -1,5 +1,4 @@
 import logging
-import os
 import sys
 from collections.abc import Callable
 from functools import reduce
@@ -10,12 +9,14 @@ from dotenv import load_dotenv
 from pandas import DataFrame
 from sqlalchemy import Engine, create_engine, exc
 
+from bluehost_log_parser.database.config import DB_URI
+
 load_dotenv()
 
 logger: Logger = logging.getLogger(__name__)
 
 try:
-    engine: Engine = create_engine(f"mysql+pymysql://{os.environ['DB_URI']}")
+    engine: Engine = create_engine(f"mysql+pymysql://{DB_URI}")
 
 except exc.SQLAlchemyError as e:
     logger.critical(str(e))
